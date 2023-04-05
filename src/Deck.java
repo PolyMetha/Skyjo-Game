@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
     private ArrayList<Card> cards;
@@ -25,8 +26,25 @@ public class Deck {
         }
     }
 
+    //prints the deck
     public void PrintDeck(){
+        System.out.println("\n__________________");
+        cards.forEach((n) -> System.out.print(n.GetValue() + " | "));
+        System.out.println("\n__________________");
+    }
 
-        cards.forEach((n) -> System.out.println(n.GetValue()));
+    //shuffle the deck
+    public void Shuffle(){
+        Collections.shuffle(cards);
+    }
+
+    //return the last card on the pile and delete it from the deck
+    public Card Draw(){
+        if(cards.size()!=0){
+            Card lastCard = cards.get(cards.size()-1);
+            cards.remove(cards.size()-1);
+            return lastCard;
+        }
+        return null;
     }
 }
