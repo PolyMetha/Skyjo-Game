@@ -3,6 +3,7 @@ import java.util.Collections;
 
 public class Deck {
     private ArrayList<Card> cards;
+    private ArrayList<Card> discardPile;
 
     public Deck(){
         cards = new ArrayList<Card>();
@@ -24,6 +25,7 @@ public class Deck {
                 cards.add(new Card(i));
             }
         }
+        Shuffle();
     }
 
     //prints the deck
