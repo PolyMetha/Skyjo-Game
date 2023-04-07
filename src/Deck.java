@@ -45,13 +45,6 @@ public class Deck {
         Shuffle();
     }
 
-    //prints the deck
-    public void PrintDeck(){
-        System.out.println("\n__________________");
-        cards.forEach((n) -> System.out.print(n.GetName() + "("+ n.GetValue() +")"+ " | "));
-        System.out.println("\n__________________");
-    }
-
     //shuffle the deck
     public void Shuffle(){
         Collections.shuffle(cards);

@@ -32,11 +32,16 @@ public class Player {
     //print hand of the player
     public void printHand(){
         System.out.print("\nHand of player : " + this.id + "\n");
-        for(int i =1; i<=12; i++){
-            System.out.print(hand.get(i-1).GetName() + "("+ hand.get(i-1).GetValue() +")" + " | ");
+        System.out.println("--------------------------------");
+        for(int i = 1; i <= 12; i++){
 
-            if(i%3==0){
-                System.out.println("\n-------------");
+            if(i%3==0)
+            {
+                System.out.print(hand.get(i-1).GetName() + " ("+ hand.get(i-1).GetValue() +")");
+                System.out.println("\n--------------------------------");
+            }
+            else {
+                System.out.print(hand.get(i-1).GetName() + " ("+ hand.get(i-1).GetValue() +")" + " | ");
             }
         }
         System.out.print("\n");
