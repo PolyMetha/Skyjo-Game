@@ -11,15 +11,11 @@ public class Deck {
         for(int i = 0; i<5; i++){
             cards.add(new Card(-2));
         }
-        //adding 15 0 cards to the deck
-        for(int i = 0; i<15; i++){
+        //adding 5 0 cards to the deck, 10 will be added in the next loop to have 15 of it
+        for(int i = 0; i<5; i++){
             cards.add(new Card(0));
         }
-        //adding -2 cards to the deck
-        for(int i = 0; i<5; i++){
-            cards.add(new Card(-2));
-        }
-        //adding -2 cards to the deck
+        //adding 10 1->10 cards to the deck
         for(int i = -1; i<=12; i++){
             for(int j=0; j<10; j++){
                 cards.add(new Card(i));
