@@ -34,6 +34,7 @@ public class Player {
         System.out.print("\nHand of player : " + this.id + "\n");
         for(int i =1; i<=12; i++){
             System.out.print(hand.get(i-1).GetValue()+" | ");
+
             if(i%3==0){
                 System.out.println("\n-------------");
             }
