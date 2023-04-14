@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Card {
     private int value;
     private String name;
@@ -7,11 +9,11 @@ public class Card {
         this.name = name;
     }
 
-    public int GetValue(){
+    public int getValue() {
         return this.value;
     }
 
-    public String GetName(){
+    public String getName(){
         return this.name;
     }
 }
