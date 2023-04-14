@@ -7,7 +7,7 @@ import java.awt.color.*;;
 public class Deck {
     private ArrayList<Card> cards;
     private ArrayList<Card> discardPile;
-    
+
     private HashMap<Integer, UV> dict = new HashMap<>();
 
     public Deck(){
@@ -61,5 +61,9 @@ public class Deck {
         return null;
     }
 
-
+    public void PrintDeck(){
+        for(Card card : cards){
+            System.out.print(" | " + card.getValue() + " | ");
+        }
+    }
 }
