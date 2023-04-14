@@ -37,11 +37,11 @@ public class Player {
 
             if(i%3==0)
             {
-                System.out.print(hand.get(i-1).GetName() + " ("+ hand.get(i-1).GetValue() +")");
+                System.out.print(hand.get(i-1).getName() + " ("+ hand.get(i-1).getValue() +")");
                 System.out.println("\n--------------------------------");
             }
             else {
-                System.out.print(hand.get(i-1).GetName() + " ("+ hand.get(i-1).GetValue() +")" + " | ");
+                System.out.print(hand.get(i-1).getName() + " ("+ hand.get(i-1).getValue() +")" + " | ");
             }
         }
         System.out.print("\n");

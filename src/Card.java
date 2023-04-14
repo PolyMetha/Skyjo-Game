@@ -2,11 +2,11 @@ import java.awt.*;
 
 public class Card {
     private int value;
-    private String name;
+    private UV uv;
 
-    public Card(int value, String name){
+    public Card(int value, UV uv){
         this.value = value;
-        this.name = name;
+        this.uv = uv;
     }
 
     public int getValue() {
@@ -14,6 +14,6 @@ public class Card {
     }
 
     public String getName(){
-        return this.name;
+        return this.uv.name;
     }
 }

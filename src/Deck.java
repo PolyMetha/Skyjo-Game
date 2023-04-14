@@ -2,29 +2,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.color.*;;
 
 public class Deck {
     private ArrayList<Card> cards;
     private ArrayList<Card> discardPile;
-
-    private HashMap<Integer, String> dict = new HashMap<>();
+    
+    private HashMap<Integer, UV> dict = new HashMap<>();
 
     public Deck(){
-        dict.put(-2, "PC20");
-        dict.put(-1, "LE09");
-        dict.put(0, "MBE1");
-        dict.put(1, "IF2B");
-        dict.put(2, "MT2A");
-        dict.put(3, "IF3B");
-        dict.put(4, "LE08");
-        dict.put(5, "PS2A");
-        dict.put(6, "LE03");
-        dict.put(7, "IF1A");
-        dict.put(8, "GE00");
-        dict.put(9, "MT3E");
-        dict.put(10, "PS28");
-        dict.put(11, "MT28");
-        dict.put(12, "PS25");
+        dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801")));
+        dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C")));
+        dict.put(0,  new UV("MBE3", java.awt.Color.decode("#FEB801")));
+        dict.put(1,  new UV("IF2B", java.awt.Color.decode("#FEB801")));
+        dict.put(2, new UV("MT2A", java.awt.Color.decode("#22A60D")));
+        dict.put(3,  new UV("IF3B", java.awt.Color.decode("#FEB801")));
+        dict.put(4, new UV("LE08", java.awt.Color.decode("#E2595C")));
+        dict.put(5, new UV("PS2A", java.awt.Color.decode("#22A60D")));
+        dict.put(6, new UV("LE03", java.awt.Color.decode("#E2595C")));
+        dict.put(7, new UV("IF2A", java.awt.Color.decode("#22A60D")));
+        dict.put(8, new UV("GE00", java.awt.Color.decode("#E2595C")));
+        dict.put(9, new UV("MT3E", java.awt.Color.decode("#22A60D")));
+        dict.put(10, new UV("PS28", java.awt.Color.decode("#22A60D")));
+        dict.put(11, new UV("MT28", java.awt.Color.decode("#22A60D")));
+        dict.put(12, new UV("PS25", java.awt.Color.decode("#22A60D")));
         
 
         cards = new ArrayList<Card>();
@@ -59,4 +60,6 @@ public class Deck {
         }
         return null;
     }
+
+
 }
