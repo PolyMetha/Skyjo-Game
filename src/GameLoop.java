@@ -30,7 +30,6 @@ public class GameLoop {
         }
     }
 
-
     public void nextRound(){
         nbRound+=1;
     }

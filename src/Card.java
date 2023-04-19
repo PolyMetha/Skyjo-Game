@@ -19,6 +19,10 @@ public class Card {
         return this.uv.getName();
     }
 
+    public void changeVisibility(){
+        this.visible = !this.visible;
+    }
+
     public String getCard() {
         if (this.visible)
         {
