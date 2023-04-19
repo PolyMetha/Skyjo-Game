@@ -19,6 +19,8 @@ public class GameLoop {
                 i++;
                 play = !its.next().verifyWin();
             }
+            //reinitialise l'itérateur
+            its = players.iterator();
         }
     }
 
