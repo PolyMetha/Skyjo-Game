@@ -76,9 +76,9 @@ public class Deck {
         }
     }
 
-    public boolean verifyExistence(Deck deck)
+    public boolean verifyExistence()
     {
-        if (deck.cards.size() > 0)
+        if (this.cards.size() > 0)
         {
             return true;
         }

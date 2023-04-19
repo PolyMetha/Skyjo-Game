@@ -13,7 +13,7 @@ public class Player {
         initializeHand(deck);
     }
 
-    public void round() {
+    public void round(Deck deck, Deck discard_pile) {
         System.out.println("--------------------------------------");
         System.out.println("1. Choose a card from the discard pile");
         System.out.println("2. Choose a card from the deck");
@@ -24,6 +24,14 @@ public class Player {
         switch (indice) {
             case 1:
                 System.out.println("1");
+                if (discard_pile.verifyExistence())
+                {
+                    System.out.println("Discard pile is null");
+                }
+                else
+                {
+                    System.out.println("Discard pile isn't null");
+                }
                 break;
             case 2:
                 System.out.println("2");
