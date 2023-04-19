@@ -35,9 +35,7 @@ public class Player {
 
             switch (indice) {
                 case 1:
-                    System.out.println("1");
-                    if (discard_pile.verifyExistence()) { // Inverser la condition pour que ça marche
-                        // Là elle est inversée pour que je puisse travailler donc après faudra mettre !discard_pile.verifyExistence()
+                    if (!discard_pile.verifyExistence()) {
                         break;
                     }
                     ArrayList<Short> position = new ArrayList<Short>();
@@ -45,7 +43,12 @@ public class Player {
                     System.out.println(position.get(0) + " : " + position.get(1));
                     break;
                 case 2:
-                    System.out.println("2");
+                    if (!deck.verifyExistence()) {
+                        break;
+                    }
+                    ArrayList<Short> position2 = new ArrayList<Short>();
+                    position2 = this.askPosition();
+                    System.out.println(position2.get(0) + " : " + position2.get(1));
                     break;
                 case 3:
                     System.out.println("3");
