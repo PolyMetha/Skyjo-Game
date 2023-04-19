@@ -15,8 +15,10 @@ public class App {
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
-        ImageIcon image = new ImageIcon("C:/Users/reini/OneDrive/Images/carte/jpg");
-        JLabel label = new JLabel(image);
+        //ImageIcon image = new ImageIcon("C:/Users/reini/OneDrive/Images/carte.jpg");
+        //JLabel label = new JLabel(image);
+        //window.add(label);
+
         window.pack();
 
         window.setLocationRelativeTo(null);
@@ -38,6 +40,8 @@ public class App {
         Deck deck = new Deck(true);
         Deck talon = new Deck(false);
         ArrayList<Player> players = new ArrayList<Player>();
+
+        deck.PrintDeck(window);
 
         for (int i=0 ; i < nbPlayers ; i++) {
             players.add(new Player(i, deck));
