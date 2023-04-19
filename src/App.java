@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 
 
@@ -13,8 +13,16 @@ public class App {
         window.setResizable(false);
         window.setTitle("Skyjo game");
 
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+        ImageIcon image = new ImageIcon("C:/Users/reini/OneDrive/Images/carte/jpg");
+        JLabel label = new JLabel(image);
+        window.pack();
+
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+
 
         short nbPlayers = 0;
         
