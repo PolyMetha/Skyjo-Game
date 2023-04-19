@@ -13,9 +13,11 @@ public class GameLoop {
         Iterator<Player> its = players.iterator();
 
         while(play){
+            int i = 0;
             while(its.hasNext()){
-                its.next().round();
-                its.next().verifyWin();
+                players.get(i).round();
+                i++;
+                play = !its.next().verifyWin();
             }
         }
     }
