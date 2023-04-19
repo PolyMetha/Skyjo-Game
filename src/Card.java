@@ -24,11 +24,15 @@ public class Card {
         return this.visible;
     }
 
-    public void changeCard(int value, UV uv, boolean visible)
-    {
-        this.visible = visible;
-        this.value = value;
-        this.uv = uv;
+    public String getCard() {
+        if (this.visible)
+        {
+            return "" + this.getName() + " (" + this.getValue() +")";
+        }
+        else
+        {
+            return "-";
+        }
     }
 
     public String getName(){
@@ -39,14 +43,10 @@ public class Card {
         this.visible = !this.visible;
     }
 
-    public String getCard() {
-        if (this.visible)
-        {
-            return "" + this.getName() + " (" + this.getValue() +")";
-        }
-        else
-        {
-            return "-";
-        }
+    public void changeCard(int value, UV uv, boolean visible)
+    {
+        this.visible = visible;
+        this.value = value;
+        this.uv = uv;
     }
 }

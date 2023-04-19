@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
-import java.awt.color.*;;
 
 public class Deck {
 
@@ -49,6 +47,16 @@ public class Deck {
         }
     }
 
+    public int getValueCard()
+    {
+        return cards.get(this.cards.size()-1).getValue();
+    }
+
+    public UV getUvCard()
+    {
+        return cards.get(this.cards.size()-1).getUv();
+    }
+
     //shuffle the deck
     public void shuffle(){
         Collections.shuffle(cards);
@@ -84,16 +92,6 @@ public class Deck {
     public void removeCard()
     {
         this.cards.remove(this.cards.size()-1);
-    }
-
-    public int getValueCard()
-    {
-        return cards.get(this.cards.size()-1).getValue();
-    }
-
-    public UV getUvCard()
-    {
-        return cards.get(this.cards.size()-1).getUv();
     }
 
     public boolean verifyExistence()
