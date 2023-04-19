@@ -37,13 +37,12 @@ public class Player {
 
             if(i%3==0)
             {
-                System.out.print(hand.get(i-1).getName() + " ("+ hand.get(i-1).getValue() +")");
+                System.out.print(hand.get(i-1).getCard());
                 System.out.println("\n--------------------------------");
             }
             else {
-                System.out.print(hand.get(i-1).getName() + " ("+ hand.get(i-1).getValue() +")" + " | ");
+                System.out.print(hand.get(i-1).getCard() + " | ");
             }
         }
-        System.out.print("\n");
     }
 }

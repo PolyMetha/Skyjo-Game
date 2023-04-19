@@ -61,9 +61,11 @@ public class Deck {
         return null;
     }
 
-    public void PrintDeck(){
-        for(Card card : cards){
-            System.out.print(" | " + card.getValue() + " | ");
+    public void PrintDeck() {
+        System.out.println("Deck : ");
+        for(Card card : cards)
+        {
+            System.out.print("|" + card.getValue() + "| ");
         }
     }
 }
