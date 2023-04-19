@@ -14,7 +14,27 @@ public class Player {
     }
 
     public void round() {
-        short indice = Utility.controlInt((short)1, (short)3, "Enter an integer between 1 and 3 to select a line", "The integer must between 1 and 3");
+        System.out.println("--------------------------------------");
+        System.out.println("1. Choose a card from the discard pile");
+        System.out.println("2. Choose a card from the deck");
+        System.out.println("3. Discover a card within your game");
+        System.out.println("--------------------------------------");
+        short indice = Utility.controlInt((short)1, (short)3, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
+
+        switch (indice) {
+            case 1:
+                System.out.println("1");
+                break;
+            case 2:
+                System.out.println("2");
+                break;
+            case 3:
+                System.out.println("3");
+                break;
+            default:
+                System.out.println("Error");
+                break;
+        }
     }
 
     public boolean verifyWin(){
@@ -24,7 +44,7 @@ public class Player {
 
     //return hisTurn
     public boolean getTurn(){
-        return hisTurn;
+        return this.hisTurn;
     }
 
     //set hisTurn
@@ -35,7 +55,7 @@ public class Player {
     //initialize the base cards of the player
     public void initializeHand(Deck deck){
         for(int i=0; i<12; i++){
-            hand.add(deck.Draw());
+            hand.add(deck.draw());
         }
     }
 

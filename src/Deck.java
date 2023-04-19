@@ -9,7 +9,7 @@ public class Deck {
     private ArrayList<Card> cards;
     private HashMap<Integer, UV> dict = new HashMap<>();
 
-    public Deck(boolean fill) {
+    public Deck (boolean fill) {
         if (fill) {
             dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801")));
             dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C")));
@@ -42,7 +42,7 @@ public class Deck {
                     cards.add(new Card(i, dict.get(i)));
                 }
             }
-            Shuffle();
+            shuffle();
         }
         else {
             cards = new ArrayList<Card>();
@@ -50,12 +50,12 @@ public class Deck {
     }
 
     //shuffle the deck
-    public void Shuffle(){
+    public void shuffle(){
         Collections.shuffle(cards);
     }
 
     //return the last card on the pile and delete it from the deck
-    public Card Draw(){
+    public Card draw(){
         if(cards.size()!=0){
             Card lastCard = cards.get(cards.size()-1);
             cards.remove(cards.size()-1);
@@ -64,7 +64,7 @@ public class Deck {
         return null;
     }
 
-    public void PrintDeck(String name) {
+    public void printDeck(String name) {
         System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
@@ -73,6 +73,18 @@ public class Deck {
         }
         else {
             System.out.println("empty");
+        }
+    }
+
+    public boolean verifyExistence(Deck deck)
+    {
+        if (deck.cards.size() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
