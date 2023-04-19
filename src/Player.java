@@ -13,36 +13,45 @@ public class Player {
         initializeHand(deck);
     }
 
-    public void round(Deck deck, Deck discard_pile) {
-        System.out.println("--------------------------------------");
-        System.out.println("1. Choose a card from the discard pile");
-        System.out.println("2. Choose a card from the deck");
-        System.out.println("3. Discover a card within your game");
-        System.out.println("--------------------------------------");
-        short indice = Utility.controlInt((short)1, (short)3, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
+    public ArrayList<Short> askPosition()
+    {
+        ArrayList<Short> position = new ArrayList<Short>();
+        short row = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a row :", "The integer must between 1 and 3, retry.");
+        short column = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a column :", "The integer must between 1 and 4, retry.");
+        position.add(row);
+        position.add(column);
+        return position;
+    }
 
-        switch (indice) {
-            case 1:
-                System.out.println("1");
-                if (discard_pile.verifyExistence())
-                {
-                    System.out.println("Discard pile is null");
-                }
-                else
-                {
-                    System.out.println("Discard pile isn't null");
-                }
-                break;
-            case 2:
-                System.out.println("2");
-                break;
-            case 3:
-                System.out.println("3");
-                break;
-            default:
-                System.out.println("Error");
-                break;
-        }
+    public void round(Deck deck, Deck discard_pile) {
+        boolean round_played = false;
+        do {
+            System.out.println("--------------------------------------");
+            System.out.println("1. Choose a card from the discard pile");
+            System.out.println("2. Choose a card from the deck");
+            System.out.println("3. Discover a card within your game");
+            System.out.println("--------------------------------------");
+            short indice = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
+
+            switch (indice) {
+                case 1:
+                    System.out.println("1");
+                    if (!discard_pile.verifyExistence()) {
+                        break;
+                    }
+                    askPosition
+                    break;
+                case 2:
+                    System.out.println("2");
+                    break;
+                case 3:
+                    System.out.println("3");
+                    break;
+                default:
+                    System.out.println("Error");
+                    break;
+            }
+        } while (round_played);
     }
 
     public boolean verifyWin(){
