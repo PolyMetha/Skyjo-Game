@@ -6,7 +6,7 @@ public class GameLoop {
     private int roundOf;    //The number of the player which is playing (0 or 1)
     private boolean play;
 
-    public GameLoop(ArrayList<Player> players){
+    public GameLoop(ArrayList<Player> players, Deck deck, Deck discard_pile){
         this.nbRound = 0;
         roundOf = (int)(Math.random()*players.size());
         this.play = true;
@@ -15,10 +15,12 @@ public class GameLoop {
         while(play){
             int i = 0;
             while(its.hasNext()){
-                players.get(i).round();
+                players.get(i).round(deck, discard_pile);
                 i++;
                 play = !its.next().verifyWin();
             }
+            //reinitialise l'itérateur
+            its = players.iterator();
         }
     }
 

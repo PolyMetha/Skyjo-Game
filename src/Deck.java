@@ -12,7 +12,7 @@ public class Deck {
     private ArrayList<Card> cards;
     private HashMap<Integer, UV> dict = new HashMap<>();
 
-    public Deck(boolean fill) {
+    public Deck (boolean fill) {
         if (fill) {
             dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
             dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
@@ -45,7 +45,7 @@ public class Deck {
                     cards.add(new Card(i, dict.get(i)));
                 }
             }
-            Shuffle();
+            shuffle();
         }
         else {
             cards = new ArrayList<Card>();
@@ -53,26 +53,31 @@ public class Deck {
     }
 
     //shuffle the deck
-    public void Shuffle(){
+    public void shuffle(){
         Collections.shuffle(cards);
     }
 
+    public void changeFirstCard(int value, UV uv, boolean visible)
+    {
+        this.cards.get(this.cards.size()-1).changeCard(value, uv, visible);
+    }
+
     //return the last card on the pile and delete it from the deck
-    public Card Draw(){
-        if(cards.size()!=0){
-            Card lastCard = cards.get(cards.size()-1);
-            cards.remove(cards.size()-1);
+    public Card draw(){
+        if (this.cards.size()!=0){
+            Card lastCard = this.cards.get(this.cards.size()-1);
+            this.removeCard();
             return lastCard;
         }
         return null;
     }
 
-    public void PrintDeck(String name) {
+    public void printDeck(String name) {
         System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
-            this.cards.get(cards.size() - 1).changeVisibility();
-            System.out.print("|" + this.cards.get(cards.size() - 1).getCard() + "| \n");
+            this.cards.get(this.cards.size()-1).changeVisibility();
+            System.out.print("|" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
         }
         else {
             System.out.println("empty");
@@ -82,5 +87,32 @@ public class Deck {
     }
 
     public void PrintDeck(JFrame window) {
+    }
+
+    public void removeCard()
+    {
+        this.cards.remove(this.cards.size()-1);
+    }
+
+    public int getValueCard()
+    {
+        return cards.get(this.cards.size()-1).getValue();
+    }
+
+    public UV getUvCard()
+    {
+        return cards.get(this.cards.size()-1).getUv();
+    }
+
+    public boolean verifyExistence()
+    {
+        if (this.cards.size() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

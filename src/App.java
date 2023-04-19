@@ -26,19 +26,11 @@ public class App {
 
 
 
-        short nbPlayers = 0;
-        
-        while(nbPlayers <2 || nbPlayers >8){
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter an integer representing the number of players : ");
-            nbPlayers = scanner.nextShort();
-            if(nbPlayers < 2 || nbPlayers > 8) {
-                System.out.println("The number of players must be between 2 and 8, retry.");
-            }
-        }
+       
+        short nbPlayers = 2;//Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
 
         Deck deck = new Deck(true);
-        Deck talon = new Deck(false);
+        Deck discard_pile = new Deck(false);
         ArrayList<Player> players = new ArrayList<Player>();
 
         deck.PrintDeck(window);
@@ -48,9 +40,9 @@ public class App {
             players.get(i).printHand();
         }
 
-        deck.PrintDeck("Deck");
-        talon.PrintDeck("Talon");
+        deck.printDeck("Deck");
+        discard_pile.printDeck("Discard pile");
 
-        GameLoop gameLoop = new GameLoop(players);
+        GameLoop gameLoop = new GameLoop(players, deck, discard_pile);
     }
 }

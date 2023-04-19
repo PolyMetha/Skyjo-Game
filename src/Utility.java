@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Utility {
 
-    public short controlInt(short borne1, short borne2, String message1, String message2)
+    static short controlInt(short borne1, short borne2, String message1, String message2)
     {
         short indice = 0;
         while (indice < borne1 || indice > borne2) {
