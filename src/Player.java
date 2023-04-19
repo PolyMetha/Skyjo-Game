@@ -14,7 +14,7 @@ public class Player {
     }
 
     public void round() {
-        short indice = controlInt(1, 3, )
+        short indice = Utility.controlInt((short)1, (short)3, "Enter an integer between 1 and 3 to select a line", "The integer must between 1 and 3");
     }
 
     public boolean verifyWin(){
