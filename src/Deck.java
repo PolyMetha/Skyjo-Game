@@ -54,11 +54,16 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
+    public void changeFirstCard(int value, UV uv, boolean visible)
+    {
+        this.cards.get(this.cards.size()-1).changeCard(value, uv, visible);
+    }
+
     //return the last card on the pile and delete it from the deck
     public Card draw(){
-        if(cards.size()!=0){
-            Card lastCard = cards.get(cards.size()-1);
-            cards.remove(cards.size()-1);
+        if (this.cards.size()!=0){
+            Card lastCard = this.cards.get(this.cards.size()-1);
+            this.removeCard();
             return lastCard;
         }
         return null;
@@ -68,12 +73,27 @@ public class Deck {
         System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
-            this.cards.get(cards.size() - 1).changeVisibility();
-            System.out.print("|" + this.cards.get(cards.size() - 1).getCard() + "| \n");
+            this.cards.get(this.cards.size()-1).changeVisibility();
+            System.out.print("|" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
         }
         else {
             System.out.println("empty");
         }
+    }
+
+    public void removeCard()
+    {
+        this.cards.remove(this.cards.size()-1);
+    }
+
+    public int getValueCard()
+    {
+        return cards.get(this.cards.size()-1).getValue();
+    }
+
+    public UV getUvCard()
+    {
+        return cards.get(this.cards.size()-1).getUv();
     }
 
     public boolean verifyExistence()
