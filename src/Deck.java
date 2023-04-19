@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.*;
-import java.awt.color.*;;
-
 
 public class Deck {
 
@@ -91,8 +88,6 @@ public class Deck {
         else {
             System.out.println("empty");
         }
-
-        
     }
 
     public void PrintDeck(JFrame window) {
@@ -113,5 +108,10 @@ public class Deck {
         {
             return false;
         }
+    }
+
+    public void addCard(Card card)
+    {
+        this.cards.add(card);
     }
 }

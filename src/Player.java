@@ -41,8 +41,10 @@ public class Player {
                     ArrayList<Short> position = new ArrayList<>();
                     position = this.askPosition();
                     int indiceHand = (position.get(0)-1) * 3 + position.get(1) - 1;
+                    Card temp = new Card(hand.get(indiceHand).getValue(), hand.get(indiceHand).getUv()); // récuperation de la carte qui va être remplacé
                     hand.get(indiceHand).changeCard(discard_pile.getValueCard(), discard_pile.getUvCard(), true);
                     discard_pile.removeCard();
+                    discard_pile.addCard(temp);
                     printHand();
                     round_played = true;
                     break;
@@ -53,8 +55,10 @@ public class Player {
                     ArrayList<Short> position2 = new ArrayList<>();
                     position2 = this.askPosition(); // demande de la position de la carte à changer dans le jeu du joueur
                     int indiceHand2 = (position2.get(0)-1) * 3 + position2.get(1) - 1; // transforme la position x,y en indice d'une liste
+                    Card temp2 = new Card(hand.get(indiceHand2).getValue(), hand.get(indiceHand2).getUv()); // récuperation de la carte qui va être remplacé
                     hand.get(indiceHand2).changeCard(deck.getValueCard(), deck.getUvCard(), true); // changement de la carte dans le jeu du joueur
                     deck.removeCard();
+                    discard_pile.addCard(temp2);
                     printHand();
                     round_played = true;
                     break;
