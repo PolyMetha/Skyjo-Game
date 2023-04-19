@@ -27,6 +27,6 @@ public class App {
 
         deck.PrintDeck();
 
-        GameLoop gameLoop = new GameLoop();
+        GameLoop gameLoop = new GameLoop(players);
     }
 }
