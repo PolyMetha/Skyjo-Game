@@ -53,6 +53,11 @@ public class Deck {
         return cards.get(this.cards.size()-1).getValue();
     }
 
+    public String getCard()
+    {
+        return cards.get(this.cards.size()-1).getCard();
+    }
+
     public UV getUvCard()
     {
         return cards.get(this.cards.size()-1).getUv();
@@ -82,7 +87,13 @@ public class Deck {
         System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
-            this.cards.get(this.cards.size()-1).changeVisibility(true);
+            if (name.equals("Deck"))
+            {
+                this.cards.get(this.cards.size()-1).changeVisibility(false);
+            }
+            else {
+                this.cards.get(this.cards.size()-1).changeVisibility(true);
+            }
             System.out.print("|" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
         }
         else {

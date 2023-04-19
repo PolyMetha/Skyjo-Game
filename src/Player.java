@@ -16,8 +16,8 @@ public class Player {
     public ArrayList<Short> askPosition()
     {
         ArrayList<Short> position = new ArrayList<>();
-        short row = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a row :", "The integer must between 1 and 3, retry.");
-        short column = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a column :", "The integer must between 1 and 4, retry.");
+        short row = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a row :", "The integer must between 1 and 4, retry.");
+        short column = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a column :", "The integer must between 1 and 3, retry.");
         position.add(row);
         position.add(column);
         return position;
@@ -26,6 +26,13 @@ public class Player {
     public boolean takeACardFromADeck(Deck deck, Deck discard_pile, short state)
     {
         ArrayList<Short> position = new ArrayList<>();
+
+        if (state == 2)
+        {
+            deck.changeFirstCard(deck.getValueCard(), deck.getUvCard(), true);
+            System.out.println("Card picked : " + deck.getCard());
+        }
+
         position = this.askPosition();
         int indiceHand = (position.get(0)-1) * 3 + position.get(1) - 1;
         Card temp = new Card(this.hand.get(indiceHand).getValue(), this.hand.get(indiceHand).getUv()); // récuperation de la carte qui va être remplacé
@@ -44,7 +51,14 @@ public class Player {
         }
         else if (state == 3)
         {
-            this.hand.get(indiceHand).changeVisibility(true);
+            if (this.hand.get(indiceHand).getVisibility())
+            {
+                return false;
+            }
+            else
+            {
+                this.hand.get(indiceHand).changeVisibility(true);
+            }
         }
         else
         {
@@ -84,19 +98,6 @@ public class Player {
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
                     break;
                 case 3:
-                    short count = 0;
-                    for (int i = 0 ; i < 12 ; i++)
-                    {
-                        if (this.hand.get(i).getVisibility() == false)
-                        {
-                            count ++;
-                        }
-                    }
-                    if (count <= 0)
-                    {
-                        System.out.println("All of your cards are returned, choose another action.");
-                        break;
-                    }
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
                     break;
                 default:
@@ -110,9 +111,24 @@ public class Player {
         } while (!round_played);
     }
 
-    public boolean verifyWin(){
-        //code pour verifier si ce joueur a gagné
-        return false;
+    public boolean verifyWin() {
+        short count = 0;
+        for (int i = 0 ; i < 12 ; i++)
+        {
+            if (!this.hand.get(i).getVisibility())
+            {
+                count ++;
+            }
+        }
+        if (count <= 0)
+        {
+            System.out.println("All of your cards are returned, you win !");
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     //return hisTurn

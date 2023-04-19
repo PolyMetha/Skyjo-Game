@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 public class GameLoop {
     private int nbRound;    //the actual round playing
@@ -15,13 +16,22 @@ public class GameLoop {
         while(play) {
             int i = 0;
             while(its.hasNext()){
+                if (i == 0 && nbRound != 0) {
+                    players.get(i).printHand();
+                }
                 players.get(i).round(deck, discard_pile);
                 i++;
+                if (i <= players.size() - 1) {
+                    players.get(i).printHand();
+                }
                 play = !its.next().verifyWin();
+                nbRound ++;
             }
             //reinitialise l'itérateur
             its = players.iterator();
         }
+
+        // calcul score
     }
 
     //switch the player playing
