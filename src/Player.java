@@ -53,6 +53,8 @@ public class Player {
         {
             if (this.hand.get(indiceHand).getVisibility())
             {
+                System.out.println("This card is already returned, please select another card.");
+                this.printHand();
                 return false;
             }
             else
@@ -101,6 +103,12 @@ public class Player {
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
                     break;
                 default:
+                    /* for (int i = 0 ; i < 12 ; i ++)
+                    {
+                        this.hand.get(i).changeVisibility(true);
+                    }
+                    this.printHand();
+                    round_played = true;*/
                     System.out.println("Error");
                     break;
             }
@@ -122,7 +130,7 @@ public class Player {
         }
         if (count <= 0)
         {
-            System.out.println("All of your cards are returned, you win !");
+            System.out.println("All of your cards are returned, you finished ! Please wait the end of the round");
             return true;
         }
         else
@@ -163,5 +171,10 @@ public class Player {
                 System.out.print(this.hand.get(i-1).getCard() + " | ");
             }
         }
+    }
+
+    public ArrayList<Card> getHand()
+    {
+        return this.hand;
     }
 }

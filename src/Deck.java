@@ -84,20 +84,20 @@ public class Deck {
     }
 
     public void printDeck(String name) {
-        System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
             if (name.equals("Deck"))
             {
                 this.cards.get(this.cards.size()-1).changeVisibility(false);
             }
-            else {
+            else
+            {
                 this.cards.get(this.cards.size()-1).changeVisibility(true);
             }
-            System.out.print("|" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
+            System.out.print(name + " : |" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
         }
         else {
-            System.out.println("empty");
+            System.out.println(name + " : empty");
         }
     }
 

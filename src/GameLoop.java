@@ -7,7 +7,40 @@ public class GameLoop {
     private int roundOf;    //The number of the player which is playing (0 or 1)
     private boolean play;
 
-    public GameLoop(ArrayList<Player> players, Deck deck, Deck discard_pile){
+    public short calculScore(Player player)
+    {
+        short score = 0;
+        short indice = 0;
+        Iterator<Card> it = player.getHand().iterator();
+        while (it.hasNext())
+        {
+            Card card = it.next();
+            score += (short) card.getValue();
+        }
+        return score;
+    }
+
+    public void displayScore(ArrayList<Player> players)
+    {
+        ArrayList<Short> scoreTable = new ArrayList<>();
+
+        for (int j = 0 ; j < players.size(); j++)
+        {
+            scoreTable.add(calculScore(players.get(j)));
+        }
+
+        System.out.println("------- Score -------");
+
+        for (int k = 0 ; k < players.size(); k++)
+        {
+            System.out.println("Player " + (k + 1) + " : " + scoreTable.get(k));
+        }
+
+        System.out.println("---------------------");
+    }
+
+    public GameLoop(ArrayList<Player> players, Deck deck, Deck discard_pile)
+    {
         this.nbRound = 0;
         roundOf = (int)(Math.random()*players.size());
         this.play = true;
@@ -20,18 +53,18 @@ public class GameLoop {
                     players.get(i).printHand();
                 }
                 players.get(i).round(deck, discard_pile);
+                play = !its.next().verifyWin();
                 i++;
                 if (i <= players.size() - 1) {
                     players.get(i).printHand();
                 }
-                play = !its.next().verifyWin();
                 nbRound ++;
             }
             //reinitialise l'itérateur
             its = players.iterator();
         }
 
-        // calcul score
+        this.displayScore(players);
     }
 
     //switch the player playing
