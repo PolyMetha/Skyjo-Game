@@ -68,7 +68,8 @@ public class Deck {
         System.out.println(name + " : ");
         if (this.cards.size() > 0)
         {
-            System.out.print("|" + this.cards.get(0).getCard() + "| \n");
+            this.cards.get(cards.size() - 1).changeVisibility();
+            System.out.print("|" + this.cards.get(cards.size() - 1).getCard() + "| \n");
         }
         else {
             System.out.println("empty");

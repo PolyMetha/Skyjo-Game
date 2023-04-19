@@ -14,7 +14,7 @@ public class GameLoop {
 
         while(play){
             while(its.hasNext()){
-                its.next().tour();
+                its.next().round();
                 its.next().verifyWin();
             }
         }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Player {
     private int id;                 //0 or 1
@@ -12,8 +13,8 @@ public class Player {
         initializeHand(deck);
     }
 
-    public void tour(){
-        //le tour d'un joueur
+    public void round() {
+        short indice = controlInt(1, 3, )
     }
 
     public boolean verifyWin(){
