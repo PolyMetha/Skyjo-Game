@@ -16,7 +16,7 @@ public class Card {
     }
 
     public String getName(){
-        return this.uv.name;
+        return this.uv.getName();
     }
 
     public String getCard() {

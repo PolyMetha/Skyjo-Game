@@ -1,10 +1,19 @@
 public class UV {
-    String name;
-    java.awt.Color color;
-
+    private String name;
+    private java.awt.Color color;
 
     public UV(String name, java.awt.Color color){
             this.name = name;
             this.color = color;
+    }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public java.awt.Color getColor()
+    {
+        return this.color;
     }
 }
