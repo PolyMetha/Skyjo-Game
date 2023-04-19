@@ -37,8 +37,8 @@ public class Card {
         return this.uv.getName();
     }
 
-    public void changeVisibility(){
-        this.visible = !this.visible;
+    public void changeVisibility(boolean visible){
+        this.visible = visible;
     }
 
     public void changeCard(int value, UV uv, boolean visible)

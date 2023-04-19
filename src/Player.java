@@ -1,14 +1,15 @@
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 
 public class Player {
-    private int id;                 //0 or 1
-    private boolean hisTurn;        //true if its his turn
-    private ArrayList<Card> hand;   //hand constitued by 12 cards
+    private int id;                 // 0 or 1
+    private boolean hisTurn;        // true if its his turn
+    private ArrayList<Card> hand;   // hand constitued by 12 cards
 
     public Player(int ID, Deck deck){
         this.id = ID;
         this.hisTurn = false;
-        hand = new ArrayList<>();
+        this.hand = new ArrayList<>();
         initializeHand(deck);
     }
 
@@ -20,6 +21,37 @@ public class Player {
         position.add(row);
         position.add(column);
         return position;
+    }
+
+    public boolean takeACardFromADeck(Deck deck, Deck discard_pile, short state)
+    {
+        ArrayList<Short> position = new ArrayList<>();
+        position = this.askPosition();
+        int indiceHand = (position.get(0)-1) * 3 + position.get(1) - 1;
+        Card temp = new Card(this.hand.get(indiceHand).getValue(), this.hand.get(indiceHand).getUv()); // récuperation de la carte qui va être remplacé
+
+        if (state == 1)
+        {
+            this.hand.get(indiceHand).changeCard(discard_pile.getValueCard(), discard_pile.getUvCard(), true);
+            discard_pile.removeCard();
+            discard_pile.addCard(temp);
+        }
+        else if (state == 2)
+        {
+            this.hand.get(indiceHand).changeCard(deck.getValueCard(), deck.getUvCard(), true); // changement de la carte dans le jeu du joueur
+            deck.removeCard();
+            discard_pile.addCard(temp);
+        }
+        else if (state == 3)
+        {
+            this.hand.get(indiceHand).changeVisibility(true);
+        }
+        else
+        {
+            System.out.println("Error");
+        }
+        this.printHand();
+        return true;
     }
 
     public void round(Deck deck, Deck discard_pile) {
@@ -36,56 +68,45 @@ public class Player {
             switch (indice) {
                 case 1:
                     if (!discard_pile.verifyExistence()) {
+                        System.out.println("The discard pile is empty, choose another action.");
                         break;
                     }
-                    ArrayList<Short> position = new ArrayList<>();
-                    position = this.askPosition();
-                    int indiceHand = (position.get(0)-1) * 3 + position.get(1) - 1;
-                    Card temp = new Card(hand.get(indiceHand).getValue(), hand.get(indiceHand).getUv()); // récuperation de la carte qui va être remplacé
-                    hand.get(indiceHand).changeCard(discard_pile.getValueCard(), discard_pile.getUvCard(), true);
-                    discard_pile.removeCard();
-                    discard_pile.addCard(temp);
-                    printHand();
-                    round_played = true;
+                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 1);
                     break;
                 case 2:
                     if (!deck.verifyExistence()) {
+                        // reprendre le talon moins la dernière carte
+                        // le melanger
+                        // le copier dans le deck
+                        // voilà
                         break;
                     }
-                    ArrayList<Short> position2 = new ArrayList<>();
-                    position2 = this.askPosition(); // demande de la position de la carte à changer dans le jeu du joueur
-                    int indiceHand2 = (position2.get(0)-1) * 3 + position2.get(1) - 1; // transforme la position x,y en indice d'une liste
-                    Card temp2 = new Card(hand.get(indiceHand2).getValue(), hand.get(indiceHand2).getUv()); // récuperation de la carte qui va être remplacé
-                    hand.get(indiceHand2).changeCard(deck.getValueCard(), deck.getUvCard(), true); // changement de la carte dans le jeu du joueur
-                    deck.removeCard();
-                    discard_pile.addCard(temp2);
-                    printHand();
-                    round_played = true;
+                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
                     break;
                 case 3:
                     short count = 0;
                     for (int i = 0 ; i < 12 ; i++)
                     {
-                        if (hand.get(i).getVisibility() == false)
+                        if (this.hand.get(i).getVisibility() == false)
                         {
                             count ++;
                         }
                     }
-                    if (count == 0)
+                    if (count <= 0)
                     {
                         System.out.println("All of your cards are returned, choose another action.");
                         break;
                     }
-                    ArrayList<Short> position3 = new ArrayList<>();
-                    position3 = this.askPosition(); // demande de la position de la carte à changer dans le jeu du joueur
-                    int indiceHand3 = (position3.get(0)-1) * 3 + position3.get(1) - 1; // transforme la position x,y en indice d'une liste
-                    hand.get(indiceHand3).changeVisibility();
-                    round_played = true;
+                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
                     break;
                 default:
                     System.out.println("Error");
                     break;
             }
+
+            deck.printDeck("Deck");
+            discard_pile.printDeck("Discard pile");
+
         } while (round_played);
     }
 
@@ -119,11 +140,11 @@ public class Player {
 
             if(i%3==0)
             {
-                System.out.print(hand.get(i-1).getCard());
+                System.out.print(this.hand.get(i-1).getCard());
                 System.out.println("\n--------------------------------");
             }
             else {
-                System.out.print(hand.get(i-1).getCard() + " | ");
+                System.out.print(this.hand.get(i-1).getCard() + " | ");
             }
         }
     }

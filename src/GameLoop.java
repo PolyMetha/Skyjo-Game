@@ -12,7 +12,7 @@ public class GameLoop {
         this.play = true;
         Iterator<Player> its = players.iterator();
 
-        while(play){
+        while(play) {
             int i = 0;
             while(its.hasNext()){
                 players.get(i).round(deck, discard_pile);
