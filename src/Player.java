@@ -12,6 +12,15 @@ public class Player {
         initializeHand(deck);
     }
 
+    public void tour(){
+        //le tour d'un joueur
+    }
+
+    public boolean verifyWin(){
+        //code pour verifier si ce joueur a gagné
+        return false;
+    }
+
     //return hisTurn
     public boolean getTurn(){
         return hisTurn;
