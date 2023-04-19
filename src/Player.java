@@ -107,7 +107,7 @@ public class Player {
             deck.printDeck("Deck");
             discard_pile.printDeck("Discard pile");
 
-        } while (round_played);
+        } while (!round_played);
     }
 
     public boolean verifyWin(){
