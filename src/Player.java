@@ -36,10 +36,13 @@ public class Player {
             switch (indice) {
                 case 1:
                     System.out.println("1");
-                    if (!discard_pile.verifyExistence()) {
+                    if (discard_pile.verifyExistence()) { // Inverser la condition pour que ça marche
+                        // Là elle est inversée pour que je puisse travailler donc après faudra mettre !discard_pile.verifyExistence()
                         break;
                     }
-                    askPosition
+                    ArrayList<Short> position = new ArrayList<Short>();
+                    position = this.askPosition();
+                    System.out.println(position.get(0) + " : " + position.get(1));
                     break;
                 case 2:
                     System.out.println("2");
