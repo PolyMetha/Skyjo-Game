@@ -1,9 +1,9 @@
 import javax.swing.ImageIcon;
 
 public class UV {
-    private String name;
-    private java.awt.Color color;
-    private ImageIcon image;
+    private final String name;
+    private final java.awt.Color color;
+    private final ImageIcon image;
 
     public UV(String name, java.awt.Color color, ImageIcon image){
             this.name = name;

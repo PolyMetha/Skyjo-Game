@@ -2,13 +2,11 @@ import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 
 public class Player {
-    private int id;                 // 0 or 1
-    private boolean hisTurn;        // true if its his turn
-    private ArrayList<Card> hand;   // hand constitued by 12 cards
+    private final int id;                 // 0 or 1
+    private final ArrayList<Card> hand;   // hand constitued by 12 cards
 
     public Player(int ID, Deck deck){
         this.id = ID;
-        this.hisTurn = false;
         this.hand = new ArrayList<>();
         initializeHand(deck);
     }
@@ -25,7 +23,7 @@ public class Player {
 
     public boolean takeACardFromADeck(Deck deck, Deck discard_pile, short state)
     {
-        ArrayList<Short> position = new ArrayList<>();
+        ArrayList<Short> position;
 
         if (state == 2)
         {
@@ -95,14 +93,14 @@ public class Player {
             short indice = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
 
             switch (indice) {
-                case 1:
+                case 1 -> {
                     if (!discard_pile.verifyExistence()) {
                         System.out.println("The discard pile is empty, choose another action.");
                         break;
                     }
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 1);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     if (!deck.verifyExistence()) {
                         // reprendre le talon moins la dernière carte
                         // le melanger
@@ -111,19 +109,16 @@ public class Player {
                         break;
                     }
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
-                    break;
-                case 3:
-                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
-                    break;
-                default:
-                    /* for (int i = 0 ; i < this.hand.size() ; i ++)
-                    {
-                        this.hand.get(i).changeVisibility(true);
+                }
+                case 3 -> round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
+                default -> {
+                    /*for (Card card : this.hand) {
+                        card.changeVisibility(true);
                     }
                     this.printHand();
                     round_played = true;*/
                     System.out.println("Error");
-                    break;
+                }
             }
 
             deck.printDeck("Deck");
@@ -145,7 +140,7 @@ public class Player {
         }
         if (count <= 0)
         {
-            if (round != nbPlayers)
+            if (round != nbPlayers - 1)
             {
                 System.out.println("All of your cards are returned, you finished ! Please wait the end of the round");
             }
@@ -159,16 +154,6 @@ public class Player {
         {
             return false;
         }
-    }
-
-    //return hisTurn
-    public boolean getTurn(){
-        return this.hisTurn;
-    }
-
-    //set hisTurn
-    public void setTurn(boolean state){
-        this.hisTurn = state;
     }
 
     //initialize the base cards of the player

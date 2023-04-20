@@ -25,7 +25,7 @@ public class Card {
     public String getCard() {
         if (this.visible)
         {
-            return "" + this.getName() + " (" + this.getValue() +")";
+            return this.getName() + " (" + this.getValue() +")";
         }
         else
         {

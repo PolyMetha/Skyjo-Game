@@ -5,12 +5,12 @@ import javax.swing.*;
 
 public class Deck {
 
-    private ArrayList<Card> cards;
-    private HashMap<Integer, UV> dict = new HashMap<>();
+    private final ArrayList<Card> cards;
 
     public Deck (boolean fill) {
         if (fill) {
-            dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
+            HashMap<Integer, UV> dict = new HashMap<>();
+            dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801"), new ImageIcon("/img/0.png")));
             dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
             dict.put(0,  new UV("MBE3", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
             dict.put(1,  new UV("IF2B", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
@@ -26,7 +26,7 @@ public class Deck {
             dict.put(11, new UV("MT28", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
             dict.put(12, new UV("PS25", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
 
-            cards = new ArrayList<Card>();
+            cards = new ArrayList<>();
             //adding 5 -2 cards to the deck
             for (int i = 0 ; i < 5; i++){
                 cards.add(new Card(-2, dict.get(-2)));
@@ -44,7 +44,7 @@ public class Deck {
             shuffle();
         }
         else {
-            cards = new ArrayList<Card>();
+            cards = new ArrayList<>();
         }
     }
 
@@ -86,14 +86,7 @@ public class Deck {
     public void printDeck(String name) {
         if (this.cards.size() > 0)
         {
-            if (name.equals("Deck"))
-            {
-                this.cards.get(this.cards.size()-1).changeVisibility(false);
-            }
-            else
-            {
-                this.cards.get(this.cards.size()-1).changeVisibility(true);
-            }
+            this.cards.get(this.cards.size()-1).changeVisibility(!name.equals("Deck"));
             System.out.print(name + " : |" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
         }
         else {
@@ -102,6 +95,7 @@ public class Deck {
     }
 
     public void PrintDeck(JFrame window) {
+
     }
 
     public void removeCard()
@@ -111,14 +105,7 @@ public class Deck {
 
     public boolean verifyExistence()
     {
-        if (this.cards.size() > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.cards.size() > 0;
     }
 
     public void addCard(Card card)
