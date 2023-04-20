@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.io.IOException;
 
 public class GameLoop {
     private int nbRound;    //the actual round playing
@@ -53,9 +52,9 @@ public class GameLoop {
                     players.get(i).printHand();
                 }
                 players.get(i).round(deck, discard_pile);
-                play = !its.next().verifyWin();
+                play = !its.next().verifyWin((short) nbRound, (short) (players.size()-1));
                 i++;
-                if (i <= players.size() - 1) {
+                if (i < players.size()) {
                     players.get(i).printHand();
                 }
                 nbRound ++;

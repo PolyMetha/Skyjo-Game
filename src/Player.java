@@ -70,6 +70,19 @@ public class Player {
         return true;
     }
 
+    public void verifyRowsAndColumns(Player player)
+    {
+        for (int i = 0 ; i < 12 ; i = i + 3)
+        {
+            if (player.hand.get(i).getUv().equals(player.hand.get(i+1).getUv()) && player.hand.get(i).getUv().equals(player.hand.get(i+2).getUv()))
+            {
+                player.hand.remove(i);
+                player.hand.remove(i+1);
+                player.hand.remove(i+2);
+            }
+        }
+    }
+
     public void round(Deck deck, Deck discard_pile) {
         boolean round_played;
         do {
@@ -103,7 +116,7 @@ public class Player {
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
                     break;
                 default:
-                    /* for (int i = 0 ; i < 12 ; i ++)
+                    /* for (int i = 0 ; i < this.hand.size() ; i ++)
                     {
                         this.hand.get(i).changeVisibility(true);
                     }
@@ -117,11 +130,13 @@ public class Player {
             discard_pile.printDeck("Discard pile");
 
         } while (!round_played);
+
+        // verify color rows or column !
     }
 
-    public boolean verifyWin() {
+    public boolean verifyWin(short round, short nbPlayers) {
         short count = 0;
-        for (int i = 0 ; i < 12 ; i++)
+        for (int i = 0 ; i < this.hand.size() - 1 ; i++)
         {
             if (!this.hand.get(i).getVisibility())
             {
@@ -130,7 +145,14 @@ public class Player {
         }
         if (count <= 0)
         {
-            System.out.println("All of your cards are returned, you finished ! Please wait the end of the round");
+            if (round != nbPlayers)
+            {
+                System.out.println("All of your cards are returned, you finished ! Please wait the end of the round");
+            }
+            else
+            {
+                System.out.println("Game finished !");
+            }
             return true;
         }
         else
@@ -151,7 +173,7 @@ public class Player {
 
     //initialize the base cards of the player
     public void initializeHand(Deck deck){
-        for(int i=0; i<12; i++){
+        for(int i=0; i < 12; i++){
             hand.add(deck.draw());
         }
     }
@@ -160,7 +182,7 @@ public class Player {
     public void printHand(){
         System.out.print("\nHand of player : " + this.id + "\n");
         System.out.println("--------------------------------");
-        for(int i = 1; i <= 12; i++){
+        for(int i = 1; i <= this.hand.size(); i++){
 
             if(i%3==0)
             {
