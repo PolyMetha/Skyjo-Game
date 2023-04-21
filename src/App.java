@@ -20,7 +20,7 @@ public class App {
         window.setLocationRelativeTo(null);
         window.setVisible(true);*/
        
-        short nbPlayers = 2;//Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
+        short nbPlayers = 3;//Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
 
         Deck deck = new Deck(true);
         Deck discard_pile = new Deck(false);

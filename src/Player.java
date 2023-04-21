@@ -56,7 +56,6 @@ public class Player {
             if (this.hand.get(indiceHand).getVisibility())
             {
                 System.out.println("This card is already returned, please select another card.");
-                this.printHand();
                 return false;
             }
             else
@@ -68,7 +67,6 @@ public class Player {
         {
             System.out.println("Error");
         }
-        this.printHand();
         return true;
     }
 
@@ -138,6 +136,8 @@ public class Player {
         do
         {
             round_played = false;
+            deck.printDeck("Deck");
+            discard_pile.printDeck("Discard pile");
             System.out.println("--------------------------------------");
             System.out.println("1. Choose a card from the discard pile");
             System.out.println("2. Choose a card from the deck");
@@ -180,10 +180,6 @@ public class Player {
                     System.out.println("Error");
                 }
             }
-
-            deck.printDeck("Deck");
-            discard_pile.printDeck("Discard pile");
-
         }
         while (!round_played);
 
@@ -229,7 +225,7 @@ public class Player {
     //print hand of the player
     public void printHand()
     {
-        System.out.print("Hand of player : " + (this.id + 1) + "\n");
+        System.out.print("\nHand of player : " + (this.id + 1) + "\n");
         System.out.println("--------------------------------");
         for (int i = 1; i <= this.hand.size(); i++)
         {
@@ -272,5 +268,17 @@ public class Player {
     public ArrayList<Card> getHand()
     {
         return this.hand;
+    }
+
+    public short getFirstCardReturned()
+    {
+        for (Card card : hand)
+        {
+            if (card.getVisibility())
+            {
+                return (short) card.getValue();
+            }
+        }
+        return 20;
     }
 }

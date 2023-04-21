@@ -46,8 +46,6 @@ public class GameLoop {
             player.printHand();
         }
 
-        short firstPlayer;
-
         for (short j = 0 ; j < players.size() ; j++) {
             if (j != 0)
             {
@@ -56,32 +54,69 @@ public class GameLoop {
             players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
         }
 
-        deck.printDeck("Deck");
-        discard_pile.printDeck("Discard pile");
+        ArrayList<Short> listFirstCardPlayer = new ArrayList<>();
 
-        for (Player player : players) {
-            player.printHand();
+        for (Player player : players)
+        {
+            listFirstCardPlayer.add(player.getFirstCardReturned());
         }
 
+        short min = Short.MAX_VALUE; // Initialisez la variable min avec une valeur maximale possible de short
+        int minIndex = -1; // Initialisez l'indice avec une valeur invalide
+        for (int i = 0; i < listFirstCardPlayer.size(); i++) {
+            if (listFirstCardPlayer.get(i) < min) {
+                min = listFirstCardPlayer.get(i);
+                minIndex = i;
+            }
+        }
+
+        short firstPlayer = (short) minIndex;
+
+        short i;
         while(play) {
-            short i = 0;
-            while(its.hasNext())
+            if (nbRound == 0)
             {
-                if (i == 0 && nbRound != 0) {
-                    players.get(i).printHand();
+                i = (short) minIndex;
+                System.out.println("\nThe first player to start is player " + (i + 1));
+            }
+            else
+            {
+                i = 0;
+            }
+
+            do
+            {
+                if (i != minIndex) {
+                    System.out.println("It's player " + (i + 1) + " round " + i);
+                    minIndex = 100;
                 }
+                else {
+                    minIndex = 100;
+                }
+
+                for (Player player : players) {
+                    player.printHand();
+                }
+
                 players.get(i).round(deck, discard_pile);
-                play = !its.next().verifyWin((short) nbRound, (short) players.size());
+                play = !its.next().verifyWin(nbRound, (short) players.size());
                 if (!play)
                 {
                     atLeastOnePlayerFinished = true;
                 }
                 nbRound++;
-                i ++;
-                if (i < players.size()) {
-                    players.get(i).printHand();
+
+                if (i == players.size() - 1)
+                {
+                    i = 0;
                 }
-            }
+                else
+                {
+                    i ++;
+                }
+
+            } while(its.hasNext());
+
             if (atLeastOnePlayerFinished)
             {
                 play = false;
