@@ -79,8 +79,11 @@ public class Player {
             {
                 try
                 {
-                    if (this.hand.get(i).getUv().equals(this.hand.get(i + 1).getUv()) && this.hand.get(i).getUv().equals(this.hand.get(i + 2).getUv()) &&
-                            this.hand.get(i).getVisibility() && this.hand.get(i + 1).getVisibility() && this.hand.get(i + 2).getVisibility())
+                    if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
+                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
+                            && this.hand.get(i).getVisibility()
+                            && this.hand.get(i + 1).getVisibility()
+                            && this.hand.get(i + 2).getVisibility())
                     {
                         this.hand.remove(i);
                         this.hand.remove(i);
@@ -102,9 +105,13 @@ public class Player {
             {
                 try
                 {
-                    if (this.hand.get(i).getUv().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv())
-                            && this.hand.get(i).getUv().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv())
-                            && this.hand.get(i).getUv().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv()))
+                    if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
+                            && this.hand.get(i).getVisibility() 
+                            && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                            && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
+                            && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility() )
                     {
                         this.hand.remove(i);
                         this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
