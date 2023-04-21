@@ -229,7 +229,7 @@ public class Player {
     //print hand of the player
     public void printHand()
     {
-        System.out.print("\nHand of player : " + (this.id + 1) + "\n");
+        System.out.print("Hand of player : " + (this.id + 1) + "\n");
         System.out.println("--------------------------------");
         for (int i = 1; i <= this.hand.size(); i++)
         {

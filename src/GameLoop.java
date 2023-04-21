@@ -22,7 +22,7 @@ public class GameLoop {
 
         System.out.println("------- Score -------");
 
-        for (int k = 0 ; k < players.size(); k++)
+        for (short k = 0 ; k < players.size(); k++)
         {
             System.out.println("Player " + (k + 1) + " : " + scoreTable.get(k));
         }
@@ -33,14 +33,38 @@ public class GameLoop {
     public GameLoop(ArrayList<Player> players, Deck deck, Deck discard_pile)
     {
         //the actual round playing
-        int nbRound = 0;
+        short nbRound = 0;
         boolean play = true;
         Iterator<Player> its = players.iterator();
 
         boolean atLeastOnePlayerFinished = false;
 
+        System.out.println("Welcome to the a UTBM version fo the Skyjo game !" +
+                "\nLet's choose a card within your cards and see who will begin !");
+
+        for (Player player : players) {
+            player.printHand();
+        }
+
+        short firstPlayer;
+
+        for (short j = 0 ; j < players.size() ; j++) {
+            if (j != 0)
+            {
+                players.get(j).printHand();
+            }
+            players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
+        }
+
+        deck.printDeck("Deck");
+        discard_pile.printDeck("Discard pile");
+
+        for (Player player : players) {
+            player.printHand();
+        }
+
         while(play) {
-            int i = 0;
+            short i = 0;
             while(its.hasNext())
             {
                 if (i == 0 && nbRound != 0) {

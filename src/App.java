@@ -28,13 +28,12 @@ public class App {
 
         // deck.PrintDeck(window);
 
-        for (int i=0 ; i < nbPlayers ; i++) {
+        for (short i = 0 ; i < nbPlayers ; i++) {
             players.add(new Player(i, deck));
-            players.get(i).printHand();
         }
 
-        deck.printDeck("Deck");
-        discard_pile.printDeck("Discard pile");
+        /* deck.printDeck("Deck");
+        discard_pile.printDeck("Discard pile"); */
 
         GameLoop gameLoop = new GameLoop(players, deck, discard_pile);
     }
