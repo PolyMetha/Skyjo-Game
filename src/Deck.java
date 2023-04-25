@@ -1,30 +1,29 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import javax.swing.*;
 
 public class Deck {
 
-    private final ArrayList<Card> cards;
+    private ArrayList<Card> cards;
 
     public Deck (boolean fill) {
         if (fill) {
             HashMap<Integer, UV> dict = new HashMap<>();
-            dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801"), new ImageIcon("/img/0.png")));
-            dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(0,  new UV("MBE3", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(1,  new UV("IF2B", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(2, new UV("MT2A", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(3,  new UV("IF3B", java.awt.Color.decode("#FEB801"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(4, new UV("LE08", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(5, new UV("PS2A", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(6, new UV("LE03", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(7, new UV("IF2A", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(8, new UV("GE00", java.awt.Color.decode("#E2595C"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(9, new UV("MT3E", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(10, new UV("PS28", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(11, new UV("MT28", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
-            dict.put(12, new UV("PS25", java.awt.Color.decode("#22A60D"), new ImageIcon("C:/Users/reini/OneDrive/Images/-2.jpg")));
+            dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801")));
+            dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C")));
+            dict.put(0,  new UV("MBE3", java.awt.Color.decode("#FEB801")));
+            dict.put(1,  new UV("IF2B", java.awt.Color.decode("#FEB801")));
+            dict.put(2, new UV("MT2A", java.awt.Color.decode("#22A60D")));
+            dict.put(3,  new UV("IF3B", java.awt.Color.decode("#FEB801")));
+            dict.put(4, new UV("LE08", java.awt.Color.decode("#E2595C")));
+            dict.put(5, new UV("PS2A", java.awt.Color.decode("#22A60D")));
+            dict.put(6, new UV("LE03", java.awt.Color.decode("#E2595C")));
+            dict.put(7, new UV("IF2A", java.awt.Color.decode("#FEB801")));
+            dict.put(8, new UV("GE00", java.awt.Color.decode("#E2595C")));
+            dict.put(9, new UV("MT3E", java.awt.Color.decode("#22A60D")));
+            dict.put(10, new UV("PS28", java.awt.Color.decode("#22A60D")));
+            dict.put(11, new UV("MT28", java.awt.Color.decode("#22A60D")));
+            dict.put(12, new UV("PS25", java.awt.Color.decode("#22A60D")));
 
             cards = new ArrayList<>();
             //adding 5 -2 cards to the deck
@@ -51,6 +50,11 @@ public class Deck {
     public int getValueCard()
     {
         return cards.get(this.cards.size()-1).getValue();
+    }
+
+    public ArrayList<Card> getCards()
+    {
+        return this.cards;
     }
 
     public String getCard()
@@ -94,8 +98,9 @@ public class Deck {
         }
     }
 
-    public void PrintDeck(JFrame window) {
-
+    public void addAllCards(Deck deck)
+    {
+        this.getCards().addAll(deck.getCards());
     }
 
     public void removeCard()

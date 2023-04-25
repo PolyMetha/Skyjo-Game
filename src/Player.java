@@ -1,14 +1,23 @@
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 
 public class Player {
     private final int id;                 // 0 or 1
-    private final ArrayList<Card> hand;   // hand constitued by 12 cards
+    private ArrayList<Card> hand;   // hand constitued by 12 cards
     private short nbColumnRemoved;
     private short nbLineRemoved;
+    private short score;
 
     public Player(int ID, Deck deck){
         this.id = ID;
+        this.hand = new ArrayList<>();
+        this.nbColumnRemoved = 0;
+        this.nbLineRemoved = 0;
+        this.score = 0;
+        initializeHand(deck);
+    }
+
+    public void resetPlayer(Deck deck)
+    {
         this.hand = new ArrayList<>();
         this.nbColumnRemoved = 0;
         this.nbLineRemoved = 0;
@@ -92,10 +101,7 @@ public class Player {
                         System.out.println("Line removed !");
                     }
                 }
-                catch (Exception exception)
-                {
-                    // System.out.println(exception);
-                }
+                catch (Exception exception) {}
             }
         }
         // verify columns
@@ -103,35 +109,42 @@ public class Player {
         {
             for (int i = 0 ; i <= 2 - this.nbColumnRemoved; i ++)
             {
-                try
-                {
-                    if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
-                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
-                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
-                            && this.hand.get(i).getVisibility() 
-                            && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
-                            && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
-                            && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility() )
-                    {
-                        this.hand.remove(i);
-                        this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                        switch (this.nbLineRemoved)
-                        {
-                            case 0 ->
-                            {
+                switch (nbLineRemoved) {
+                    case 0 -> {
+                        try {
+                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
+                                    && this.hand.get(i).getVisibility()
+                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
+                                    && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
+                                this.hand.remove(i);
+                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
                                 this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
                                 this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
+
+                                this.nbColumnRemoved += 1;
+                                System.out.println("Column removed !");
                             }
-                            case 1 -> this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
-                            default -> System.out.println("Error");
-                        }
-                        this.nbColumnRemoved += 1;
-                        System.out.println("Column removed !");
+                        } catch (Exception exception) {}
                     }
-                }
-                catch (Exception exception)
-                {
-                    // System.out.println("Except 2");
+                    case 1 -> {
+                        try {
+                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                    && this.hand.get(i).getVisibility()
+                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+                                this.hand.remove(i);
+                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+                                this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+                                this.nbColumnRemoved += 1;
+                                System.out.println("Column removed !");
+                            }
+                        } catch (Exception exception) {}
+                    }
                 }
             }
         }
@@ -167,10 +180,10 @@ public class Player {
                 {
                     if (!deck.verifyExistence())
                     {
-                        // reprendre le talon moins la dernière carte
-                        // le melanger
-                        // le copier dans le deck
-                        // voilà
+                        deck = new Deck(false);
+                        deck.addAllCards(discard_pile);
+                        discard_pile = new Deck(false);
+                        discard_pile.addCard(deck.draw());
                         break;
                     }
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
@@ -210,7 +223,7 @@ public class Player {
             }
             else
             {
-                System.out.println("Game finished !");
+                System.out.println("Round finished !");
             }
             return true;
         }
@@ -270,6 +283,14 @@ public class Player {
                 case 3 -> System.out.println("empty");
             }
         }
+    }
+
+    public void setScore(short score) {
+        this.score += score;
+    }
+
+    public short getScore() {
+        return this.score;
     }
 
     public ArrayList<Card> getHand()

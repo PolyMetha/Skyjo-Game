@@ -1,40 +1,45 @@
 import java.util.ArrayList;
-import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
-        /*
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Skyjo game");
 
-        GamePanel gamePanel = new GamePanel();
-        window.add(gamePanel);
-        //ImageIcon image = new ImageIcon("C:/Users/reini/OneDrive/Images/carte.jpg");
-        //JLabel label = new JLabel(image);
-        //window.add(label);
+        short nbPlayers = Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
 
-        window.pack();
-
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);*/
-       
-        short nbPlayers = 3;//Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
+        // Initialisation des variables
+        GameLoop gameLoop = new GameLoop();
+        int maxScore = 50;
+        boolean gameOver = false;
 
         Deck deck = new Deck(true);
         Deck discard_pile = new Deck(false);
         ArrayList<Player> players = new ArrayList<>();
 
-        // deck.PrintDeck(window);
-
         for (short i = 0 ; i < nbPlayers ; i++) {
             players.add(new Player(i, deck));
         }
 
-        /* deck.printDeck("Deck");
-        discard_pile.printDeck("Discard pile"); */
 
-        GameLoop gameLoop = new GameLoop(players, deck, discard_pile);
+        System.out.println("Welcome to the a UTBM version fo the Skyjo game !" +
+                "\nLet's choose a card within your cards and see who will begin !");
+
+        while(!gameOver) {
+            // Exécution d'une manche de jeu
+            gameLoop.executeRound(players, deck, discard_pile);
+
+            Utility.displayScore(players);
+
+            // Vérification du score de chaque joueur
+            for(Player player : players)
+            {
+                if(player.getScore() >= maxScore)
+                {
+                    gameOver = true;
+                    break;
+                }
+            }
+            gameLoop.resetGame(players, deck, discard_pile);
+        }
+
+        System.out.println("Le jeu est terminé !");
     }
 }

@@ -3,44 +3,24 @@ import java.util.Iterator;
 
 public class GameLoop {
 
-    public short calculScore(Player player)
+    public void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
     {
-        short score = 0;
-        for (Card card : player.getHand()) {
-            score += (short) card.getValue();
-        }
-        return score;
-    }
+        deck = new Deck(true);
+        discard_pile = new Deck(false);
 
-    public void displayScore(ArrayList<Player> players)
-    {
-        ArrayList<Short> scoreTable = new ArrayList<>();
-
-        for (Player player : players) {
-            scoreTable.add(calculScore(player));
-        }
-
-        System.out.println("------- Score -------");
-
-        for (short k = 0 ; k < players.size(); k++)
+        for (Player player : players)
         {
-            System.out.println("Player " + (k + 1) + " : " + scoreTable.get(k));
+            player.resetPlayer(deck);
         }
-
-        System.out.println("---------------------");
     }
 
-    public GameLoop(ArrayList<Player> players, Deck deck, Deck discard_pile)
-    {
+    public void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
         //the actual round playing
         short nbRound = 0;
         boolean play = true;
         Iterator<Player> its = players.iterator();
 
         boolean atLeastOnePlayerFinished = false;
-
-        System.out.println("Welcome to the a UTBM version fo the Skyjo game !" +
-                "\nLet's choose a card within your cards and see who will begin !");
 
         for (Player player : players) {
             player.printHand();
@@ -70,35 +50,34 @@ public class GameLoop {
             }
         }
 
-        short firstPlayer = (short) minIndex;
-
-        short i;
+        short j;
         while(play) {
             if (nbRound == 0)
             {
-                i = (short) minIndex;
-                System.out.println("\nThe first player to start is player " + (i + 1));
+                j = (short) minIndex;
+                if (j != 0)
+                {
+                    its.next();
+                }
+                System.out.println("\nThe first player to start is player " + (j + 1));
             }
             else
             {
-                i = 0;
+                j = 0;
             }
 
             do
             {
-                if (i != minIndex) {
-                    System.out.println("It's player " + (i + 1) + " round " + i);
-                    minIndex = 100;
+                if (j != minIndex) {
+                    System.out.println("It's player " + (j + 1) + " round's");
                 }
-                else {
-                    minIndex = 100;
-                }
+                minIndex = 100;
 
                 for (Player player : players) {
                     player.printHand();
                 }
 
-                players.get(i).round(deck, discard_pile);
+                players.get(j).round(deck, discard_pile);
                 play = !its.next().verifyWin(nbRound, (short) players.size());
                 if (!play)
                 {
@@ -106,15 +85,14 @@ public class GameLoop {
                 }
                 nbRound++;
 
-                if (i == players.size() - 1)
+                if (j == players.size() - 1)
                 {
-                    i = 0;
+                    j = 0;
                 }
                 else
                 {
-                    i ++;
+                    j ++;
                 }
-
             } while(its.hasNext());
 
             if (atLeastOnePlayerFinished)
@@ -124,7 +102,5 @@ public class GameLoop {
             //reinitialise l'itérateur
             its = players.iterator();
         }
-
-        this.displayScore(players);
     }
 }
