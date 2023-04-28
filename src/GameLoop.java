@@ -4,7 +4,7 @@ import java.util.Iterator;
 public class GameLoop {
 
     // Reset the game with a new deck and empty discard pile for each player
-    public void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
+    public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
     {
         // Create a new deck and discard pile
         deck = new Deck(true);
@@ -18,7 +18,7 @@ public class GameLoop {
     }
 
     // Execute a round of the game
-    public void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
+    public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
         // Initialize some variables for the round
         short nbRound = 0;
         boolean play = true;

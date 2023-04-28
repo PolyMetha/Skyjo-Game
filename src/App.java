@@ -7,7 +7,6 @@ public class App {
         short nbPlayers = Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
 
         // Initialize the variables for the game
-        GameLoop gameLoop = new GameLoop();
         int maxScore = 50;
         boolean gameOver = false;
 
@@ -33,7 +32,7 @@ public class App {
         while(!gameOver) {
 
             // Execute a round of the game
-            gameLoop.executeRound(players, deck, discard_pile);
+            GameLoop.executeRound(players, deck, discard_pile);
 
             // Display the scores of all the players
             Utility.displayScore(players);
@@ -49,7 +48,7 @@ public class App {
             }
 
             // Reset the game state for the next round
-            gameLoop.resetGame(players, deck, discard_pile);
+            GameLoop.resetGame(players, deck, discard_pile);
         }
 
         // Print the message to indicate that the game is finished
