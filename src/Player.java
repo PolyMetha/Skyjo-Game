@@ -27,8 +27,8 @@ public class Player {
     public ArrayList<Short> askPosition()
     {
         ArrayList<Short> position = new ArrayList<>();
-        short row = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a row :", "The integer must between 1 and 4, retry.");
-        short column = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a column :", "The integer must between 1 and 3, retry.");
+        short row = Utility.controlInt((short) 1, (short) (4 - this.nbLineRemoved), "Enter an integer to select a row :", "The integer must between 1 and 4, retry.");
+        short column = Utility.controlInt((short) 1, (short) (3 - this.nbColumnRemoved), "Enter an integer to select a column :", "The integer must between 1 and 3, retry.");
         position.add(row);
         position.add(column);
         return position;
@@ -163,7 +163,7 @@ public class Player {
             System.out.println("2. Choose a card from the deck");
             System.out.println("3. Discover a card within your game");
             System.out.println("--------------------------------------");
-            short indice = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
+            short indice = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
 
             switch (indice)
             {
