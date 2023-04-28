@@ -4,17 +4,20 @@ import java.util.HashMap;
 
 public class Deck {
 
+    // List of cards in the deck
     private ArrayList<Card> cards;
 
-    public Deck (boolean fill) {
+    // Constructor for the deck
+    public Deck(boolean fill) {
         if (fill) {
+            // Map of UV values for each card value
             HashMap<Integer, UV> dict = new HashMap<>();
             dict.put(-2, new UV("PC20", java.awt.Color.decode("#FEB801")));
-            dict.put(-1,  new UV("LE09", java.awt.Color.decode("#E2595C")));
-            dict.put(0,  new UV("MBE3", java.awt.Color.decode("#FEB801")));
-            dict.put(1,  new UV("IF2B", java.awt.Color.decode("#FEB801")));
+            dict.put(-1, new UV("LE09", java.awt.Color.decode("#E2595C")));
+            dict.put(0, new UV("MBE3", java.awt.Color.decode("#FEB801")));
+            dict.put(1, new UV("IF2B", java.awt.Color.decode("#FEB801")));
             dict.put(2, new UV("MT2A", java.awt.Color.decode("#22A60D")));
-            dict.put(3,  new UV("IF3B", java.awt.Color.decode("#FEB801")));
+            dict.put(3, new UV("IF3B", java.awt.Color.decode("#FEB801")));
             dict.put(4, new UV("LE08", java.awt.Color.decode("#E2595C")));
             dict.put(5, new UV("PS2A", java.awt.Color.decode("#22A60D")));
             dict.put(6, new UV("LE03", java.awt.Color.decode("#E2595C")));
@@ -25,96 +28,95 @@ public class Deck {
             dict.put(11, new UV("MT28", java.awt.Color.decode("#22A60D")));
             dict.put(12, new UV("PS25", java.awt.Color.decode("#22A60D")));
 
+            // Initialize the deck with the cards according to the game rules
             cards = new ArrayList<>();
-            //adding 5 -2 cards to the deck
-            for (int i = 0 ; i < 5; i++){
+            // Add 5 -2 cards to the deck
+            for (int i = 0; i < 5; i++) {
                 cards.add(new Card(-2, dict.get(-2)));
             }
-            //adding 5 0 cards to the deck, 10 will be added in the next loop to have 15 of it
-            for (int i = 0 ; i < 5 ; i++){
+            // Add 5 0 cards to the deck, 10 will be added in the next loop to have 15 of them
+            for (int i = 0; i < 5; i++) {
                 cards.add(new Card(0, dict.get(0)));
             }
-            //adding 10 1->10 cards to the deck
-            for (int i = -1 ; i <= 12 ; i++){
-                for(int j = 0 ; j < 10 ; j++){
+            // Add 10 1->10 cards to the deck
+            for (int i = -1; i <= 12; i++) {
+                for (int j = 0; j < 10; j++) {
                     cards.add(new Card(i, dict.get(i)));
                 }
             }
+
+            // Shuffle the deck
             shuffle();
-        }
-        else {
+        } else {
+            // Initialize an empty deck
             cards = new ArrayList<>();
         }
     }
 
-    public int getValueCard()
-    {
-        return cards.get(this.cards.size()-1).getValue();
+    // Get the value of the top card in the deck
+    public int getValueCard() {
+        return cards.get(this.cards.size() - 1).getValue();
     }
 
-    public ArrayList<Card> getCards()
-    {
+    // Get the list of cards in the deck
+    public ArrayList<Card> getCards() {
         return this.cards;
     }
 
-    public String getCard()
-    {
-        return cards.get(this.cards.size()-1).getCard();
+    // Get the name of the top card in the deck
+    public String getCard() {
+        return cards.get(this.cards.size() - 1).getCard();
     }
 
-    public UV getUvCard()
-    {
-        return cards.get(this.cards.size()-1).getUv();
+    // Get the UV values of the top card in the deck
+    public UV getUvCard() {
+        return cards.get(this.cards.size() - 1).getUv();
     }
 
-    //shuffle the deck
-    public void shuffle(){
-        Collections.shuffle(cards);
+    // Shuffle the deck
+    public void shuffle() {
+        Collections.shuffle(cards); // shuffle the cards using the Collections.shuffle method
     }
 
-    public void changeFirstCard(int value, UV uv, boolean visible)
-    {
-        this.cards.get(this.cards.size()-1).changeCard(value, uv, visible);
+    public void changeFirstCard(int value, UV uv, boolean visible) {
+        // change the value, uv, and visibility of the first card in the deck
+        this.cards.get(this.cards.size() - 1).changeCard(value, uv, visible);
     }
 
-    //return the last card on the pile and delete it from the deck
-    public Card draw(){
-        if (this.cards.size()!=0){
-            Card lastCard = this.cards.get(this.cards.size()-1);
-            this.removeCard();
-            return lastCard;
+    // Return the last card on the pile and delete it from the deck
+    public Card draw() {
+        if (this.cards.size() != 0) { // check if there is at least one card in the deck
+            Card lastCard = this.cards.get(this.cards.size() - 1); // get the last card in the deck
+            this.removeCard(); // remove the last card from the deck
+            return lastCard; // return the last card
         }
-        return null;
+        return null; // return null if there are no cards in the deck
     }
 
     public void printDeck(String name) {
-        if (this.cards.size() > 0)
+        if (this.cards.size() > 0) // check if there is at least one card in the deck
         {
-            this.cards.get(this.cards.size()-1).changeVisibility(!name.equals("Deck"));
-            System.out.print(name + " : |" + this.cards.get(this.cards.size()-1).getCard() + "| \n");
+            // change the visibility of the last card in the deck and print it
+            this.cards.get(this.cards.size() - 1).changeVisibility(!name.equals("Deck"));
+            System.out.print(name + " : |" + this.cards.get(this.cards.size() - 1).getCard() + "| \n");
+        } else {
+            System.out.println(name + " : empty"); // if there are no cards in the deck, print "empty"
         }
-        else {
-            System.out.println(name + " : empty");
-        }
     }
 
-    public void addAllCards(Deck deck)
-    {
-        this.getCards().addAll(deck.getCards());
+    public void addAllCards(Deck deck) {
+        this.getCards().addAll(deck.getCards()); // add all the cards from the provided deck to this deck
     }
 
-    public void removeCard()
-    {
-        this.cards.remove(this.cards.size()-1);
+    public void removeCard() {
+        this.cards.remove(this.cards.size() - 1); // remove the last card from the deck
     }
 
-    public boolean verifyExistence()
-    {
-        return this.cards.size() > 0;
+    public boolean verifyExistence() {
+        return this.cards.size() > 0; // check if there is at least one card in the deck and return a boolean value
     }
 
-    public void addCard(Card card)
-    {
-        this.cards.add(card);
+    public void addCard(Card card) {
+        this.cards.add(card); // add a card to the deck
     }
 }

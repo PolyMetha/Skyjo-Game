@@ -3,29 +3,34 @@ import java.util.Iterator;
 
 public class GameLoop {
 
+    // Reset the game with a new deck and empty discard pile for each player
     public void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
     {
+        // Create a new deck and discard pile
         deck = new Deck(true);
         discard_pile = new Deck(false);
 
+        // Reset each player with the new deck
         for (Player player : players)
         {
             player.resetPlayer(deck);
         }
     }
 
+    // Execute a round of the game
     public void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
-        //the actual round playing
+        // Initialize some variables for the round
         short nbRound = 0;
         boolean play = true;
         Iterator<Player> its = players.iterator();
-
         boolean atLeastOnePlayerFinished = false;
 
+        // Print each player's hand
         for (Player player : players) {
             player.printHand();
         }
 
+        // Each player takes a card from the deck to know who is the first player to start
         for (short j = 0 ; j < players.size() ; j++) {
             if (j != 0)
             {
@@ -34,15 +39,14 @@ public class GameLoop {
             players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
         }
 
+        // Get the first card returned by each player and find the player with the lowest card
         ArrayList<Short> listFirstCardPlayer = new ArrayList<>();
-
         for (Player player : players)
         {
             listFirstCardPlayer.add(player.getFirstCardReturned());
         }
-
-        short min = Short.MAX_VALUE; // Initialisez la variable min avec une valeur maximale possible de short
-        int minIndex = -1; // Initialisez l'indice avec une valeur invalide
+        short min = Short.MAX_VALUE; // Initialize the variable min with the maximum possible value of short
+        int minIndex = -1; // Initialize the index with an invalid value
         for (int i = 0; i < listFirstCardPlayer.size(); i++) {
             if (listFirstCardPlayer.get(i) < min) {
                 min = listFirstCardPlayer.get(i);
@@ -50,6 +54,7 @@ public class GameLoop {
             }
         }
 
+        // Play the round until all players have finished
         short j;
         while(play) {
             if (nbRound == 0)
@@ -66,18 +71,20 @@ public class GameLoop {
                 j = 0;
             }
 
+            // Play one round for each player
             do
             {
                 if (j != minIndex) {
                     System.out.println("It's player " + (j + 1) + " round's");
                 }
-                minIndex = 100;
 
+                // Print each player's hand and execute their turn
                 for (Player player : players) {
                     player.printHand();
                 }
-
                 players.get(j).round(deck, discard_pile);
+
+                // Check if the player has won and update the play variable accordingly
                 play = !its.next().verifyWin(nbRound, (short) players.size());
                 if (!play)
                 {
@@ -85,6 +92,7 @@ public class GameLoop {
                 }
                 nbRound++;
 
+                // Move to the next player
                 if (j == players.size() - 1)
                 {
                     j = 0;
@@ -95,11 +103,13 @@ public class GameLoop {
                 }
             } while(its.hasNext());
 
+            // Check if at least one player has finished and update the play variable accordingly
             if (atLeastOnePlayerFinished)
             {
                 play = false;
             }
-            //reinitialise l'itérateur
+
+            // Reset the iterator to the beginning
             its = players.iterator();
         }
     }
