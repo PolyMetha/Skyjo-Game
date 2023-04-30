@@ -4,12 +4,14 @@ public class Card {
     private int value;
     private UV uv;
     private boolean visible;
+    private UIComponent uiCard;
 
     // Constructor to initialize the card's value, UV, and visibility status
-    public Card(int value, UV uv){
+    public Card(int value, UV uv, UIComponent uiCard){
         this.value = value;
         this.uv = uv;
         this.visible = false;
+        this.uiCard = uiCard;
     }
 
     // Getter method to retrieve the card's UV
@@ -20,6 +22,11 @@ public class Card {
     // Getter method to retrieve the card's value
     public int getValue() {
         return this.value;
+    }
+
+    
+    public UIComponent getUICard(){
+        return uiCard;
     }
 
     // Getter method to retrieve the card's visibility status

@@ -1,10 +1,39 @@
+import java.awt.Component;
+import java.awt.LayoutManager;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class App {
     public static void main(String[] args) {
 
+
+        JFrame window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setTitle("Skyjo game");
+        window.setLayout(null);
+        window.setSize(5000, 5000);
+        
+        //PNG size : 1556*2000
+        
+        // UIComponent label = new UIComponent(new ImageResized("img/-1.png"));
+        // label.setBounds(0, 0, label.getImage().getImage().getWidth(null), label.getImage().getImage().getHeight(null));
+        
+        // window.add(label);
+
+        
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+
+
         // Prompt the user to input the number of players and validate the input
         short nbPlayers = Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
+        String waitMessage = "Game Loading, Please wait...";
+        window.add(new JLabel(waitMessage));
+        System.out.println(waitMessage);
 
         // Initialize the variables for the game
         int maxScore = 50;
@@ -28,11 +57,14 @@ public class App {
         System.out.println("Welcome to the UTBM version of the Skyjo game!" +
                 "\nLet's choose a card within your cards and see who will begin!");
 
+        //initialize the base view
+        GameLoop.initializeRoundUI(window, players, deck, discard_pile);
+
         // Play the game until a player reaches the maximum score
         while(!gameOver) {
 
             // Execute a round of the game
-            GameLoop.executeRound(players, deck, discard_pile);
+            GameLoop.executeRound(players, deck, discard_pile, window);
 
             // Display the scores of all the players
             Utility.displayScore(players);

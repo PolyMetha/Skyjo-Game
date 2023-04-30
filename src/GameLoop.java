@@ -1,7 +1,11 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JFrame;
+
 public class GameLoop {
+
+    final private static int UI_HAND_OFFSET = 50;
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -17,8 +21,26 @@ public class GameLoop {
         }
     }
 
+    public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
+        //initialize player hands
+        int i =0, j=0;
+        for (Player player : players) {
+            player.printHand(window, i*(player.getUiHandSize()[0]+UI_HAND_OFFSET), j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
+            System.out.println(player.getUiHandSize()[0]);
+            i++;
+            if(i==3){
+                j+=1;
+                i=0;
+            }
+        }
+
+        //initialize deck
+
+        //initialize discard pile
+    }
+
     // Execute a round of the game
-    public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
+    public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile, JFrame window) {
         // Initialize some variables for the round
         short nbRound = 0;
         boolean play = true;
