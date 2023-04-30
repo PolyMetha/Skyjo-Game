@@ -8,35 +8,22 @@ import javax.swing.JLabel;
 public class UIComponent extends JLabel {
     private Runnable onClick;
     private ImageIcon image;
+    private ImageIcon back;
+    private ImageIcon front;
 
     public UIComponent(ImageIcon icon) {
         super(icon);
         image = icon;
+        front = icon;
+        back = new ImageIcon("img/Back.png");
+        this.setIcon(back);
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (onClick != null) {
-                    onClick.run();
-                    System.out.println("clickes");
-                }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
+        // this.addMouseListener(new MouseHandler());
     }
 
 
     public void changeCardImage(ImageIcon newCard){
-        this.setIcon(newCard);
+        // this.setIcon(newCard);
     }
 
     public void setOnClick(Runnable onClick) {
@@ -44,6 +31,6 @@ public class UIComponent extends JLabel {
     }
 
     public ImageIcon getImage(){
-        return image;
+        return this.image;
     }
 }

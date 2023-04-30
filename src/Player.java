@@ -28,9 +28,10 @@ public class Player {
         uiHand = new ArrayList<UIComponent>();
         uiHandSize = new int[2];
         // initialize the player's hand
-        initializeHand(deck);        
-        uiHandSize[0]=5*hand.get(0).getUICard().getImage().getIconWidth();
-        uiHandSize[1]=4*hand.get(0).getUICard().getImage().getIconHeight();
+        initializeHand(deck);
+
+        uiHandSize[0]=5*hand.get(0).getImage().getIconWidth();
+        uiHandSize[1]=4*hand.get(0).getImage().getIconHeight();
     }
 
     // reset the player's state by removing their hand, column and line counts and initializing their hand
@@ -69,7 +70,7 @@ public class Player {
         position = this.askPosition();
         int indiceHand = (position.get(0)-1) * (3 - this.nbColumnRemoved) + position.get(1) - 1;
         // get the card that will be replaced by the new card
-        Card temp = new Card(this.hand.get(indiceHand).getValue(), this.hand.get(indiceHand).getUv(), this.hand.get(indiceHand).getUICard());
+        Card temp = new Card(this.hand.get(indiceHand).getValue(), this.hand.get(indiceHand).getUv(), this.hand.get(indiceHand).getImage());
 
         // replace the card based on the given state
         if (state == 1)
@@ -267,20 +268,22 @@ public class Player {
     // Initialize the player's hand with 12 cards drawn from the deck
     public void initializeHand(Deck deck) {
         for(int i = 0; i < 12; i++) {
-            hand.add(deck.draw());
+            Card card = deck.draw();
+            card.addMouseListener(new MouseHandler(card, this));
+            hand.add(card);
+
         }
+        
     }
 
     public void printHand(JFrame window, int x, int y){
         int j=0, tmpX = x, tmpY = y;
         for(Card card : hand){
-            UIComponent uiCard = card.getUICard();
-            uiHand.add(uiCard);
-            uiHand.get(j).setBounds(x, y, uiHand.get(j).getImage().getImage().getWidth(null), uiHand.get(j).getImage().getImage().getWidth(null));
-            window.add(uiHand.get(j));
-            x+=uiCard.getWidth() + uiCard.getWidth()/4;
+            card.setBounds(x, y, card.getImage().getImage().getWidth(null), card.getImage().getImage().getWidth(null));
+            window.add(card);
+            x+=hand.get(0).getWidth() + hand.get(0).getWidth()/4;
             if(j==3 || j==7){
-                y+=uiCard.getHeight() + uiCard.getHeight()/3;
+                y+=hand.get(0).getHeight() + hand.get(0).getHeight()/3;
                 x=tmpX;
             }
             j+=1;
@@ -363,8 +366,16 @@ public class Player {
     }
 
 
+    public ArrayList<UIComponent> getUiHand(){
+        return uiHand;
+    }
+
     public int[] getUiHandSize(){
         return uiHandSize;
+    }
+
+    public int getID(){
+        return id;
     }
 
     public short getFirstCardReturned()

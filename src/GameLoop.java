@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 public class GameLoop {
 
     final private static int UI_HAND_OFFSET = 50;
+    public static short j=0;
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -33,9 +34,10 @@ public class GameLoop {
                 i=0;
             }
         }
+        
 
         //initialize deck
-
+        deck.printDeck(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET));
         //initialize discard pile
     }
 
@@ -77,7 +79,6 @@ public class GameLoop {
         }
 
         // Play the round until all players have finished
-        short j;
         while(play) {
             if (nbRound == 0)
             {

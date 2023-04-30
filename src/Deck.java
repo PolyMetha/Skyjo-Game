@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+
 public class Deck {
 
     // List of cards in the deck
@@ -32,16 +35,16 @@ public class Deck {
             cards = new ArrayList<>();
             // Add 5 -2 cards to the deck
             for (int i = 0; i < 5; i++) {
-                cards.add(new Card(-2, dict.get(-2),new UIComponent(new ImageResized("img/-2.png"))));
+                cards.add(new Card(-2, dict.get(-2),new ImageResized("img/-2.png")));
             }
             // Add 5 0 cards to the deck, 10 will be added in the next loop to have 15 of them
             for (int i = 0; i < 5; i++) {
-                cards.add(new Card(0, dict.get(0),new UIComponent(new ImageResized("img/0.png"))));
+                cards.add(new Card(0, dict.get(0),new ImageResized("img/0.png")));
             }
             // Add 10 -1->10 cards to the deck
             for (int i = -1; i <= 12; i++) {
                 for (int j = 0; j < 10; j++) {
-                    cards.add(new Card(i, dict.get(i),new UIComponent(new ImageResized("img/"+i+".png"))));
+                    cards.add(new Card(i, dict.get(i),new ImageResized("img/"+i+".png")));
                 }
             }
 
@@ -102,6 +105,12 @@ public class Deck {
         } else {
             System.out.println(name + " : empty"); // if there are no cards in the deck, print "empty"
         }
+    }
+
+    public void printDeck(JFrame window, int x, int y){
+        UIComponent deck = new UIComponent(new ImageResized("img/back.png"));
+        deck.setBounds(x, y, deck.getImage().getImage().getWidth(null), deck.getImage().getImage().getWidth(null));
+        window.add(deck);
     }
 
     public void addAllCards(Deck deck) {
