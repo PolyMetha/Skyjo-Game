@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.JFrame;
@@ -54,8 +55,12 @@ public class GameLoop {
         Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
 
+        //Decide who will begin
+        playerTurn = whoBegins(players);
+
         while(play){    //while nobody outpassed the max score
 
+            
 
             while(playerTurn<players.size()){
                 //wait until an input of the player
@@ -253,5 +258,42 @@ public class GameLoop {
             // Reset the iterator to the beginning
             its = players.iterator();
         }*/
+    }
+
+    private static short whoBegins(ArrayList<Player> players){
+        short bestSum = -5;   //initialise at -5 because the lowest wo can do wth 2 cards is -4
+        short bestSumID=0;
+
+        for(playerTurn =0; playerTurn<players.size(); playerTurn++){
+            //do 1 round of 2 cards return to know which player is going to begin
+
+            //retry while there is no selection or if the player select the deck or the discard pile
+            while(firstSelection == null || firstSelection.getPlayerId()==-1 || firstSelection.getPlayerId()==-2){
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // Handle the exception if necessary
+                }
+            }
+            //moreover, verify if the 2nd selection is different from the first
+            while(secondSelection == null || secondSelection.getPlayerId()==-1 || secondSelection.getPlayerId()==-2 || secondSelection.equals(firstSelection)){
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // Handle the exception if necessary
+                }
+            }
+
+            if(firstSelection.getValue() + secondSelection.getValue()>bestSum){
+                bestSum = (short)(firstSelection.getValue() + secondSelection.getValue());
+                bestSumID = playerTurn;
+            }
+            firstSelection =null;
+            secondSelection=null;
+        }
+
+        //return the ID of the player that had the biggest sum
+        //if there is an equality between 2 players, the first that took the cards begins
+        return bestSumID;
     }
 }
