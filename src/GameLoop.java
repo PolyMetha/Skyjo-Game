@@ -6,7 +6,11 @@ import javax.swing.JFrame;
 public class GameLoop {
 
     final private static int UI_HAND_OFFSET = 50;
-    public static short j=0;
+    public static short playerTurn=0;
+    public static Card firstSelection = null;
+    public static Card secondSelection = null;
+    private static Card discardPileUI=null;
+    private static Card deckUI=null;
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -37,8 +41,9 @@ public class GameLoop {
         
 
         //initialize deck
-        deck.printDeck(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET));
+        deckUI = deck.printDeck(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/back.png", deck.getFirstCard());
         //initialize discard pile
+        discardPileUI = discardPile.PrintDiscardPile(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/Discard_empty.png", new Card(new ImageResized("img/Discard_Empty.png")));
     }
 
     // Execute a round of the game
@@ -49,6 +54,119 @@ public class GameLoop {
         Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
 
+        while(play){    //while nobody outpassed the max score
+            
+            while(playerTurn<players.size()){
+                //wait until an input of the player
+                while(firstSelection == null){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        // Handle the exception if necessary
+                    }
+                }
+
+                //switch between the possible player actions (choose deck, discard pile or a card)
+                switch(firstSelection.getPlayerId()){
+                    case -2:// Take a card from the deck
+                        //verify if there is a deck
+
+                        
+
+                        if (!deck.verifyExistence()) {
+                            // Shuffle discard pile back into deck and draw a new card if the deck is empty
+                            deck = new Deck(false);
+                            deck.addAllCards(discard_pile);
+                            //empty the discard pile
+                            discard_pile = new Deck(false);
+                            break;
+                        }            
+                        if(!discard_pile.verifyExistence()){
+                            //create discard pile
+                            discard_pile = new Deck(false);
+                        }
+                        //wait until the player clicks on something
+                        while(secondSelection == null){
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                // Handle the exception if necessary
+                            }
+                        }
+                        players.get(playerTurn).takeACardFromDeck(deck, discard_pile, discardPileUI, deckUI, firstSelection, secondSelection);
+                        playerTurn+=1;
+                        break;
+                        /*
+                            System.out.println("Replace : " + secondSelection.getName() + " with deck card");
+                        players.get(playerTurn).takeACardFromDeck(deck, discard_pile, secondSelection);
+
+                        Card tmp = new Card(secondSelection);
+                        secondSelection.changeCard(firstSelection);
+                        secondSelection.setPlayerID(playerTurn);
+                        secondSelection.changeCardImage(secondSelection.getFront());
+                        //afficher la carte de la discard pile
+                        tmp.setPlayerID(-1);
+                        tmp.addMouseListener(new MouseHandler(tmp, players.get(playerTurn)));
+                        if(discardPileUI.getMouseListeners()[0]!=null){
+                            discardPileUI.removeMouseListener(discardPileUI.getMouseListeners()[0]);
+                        }
+                        discardPileUI.addMouseListener(new MouseHandler(tmp, players.get(playerTurn)));
+                        discardPileUI.changeCard(tmp);
+                        discardPileUI.changeCardImage(tmp.getFront());
+                        playerTurn+=1;
+                        System.out.println(discard_pile.getCard() + " put to the discard pile");
+                        break;
+*/
+                    case -1:
+                    
+                        //discard pile card selected
+                        //verify if there is a discard pile
+                        if (!discard_pile.verifyExistence()) {
+                            //if there is no discard pile, you can't draw in it, say it to the player and replay
+                            System.out.println("There is no discard pile, choose another");
+                            break;
+                        }
+                        //wait until the player clicks on something
+                        while(secondSelection == null){
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                // Handle the exception if necessary
+                            }
+                        }
+                        players.get(playerTurn).takeACardFromDiscardPile(discard_pile, discardPileUI, firstSelection, secondSelection);
+                        playerTurn+=1;
+                        break;
+                        /*
+                            System.out.println("Took : " + secondSelection.getName() + " from the discard pile");
+                        players.get(playerTurn).takeACardFromDiscardPile(discard_pile, secondSelection);
+                            System.out.println(discard_pile.getFirstCard().getCardName() + " is the next card of the discard pile");
+                        secondSelection.changeCard(discard_pile.getFirstCard());
+                        secondSelection.changeCardImage(secondSelection.getFront());
+                            System.out.println(secondSelection.getFront().toString());
+                        //afficher la carte de la discard pile
+                        playerTurn+=1;
+                        break;
+                        */
+                    default:
+                        //player card selected
+                        firstSelection.changeCardImage(firstSelection.getFront());
+                        System.out.println("Changed the card side");
+                        playerTurn+=1;
+                        break;
+                }
+                System.out.println("Discard pile : " + discard_pile.getFirstCard().getCardName());
+                firstSelection=null;
+                secondSelection=null;
+            }
+
+            //check win
+
+            playerTurn=0;
+        }
+        
+
+        /* 
         // Print each player's hand
         for (Player player : players) {
             player.printHand();
@@ -82,30 +200,30 @@ public class GameLoop {
         while(play) {
             if (nbRound == 0)
             {
-                j = (short) minIndex;
-                if (j != 0)
+                playerTurn = (short) minIndex;
+                if (playerTurn != 0)
                 {
                     its.next();
                 }
-                System.out.println("\nThe first player to start is player " + (j + 1));
+                System.out.println("\nThe first player to start is player " + (playerTurn + 1));
             }
             else
             {
-                j = 0;
+                playerTurn = 0;
             }
 
             // Play one round for each player
             do
             {
-                if (j != minIndex) {
-                    System.out.println("It's player " + (j + 1) + " round's");
+                if (playerTurn != minIndex) {
+                    System.out.println("It's player " + (playerTurn + 1) + " round's");
                 }
 
                 // Print each player's hand and execute their turn
                 for (Player player : players) {
                     player.printHand();
                 }
-                players.get(j).round(deck, discard_pile);
+                players.get(playerTurn).round(deck, discard_pile);
 
                 // Check if the player has won and update the play variable accordingly
                 play = !its.next().verifyWin(nbRound, (short) players.size());
@@ -116,13 +234,13 @@ public class GameLoop {
                 nbRound++;
 
                 // Move to the next player
-                if (j == players.size() - 1)
+                if (playerTurn == players.size() - 1)
                 {
-                    j = 0;
+                    playerTurn = 0;
                 }
                 else
                 {
-                    j ++;
+                    playerTurn ++;
                 }
             } while(its.hasNext());
 
@@ -134,6 +252,6 @@ public class GameLoop {
 
             // Reset the iterator to the beginning
             its = players.iterator();
-        }
+        }*/
     }
 }

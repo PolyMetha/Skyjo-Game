@@ -1,13 +1,14 @@
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Card extends JLabel{
-
     // Private member variables to store the card's value, UV, and visibility status
     private int value;
     private UV uv;
     private boolean visible;
-    private int playerID;
+    private int playerID=-2; //set all the cards to-1, the cards -2 corresponds to the deck, -1 to the discard pile and others positive are for the players
     private int playerTurn;
 
     private Runnable onClick;
@@ -17,6 +18,7 @@ public class Card extends JLabel{
 
 
     public void changeCardImage(ImageIcon newCard){
+        this.visible = true;
         this.setIcon(newCard);
     }
 
@@ -28,6 +30,26 @@ public class Card extends JLabel{
         return this.image;
     }
 
+    //to intervert 2 cards when we need to
+    public void changeCard(Card other){
+        this.value = other.getValue();
+        this.uv = other.uv;
+        this.front = other.getFront();
+    }
+
+    //used only to instantiate the UI of the discard pile
+    public Card(ImageResized img){
+        super();
+        this.value = 0;
+        this.uv = new UV("Discard empty",Color.black);
+        this.visible = false;
+
+        image = img;
+        front = null;
+        back = new ImageIcon("img/Discard_empty.png");
+        playerID=-1;
+        this.setIcon(back);
+    }
 
     // Constructor to initialize the card's value, UV, and visibility status
     public Card(int value, UV uv, ImageIcon icon){
@@ -41,6 +63,19 @@ public class Card extends JLabel{
         back = new ImageIcon("img/Back.png");
         this.setIcon(back);
     }
+
+        // Constructor to initialize the card's value, UV, and visibility status
+        public Card(Card card){
+            super(card.getFront());
+            this.value = card.getValue();
+            this.uv = card.getUv();
+            this.visible = card.getVisibility();
+    
+            image = card.getFront();
+            front = card.getFront();
+            back = new ImageIcon("img/Back.png");
+            this.setIcon(back);
+        }
 
     public ImageIcon getFront(){
         return front;
@@ -70,8 +105,12 @@ public class Card extends JLabel{
         return this.visible;
     }
 
+    public Card getCard(){
+        return this;
+    }
+
     // Method to get the string representation of the card
-    public String getCard() {
+    public String getCardName() {
         if (this.visible) {
             // If the card is visible, return the name and value of the card
             return this.getName() + " (" + this.getValue() +")";

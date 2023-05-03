@@ -48,6 +48,11 @@ public class Deck {
                 }
             }
 
+            //set the player id to -2 to detect later when a card is from deck or not
+            for(int i=0; i<cards.size(); i++){
+                cards.get(i).setPlayerID(-2);
+            }
+
             // Shuffle the deck
             shuffle();
         } else {
@@ -68,7 +73,7 @@ public class Deck {
 
     // Get the name of the top card in the deck
     public String getCard() {
-        return cards.get(this.cards.size() - 1).getCard();
+        return cards.get(this.cards.size() - 1).getName();
     }
 
     // Get the UV values of the top card in the deck
@@ -86,6 +91,10 @@ public class Deck {
         this.cards.get(this.cards.size() - 1).changeCard(value, uv, visible);
     }
 
+    public Card getFirstCard(){
+        return cards.get(cards.size()-1);
+    }
+
     // Return the last card on the pile and delete it from the deck
     public Card draw() {
         if (this.cards.size() != 0) { // check if there is at least one card in the deck
@@ -101,16 +110,27 @@ public class Deck {
         {
             // change the visibility of the last card in the deck and print it
             this.cards.get(this.cards.size() - 1).changeVisibility(!name.equals("Deck"));
-            System.out.print(name + " : |" + this.cards.get(this.cards.size() - 1).getCard() + "| \n");
+            System.out.print(name + " : |" + this.cards.get(this.cards.size() - 1).getCardName() + "| \n");
         } else {
             System.out.println(name + " : empty"); // if there are no cards in the deck, print "empty"
         }
     }
 
-    public void printDeck(JFrame window, int x, int y){
-        UIComponent deck = new UIComponent(new ImageResized("img/back.png"));
+    public Card printDeck(JFrame window, int x, int y, String path, Card card){
+        Card deck = new Card(new ImageResized(path));
         deck.setBounds(x, y, deck.getImage().getImage().getWidth(null), deck.getImage().getImage().getWidth(null));
+        deck.addMouseListener(new MouseHandler(card));
         window.add(deck);
+
+        return deck;
+    }
+
+    public Card PrintDiscardPile(JFrame window, int x, int y, String path, Card card){
+        Card discardPile = new Card(new ImageResized(path));
+        discardPile.setBounds(x, y, discardPile.getImage().getImage().getWidth(null), discardPile.getImage().getImage().getWidth(null));
+        discardPile.addMouseListener(new MouseHandler(card));
+        window.add(discardPile);
+        return discardPile;
     }
 
     public void addAllCards(Deck deck) {

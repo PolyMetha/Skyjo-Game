@@ -1,5 +1,7 @@
 import java.awt.Component;
 import java.awt.LayoutManager;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -17,14 +19,6 @@ public class App {
         window.setLayout(null);
         window.setSize(5000, 5000);
         
-        //PNG size : 1556*2000
-        
-        // UIComponent label = new UIComponent(new ImageResized("img/-1.png"));
-        // label.setBounds(0, 0, label.getImage().getImage().getWidth(null), label.getImage().getImage().getHeight(null));
-        
-        // window.add(label);
-
-        
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
@@ -32,7 +26,7 @@ public class App {
         // Prompt the user to input the number of players and validate the input
         short nbPlayers = Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
         String waitMessage = "Game Loading, Please wait...";
-        window.add(new JLabel(waitMessage));
+        // window.add(new JLabel(waitMessage));
         System.out.println(waitMessage);
 
         // Initialize the variables for the game

@@ -17,8 +17,6 @@ public class UIComponent extends JLabel {
         front = icon;
         back = new ImageIcon("img/Back.png");
         this.setIcon(back);
-
-        // this.addMouseListener(new MouseHandler());
     }
 
 

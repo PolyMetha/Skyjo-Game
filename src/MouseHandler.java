@@ -2,8 +2,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MouseHandler implements MouseListener{
-
-
     private Card card;
     private Player player;
 
@@ -13,16 +11,36 @@ public class MouseHandler implements MouseListener{
         this.player = player;
     }
 
+    public MouseHandler(Card card){
+        super();
+        this.card = card;
+        this.player = null;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("clicked");
-        
 
-
-        if(GameLoop.j == player.getID()){
-                card.changeCardImage(card.getFront());
+        //detects if we clicked on the deck, the discard pile or a card of the hand of a player
+        switch(card.getPlayerId()){
+            case -2:
+                GameLoop.firstSelection = card;
+                System.out.println("First selection is deck card : "+card.getName());
+                break;
+            case -1:
+                GameLoop.firstSelection = card;
+                System.out.println("First selection is discard card : "+card.getName());
+                break;
+            default:
+                if(GameLoop.playerTurn == player.getID() && !card.getVisibility()&&GameLoop.firstSelection == null){
+                    GameLoop.firstSelection = this.card;
+                    System.out.println("First selection is : "+card.getName());
+                }
+                else if(GameLoop.playerTurn == player.getID() && !card.getVisibility()){
+                    GameLoop.secondSelection = this.card;
+                    System.out.println("Second selection is : "+card.getName());
+                }
+                break;
         }
-
     }
 
     @Override

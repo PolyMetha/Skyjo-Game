@@ -109,6 +109,91 @@ public class Player {
         return true;
     }
 
+    public void takeACardFromDeck(Deck deck, Deck discard_pile, Card discardUI, Card deckUI, Card firstSelection, Card secondSelection)
+    {
+        Card tmp = new Card(secondSelection);
+        secondSelection.changeCard(firstSelection);
+        secondSelection.setPlayerID(GameLoop.playerTurn);
+        secondSelection.setVisible(true);
+        secondSelection.changeCardImage(secondSelection.getFront());
+
+        tmp.changeVisibility(true);
+        tmp.setPlayerID(-1);
+        System.out.println("tmp : " + tmp.getCardName());
+
+        discard_pile.addCard(tmp);
+        System.out.println("discard pile :"+discard_pile.getFirstCard().getName());
+        discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+        discardUI.changeCard(discard_pile.getFirstCard());
+        discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+        discardUI.changeVisibility(true);
+
+        deck.draw();
+        deckUI.removeMouseListener(deckUI.getMouseListeners()[0]);
+        deckUI.changeCard(deck.getFirstCard());
+        deckUI.addMouseListener(new MouseHandler(deck.getFirstCard(), null));
+
+
+
+        //change the first card of the deck and print it out
+
+        // deck.changeFirstCard(deck.getValueCard(), deck.getUvCard(), true);
+
+        /*
+        System.out.println("Card picked : " + deck.getCard());
+
+        
+        int indiceHand = hand.indexOf(card);
+        // get the card that will be replaced by the new card
+        Card temp = new Card(card.getValue(), card.getUv(), card.getImage());
+
+        // replace the card with a card from the deck and add the replaced card to the discard pile
+        this.hand.get(indiceHand).changeCard(deck.getValueCard(), deck.getUvCard(), true);
+        deck.removeCard();
+        temp.setPlayerID(-1);
+        discard_pile.addCard(temp);
+        GameLoop.firstSelection.changeCard(temp);
+
+        this.printHand();*/
+    }
+
+    public void takeACardFromDiscardPile(Deck discard_pile,Card discardUI, Card firstSelection, Card secondSelection){
+        
+        Card tmp = new Card(secondSelection);
+        secondSelection.changeCard(firstSelection);
+        secondSelection.setPlayerID(GameLoop.playerTurn);
+        secondSelection.setVisible(true);
+        secondSelection.changeCardImage(secondSelection.getFront());
+
+        tmp.setPlayerID(-1);
+        discard_pile.addCard(tmp);
+        discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+        discardUI.changeCard(discard_pile.getFirstCard());
+        discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        discardUI.changeCardImage(discardUI.getFront());
+
+        /*System.out.println("Card picked : " + discard_pile.getCard());
+
+        int indiceHand = hand.indexOf(cardPicked);
+        // get the card that will be replaced by the new card
+        Card temp = new Card(cardPicked);
+
+        // replace the card with a card from the deck and add the replaced card to the discard pile
+        this.hand.get(indiceHand).changeCard(discard_pile.getFirstCard());
+        this.hand.get(indiceHand).setPlayerID(GameLoop.playerTurn);
+        discard_pile.removeCard();
+        temp.setPlayerID(-1);
+        temp.setVisible(true);
+        discard_pile.addCard(temp);
+        discard_pile.getFirstCard().changeCardImage(discard_pile.getFirstCard().getFront());
+        GameLoop.firstSelection.changeCard(temp);
+        GameLoop.firstSelection.changeCardImage(temp.getFront());
+
+        this.printHand();*/
+    }
+
+
     public void verifyRowsAndColumns()
     {
         // Check if any rows can be removed
@@ -269,9 +354,9 @@ public class Player {
     public void initializeHand(Deck deck) {
         for(int i = 0; i < 12; i++) {
             Card card = deck.draw();
+            card.setPlayerID(id);       //set the cardId to the player ID
             card.addMouseListener(new MouseHandler(card, this));
             hand.add(card);
-
         }
         
     }
@@ -310,13 +395,13 @@ public class Player {
                     // If this is the third card in a row, print it on a new line
                     if (i % 3 == 0)
                     {
-                        System.out.print(this.hand.get(i - 1).getCard());
+                        System.out.print(this.hand.get(i - 1).getCardName());
                         System.out.println("\n--------------------------------");
                     }
                     // Otherwise, print the card followed by a separator
                     else
                     {
-                        System.out.print(this.hand.get(i - 1).getCard() + " | ");
+                        System.out.print(this.hand.get(i - 1).getCardName() + " | ");
                     }
                 }
 
@@ -326,20 +411,20 @@ public class Player {
                     // If this is the second card in a row, print it on a new line
                     if (i % 2 == 0)
                     {
-                        System.out.print(this.hand.get(i - 1).getCard());
+                        System.out.print(this.hand.get(i - 1).getCardName());
                         System.out.println("\n--------------------------------");
                     }
                     // Otherwise, print the card followed by a separator
                     else
                     {
-                        System.out.print(this.hand.get(i - 1).getCard() + " | ");
+                        System.out.print(this.hand.get(i - 1).getCardName() + " | ");
                     }
                 }
 
                 // If two cards have been removed, print each card on a new line
                 case 2 ->
                 {
-                    System.out.print(this.hand.get(i - 1).getCard());
+                    System.out.print(this.hand.get(i - 1).getCardName());
                     System.out.println("\n--------------------------------");
                 }
 
