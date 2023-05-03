@@ -155,7 +155,6 @@ public class GameLoop {
                         playerTurn+=1;
                         break;
                 }
-                System.out.println("Discard pile : " + discard_pile.getFirstCard().getCardName());
                 firstSelection=null;
                 secondSelection=null;
             }

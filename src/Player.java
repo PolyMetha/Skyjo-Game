@@ -364,7 +364,7 @@ public class Player {
     public void printHand(JFrame window, int x, int y){
         int j=0, tmpX = x, tmpY = y;
         for(Card card : hand){
-            card.setBounds(x, y, card.getImage().getImage().getWidth(null), card.getImage().getImage().getWidth(null));
+            card.setBounds(x, y, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
             window.add(card);
             x+=hand.get(0).getWidth() + hand.get(0).getWidth()/4;
             if(j==3 || j==7){

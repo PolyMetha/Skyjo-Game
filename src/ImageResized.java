@@ -8,7 +8,7 @@ public class ImageResized extends ImageIcon{
 
     public ImageResized(String fileName){
         super(fileName);
-        Image imageResized = this.getImage().getScaledInstance(78, 100, Image.SCALE_SMOOTH);
+        Image imageResized = this.getImage().getScaledInstance(IMG_WIDTH, IMG_HEIGHT, Image.SCALE_SMOOTH);
         this.setImage(imageResized);
     }
 }
