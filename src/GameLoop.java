@@ -55,7 +55,8 @@ public class GameLoop {
         boolean atLeastOnePlayerFinished = false;
 
         while(play){    //while nobody outpassed the max score
-            
+
+
             while(playerTurn<players.size()){
                 //wait until an input of the player
                 while(firstSelection == null){
@@ -159,7 +160,7 @@ public class GameLoop {
                 secondSelection=null;
             }
 
-            //check win
+            //check win and card lines
 
             playerTurn=0;
         }
