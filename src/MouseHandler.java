@@ -24,11 +24,11 @@ public class MouseHandler implements MouseListener{
         switch(card.getPlayerId()){
             case -2:
                 GameLoop.firstSelection = card;
-                System.out.println("First selection is deck card : "+card.getName());
+                System.out.println("First selection is deck card : "+card.getName()+" : -2");
                 break;
             case -1:
                 GameLoop.firstSelection = card;
-                System.out.println("First selection is discard card : "+card.getName());
+                System.out.println("First selection is discard card : "+card.getName()+" : -1");
                 break;
             default:
                 if(GameLoop.playerTurn == player.getID() && !card.getVisibility()&&GameLoop.firstSelection == null){

@@ -1,5 +1,9 @@
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Utility {
 
@@ -40,19 +44,19 @@ public class Utility {
     }
 
     // This function displays the scores of all the players in the game.
-    static void displayScore(ArrayList<Player> players)
+    static void displayScore(ArrayList<Player> players, JFrame window)
     {
+        int i=0;
         for (Player player : players) {
-            calculScore(player); // calculates the score of each player
+
+            calculScore(player); // calculates the score of each player        
+            JLabel scoreUI = new JLabel("Player "+ player.getID()+" score : "+player.getScore());
+            scoreUI.setBounds(500, 550+i, 500, 30);
+            scoreUI.setFont(new Font("Verdana", Font.PLAIN, 18));
+            window.add(scoreUI);
+            window.repaint();
+            i+=30;
         }
 
-        System.out.println("------- Score -------");
-
-        for (short k = 0 ; k < players.size(); k++)
-        {
-            System.out.println("Player " + (k + 1) + " : " + players.get(k).getScore()); // displays each player's score
-        }
-
-        System.out.println("---------------------");
     }
 }

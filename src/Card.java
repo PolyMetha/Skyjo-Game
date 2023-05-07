@@ -46,7 +46,7 @@ public class Card extends JLabel{
 
         image = img;
         front = null;
-        back = new ImageIcon("img/Discard_empty.png");
+        back = new ImageResized("img/Discard_empty.png");
         playerID=-1;
         this.setIcon(back);
     }
@@ -60,7 +60,7 @@ public class Card extends JLabel{
 
         image = icon;
         front = icon;
-        back = new ImageIcon("img/Back.png");
+        back = new ImageResized("img/Back.png");
         this.setIcon(back);
     }
 
@@ -73,7 +73,7 @@ public class Card extends JLabel{
     
             image = card.getFront();
             front = card.getFront();
-            back = new ImageIcon("img/Back.png");
+            back = new ImageResized("img/Back.png");
             this.setIcon(back);
         }
 

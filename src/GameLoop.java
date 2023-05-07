@@ -1,17 +1,20 @@
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class GameLoop {
 
-    final private static int UI_HAND_OFFSET = 50;
+    final private static int UI_HAND_OFFSET = 20;
     public static short playerTurn=0;
     public static Card firstSelection = null;
     public static Card secondSelection = null;
     private static Card discardPileUI=null;
     private static Card deckUI=null;
+    private static JLabel infoBar;
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -28,10 +31,14 @@ public class GameLoop {
     }
 
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
+        final int INTERFACE_SIZE = 3*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET); 
+
+        final int WIN_WIDTH_OFFSET = (window.getWidth()-INTERFACE_SIZE)/2;
+        final int WIN_HEIGHT_OFFSET = 20;
         //initialize player hands
         int i =0, j=0;
         for (Player player : players) {
-            player.printHand(window, i*(player.getUiHandSize()[0]+UI_HAND_OFFSET), j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
+            player.printHand(window, WIN_WIDTH_OFFSET + i*(player.getUiHandSize()[0]+UI_HAND_OFFSET),WIN_HEIGHT_OFFSET+ j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
             System.out.println(player.getUiHandSize()[0]);
             i++;
             if(i==3){
@@ -39,12 +46,14 @@ public class GameLoop {
                 i=0;
             }
         }
+
+
         
 
         //initialize deck
-        deckUI = deck.printDeck(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/back.png", deck.getFirstCard());
+        deckUI = deck.printDeck(window,WIN_WIDTH_OFFSET+ i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), WIN_HEIGHT_OFFSET+j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/back.png", deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/Discard_empty.png", new Card(new ImageResized("img/Discard_Empty.png")));
+        discardPileUI = discardPile.PrintDiscardPile(window, WIN_WIDTH_OFFSET+i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET),WIN_HEIGHT_OFFSET+ j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/Discard_empty.png", new Card(new ImageResized("img/Discard_Empty.png")));
     }
 
     // Execute a round of the game
@@ -55,14 +64,31 @@ public class GameLoop {
         Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
 
+        infoBar = new JLabel("Select 2 cards to know who will begin");
+        infoBar.setBounds(550, 380, 1000, 30);
+        infoBar.setFont(new Font("Verdana", Font.PLAIN, 18));
+        window.add(infoBar);
         //Decide who will begin
         playerTurn = whoBegins(players);
+
+        infoBar.setText("Player "+(playerTurn+1)+" begins");
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            // Handle the exception if necessary
+        }
 
         while(play){    //while nobody outpassed the max score
 
             
 
-            while(playerTurn<players.size()){
+            while(playerTurn < players.size()){
+
+                
+                Player player = players.get(playerTurn);
+
+                infoBar.setText("Select a card, the deck or the discard pile");
                 //wait until an input of the player
                 while(firstSelection == null){
                     try {
@@ -91,6 +117,9 @@ public class GameLoop {
                             //create discard pile
                             discard_pile = new Deck(false);
                         }
+                        
+                        firstSelection.setVisible(true);
+                        infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
                         //wait until the player clicks on something
                         while(secondSelection == null){
                             try {
@@ -102,27 +131,7 @@ public class GameLoop {
                         players.get(playerTurn).takeACardFromDeck(deck, discard_pile, discardPileUI, deckUI, firstSelection, secondSelection);
                         playerTurn+=1;
                         break;
-                        /*
-                            System.out.println("Replace : " + secondSelection.getName() + " with deck card");
-                        players.get(playerTurn).takeACardFromDeck(deck, discard_pile, secondSelection);
 
-                        Card tmp = new Card(secondSelection);
-                        secondSelection.changeCard(firstSelection);
-                        secondSelection.setPlayerID(playerTurn);
-                        secondSelection.changeCardImage(secondSelection.getFront());
-                        //afficher la carte de la discard pile
-                        tmp.setPlayerID(-1);
-                        tmp.addMouseListener(new MouseHandler(tmp, players.get(playerTurn)));
-                        if(discardPileUI.getMouseListeners()[0]!=null){
-                            discardPileUI.removeMouseListener(discardPileUI.getMouseListeners()[0]);
-                        }
-                        discardPileUI.addMouseListener(new MouseHandler(tmp, players.get(playerTurn)));
-                        discardPileUI.changeCard(tmp);
-                        discardPileUI.changeCardImage(tmp.getFront());
-                        playerTurn+=1;
-                        System.out.println(discard_pile.getCard() + " put to the discard pile");
-                        break;
-*/
                     case -1:
                     
                         //discard pile card selected
@@ -130,8 +139,15 @@ public class GameLoop {
                         if (!discard_pile.verifyExistence()) {
                             //if there is no discard pile, you can't draw in it, say it to the player and replay
                             System.out.println("There is no discard pile, choose another");
+                            infoBar.setText("There is no discard pile");
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                // Handle the exception if necessary
+                            }
                             break;
                         }
+                        infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
                         //wait until the player clicks on something
                         while(secondSelection == null){
                             try {
@@ -143,35 +159,34 @@ public class GameLoop {
                         players.get(playerTurn).takeACardFromDiscardPile(discard_pile, discardPileUI, firstSelection, secondSelection);
                         playerTurn+=1;
                         break;
-                        /*
-                            System.out.println("Took : " + secondSelection.getName() + " from the discard pile");
-                        players.get(playerTurn).takeACardFromDiscardPile(discard_pile, secondSelection);
-                            System.out.println(discard_pile.getFirstCard().getCardName() + " is the next card of the discard pile");
-                        secondSelection.changeCard(discard_pile.getFirstCard());
-                        secondSelection.changeCardImage(secondSelection.getFront());
-                            System.out.println(secondSelection.getFront().toString());
-                        //afficher la carte de la discard pile
-                        playerTurn+=1;
-                        break;
-                        */
+
                     default:
                         //player card selected
-                        firstSelection.changeCardImage(firstSelection.getFront());
+                        player.ChangeCardSide(firstSelection);
                         System.out.println("Changed the card side");
                         playerTurn+=1;
                         break;
                 }
                 firstSelection=null;
-                secondSelection=null;
+                secondSelection=null;            
+                
+                play = !its.next().verifyWin(nbRound, (short) players.size());
+                if (!play)
+                {
+                    atLeastOnePlayerFinished = true;
+                    infoBar.setText("Game finished");
+                }
             }
 
+            its = players.iterator();
             //check win and card lines
 
             playerTurn=0;
+            Utility.displayScore(players, window);
         }
         
 
-        /* 
+        /*
         // Print each player's hand
         for (Player player : players) {
             player.printHand();
@@ -266,23 +281,30 @@ public class GameLoop {
 
         for(playerTurn =0; playerTurn<players.size(); playerTurn++){
             //do 1 round of 2 cards return to know which player is going to begin
-
             //retry while there is no selection or if the player select the deck or the discard pile
-            while(firstSelection == null || firstSelection.getPlayerId()==-1 || firstSelection.getPlayerId()==-2){
+            while(firstSelection == null || firstSelection.getPlayerId()<0){
                 try {
+                    firstSelection=null;
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     // Handle the exception if necessary
                 }
             }
+
+            //change card side
+            players.get(playerTurn).ChangeCardSide(firstSelection);
+
             //moreover, verify if the 2nd selection is different from the first
-            while(secondSelection == null || secondSelection.getPlayerId()==-1 || secondSelection.getPlayerId()==-2 || secondSelection.equals(firstSelection)){
+            while(secondSelection == null || secondSelection.getPlayerId()<0 || secondSelection.equals(firstSelection)){
                 try {
+                    secondSelection = null;
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     // Handle the exception if necessary
                 }
             }
+            
+            players.get(playerTurn).ChangeCardSide(secondSelection);
 
             if(firstSelection.getValue() + secondSelection.getValue()>bestSum){
                 bestSum = (short)(firstSelection.getValue() + secondSelection.getValue());

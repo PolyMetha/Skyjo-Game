@@ -114,8 +114,7 @@ public class Player {
         Card tmp = new Card(secondSelection);
         secondSelection.changeCard(firstSelection);
         secondSelection.setPlayerID(GameLoop.playerTurn);
-        secondSelection.setVisible(true);
-        secondSelection.changeCardImage(secondSelection.getFront());
+        this.ChangeCardSide(secondSelection);
 
         tmp.changeVisibility(true);
         tmp.setPlayerID(-1);
@@ -133,29 +132,6 @@ public class Player {
         deckUI.removeMouseListener(deckUI.getMouseListeners()[0]);
         deckUI.changeCard(deck.getFirstCard());
         deckUI.addMouseListener(new MouseHandler(deck.getFirstCard(), null));
-
-
-
-        //change the first card of the deck and print it out
-
-        // deck.changeFirstCard(deck.getValueCard(), deck.getUvCard(), true);
-
-        /*
-        System.out.println("Card picked : " + deck.getCard());
-
-        
-        int indiceHand = hand.indexOf(card);
-        // get the card that will be replaced by the new card
-        Card temp = new Card(card.getValue(), card.getUv(), card.getImage());
-
-        // replace the card with a card from the deck and add the replaced card to the discard pile
-        this.hand.get(indiceHand).changeCard(deck.getValueCard(), deck.getUvCard(), true);
-        deck.removeCard();
-        temp.setPlayerID(-1);
-        discard_pile.addCard(temp);
-        GameLoop.firstSelection.changeCard(temp);
-
-        this.printHand();*/
     }
 
     public void takeACardFromDiscardPile(Deck discard_pile,Card discardUI, Card firstSelection, Card secondSelection){
@@ -163,34 +139,15 @@ public class Player {
         Card tmp = new Card(secondSelection);
         secondSelection.changeCard(firstSelection);
         secondSelection.setPlayerID(GameLoop.playerTurn);
-        secondSelection.setVisible(true);
-        secondSelection.changeCardImage(secondSelection.getFront());
+        this.ChangeCardSide(secondSelection);
 
         tmp.setPlayerID(-1);
         discard_pile.addCard(tmp);
         discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
         discardUI.changeCard(discard_pile.getFirstCard());
         discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
-        discardUI.changeCardImage(discardUI.getFront());
+        this.ChangeCardSide(discardUI);
 
-        /*System.out.println("Card picked : " + discard_pile.getCard());
-
-        int indiceHand = hand.indexOf(cardPicked);
-        // get the card that will be replaced by the new card
-        Card temp = new Card(cardPicked);
-
-        // replace the card with a card from the deck and add the replaced card to the discard pile
-        this.hand.get(indiceHand).changeCard(discard_pile.getFirstCard());
-        this.hand.get(indiceHand).setPlayerID(GameLoop.playerTurn);
-        discard_pile.removeCard();
-        temp.setPlayerID(-1);
-        temp.setVisible(true);
-        discard_pile.addCard(temp);
-        discard_pile.getFirstCard().changeCardImage(discard_pile.getFirstCard().getFront());
-        GameLoop.firstSelection.changeCard(temp);
-        GameLoop.firstSelection.changeCardImage(temp.getFront());
-
-        this.printHand();*/
     }
 
 
@@ -350,6 +307,11 @@ public class Player {
         }
     }
 
+    public void ChangeCardSide(Card card){
+        card.changeCardImage(card.getFront());
+        card.setVisible(true);
+    }
+
     // Initialize the player's hand with 12 cards drawn from the deck
     public void initializeHand(Deck deck) {
         for(int i = 0; i < 12; i++) {
@@ -366,9 +328,9 @@ public class Player {
         for(Card card : hand){
             card.setBounds(x, y, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
             window.add(card);
-            x+=hand.get(0).getWidth() + hand.get(0).getWidth()/4;
+            x+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
             if(j==3 || j==7){
-                y+=hand.get(0).getHeight() + hand.get(0).getHeight()/3;
+                y+=hand.get(0).getHeight() + hand.get(0).getHeight()/5;
                 x=tmpX;
             }
             j+=1;
