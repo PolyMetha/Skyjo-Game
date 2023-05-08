@@ -44,14 +44,15 @@ public class Utility {
     }
 
     // This function displays the scores of all the players in the game.
-    static void displayScore(ArrayList<Player> players, JFrame window)
+    static void displayScore(ArrayList<Player> players, JFrame window, Card deckUI)
     {
         int i=0;
         for (Player player : players) {
 
             calculScore(player); // calculates the score of each player        
             JLabel scoreUI = new JLabel("Player "+ player.getID()+" score : "+player.getScore());
-            scoreUI.setBounds(500, 550+i, 500, 30);
+            // scoreUI.setBounds((players.size()%3)*(players.get(0).getUiHandSize()[0]+), players.size()/3*(players.get(0).getUiHandSize()[1]+100), 500, 30);
+            scoreUI.setBounds(deckUI.getBounds().x+deckUI.getWidth()+20, deckUI.getBounds().y+deckUI.getHeight()+i, 500, 30);
             scoreUI.setFont(new Font("Verdana", Font.PLAIN, 18));
             window.add(scoreUI);
             window.repaint();

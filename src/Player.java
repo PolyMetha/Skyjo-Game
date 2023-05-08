@@ -1,4 +1,6 @@
 // import the required ArrayList class
+import java.awt.Component;
+import java.awt.Window;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -8,13 +10,14 @@ public class Player {
     private final int id;
     // array list of cards representing the player's hand
     private ArrayList<Card> hand;
-    private ArrayList<UIComponent> uiHand;
     // the number of columns the player has removed
     private short nbColumnRemoved;
     // the number of lines the player has removed
     private short nbLineRemoved;
     // the player's score
     private short score;
+
+    private ArrayList<Component> uiHandCards;
 
     private int[] uiHandSize;
 
@@ -25,7 +28,6 @@ public class Player {
         this.nbColumnRemoved = 0;
         this.nbLineRemoved = 0;
         this.score = 0;
-        uiHand = new ArrayList<UIComponent>();
         uiHandSize = new int[2];
         // initialize the player's hand
         initializeHand(deck);
@@ -151,7 +153,7 @@ public class Player {
     }
 
 
-    public void verifyRowsAndColumns()
+    public void verifyRowsAndColumns(JFrame window)
     {
         // Check if any rows can be removed
         if (this.nbColumnRemoved == 0)
@@ -170,8 +172,15 @@ public class Player {
                     {
                         // If so, remove the cards from the hand and increment the number of lines removed
                         this.hand.remove(i);
+                        window.remove(hand.get(i));
+                        window.remove(uiHandCards.get(i));
                         this.hand.remove(i);
+                        window.remove(hand.get(i));
+                        window.remove(uiHandCards.get(i));
                         this.hand.remove(i);
+                        window.remove(hand.get(i));
+                        window.remove(uiHandCards.get(i));
+                        window.repaint();
                         this.nbLineRemoved += 1;
                         System.out.println("Line removed !");
                     }
@@ -229,7 +238,7 @@ public class Player {
         }
     }
 
-    public void round(Deck deck, Deck discard_pile) {
+    public void round(Deck deck, Deck discard_pile, JFrame window) {
         boolean round_played;
         do {
             round_played = false;
@@ -281,7 +290,7 @@ public class Player {
         } while (!round_played);
 
         // Verify rows and columns for the player's hand
-        this.verifyRowsAndColumns();
+        this.verifyRowsAndColumns(window);
     }
 
     public boolean verifyWin(short round, short nbPlayers) {
@@ -325,9 +334,10 @@ public class Player {
 
     public void printHand(JFrame window, int x, int y){
         int j=0, tmpX = x, tmpY = y;
+        this.uiHandCards = new ArrayList<>();
         for(Card card : hand){
             card.setBounds(x, y, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
-            window.add(card);
+            uiHandCards.add(window.add(card));
             x+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
             if(j==3 || j==7){
                 y+=hand.get(0).getHeight() + hand.get(0).getHeight()/5;
@@ -410,11 +420,6 @@ public class Player {
     {
         // Return the player's hand
         return this.hand;
-    }
-
-
-    public ArrayList<UIComponent> getUiHand(){
-        return uiHand;
     }
 
     public int[] getUiHandSize(){

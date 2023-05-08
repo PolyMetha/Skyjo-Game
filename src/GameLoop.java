@@ -81,8 +81,6 @@ public class GameLoop {
 
         while(play){    //while nobody outpassed the max score
 
-            
-
             while(playerTurn < players.size()){
 
                 
@@ -167,6 +165,7 @@ public class GameLoop {
                         playerTurn+=1;
                         break;
                 }
+                player.verifyRowsAndColumns(window);
                 firstSelection=null;
                 secondSelection=null;            
                 
@@ -179,12 +178,12 @@ public class GameLoop {
             }
 
             its = players.iterator();
-            //check win and card lines
 
             playerTurn=0;
-            Utility.displayScore(players, window);
+            
         }
-        
+        //display the score at the end of the round
+        Utility.displayScore(players, window, deckUI);
 
         /*
         // Print each player's hand
