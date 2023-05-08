@@ -35,7 +35,7 @@ public class MouseHandler implements MouseListener{
                     GameLoop.firstSelection = this.card;
                     System.out.println("First selection is : "+card.getName());
                 }
-                else if(GameLoop.playerTurn == player.getID() && !card.getVisibility()){
+                else if(GameLoop.playerTurn == player.getID()){
                     GameLoop.secondSelection = this.card;
                     System.out.println("Second selection is : "+card.getName());
                 }

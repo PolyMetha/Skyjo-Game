@@ -109,7 +109,7 @@ public class Deck {
         if (this.cards.size() > 0) // check if there is at least one card in the deck
         {
             // change the visibility of the last card in the deck and print it
-            this.cards.get(this.cards.size() - 1).changeVisibility(!name.equals("Deck"));
+            this.cards.get(this.cards.size() - 1).setVisibility(!name.equals("Deck"));
             System.out.print(name + " : |" + this.cards.get(this.cards.size() - 1).getCardName() + "| \n");
         } else {
             System.out.println(name + " : empty"); // if there are no cards in the deck, print "empty"

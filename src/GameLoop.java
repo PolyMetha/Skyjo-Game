@@ -63,6 +63,7 @@ public class GameLoop {
         boolean play = true;
         Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
+        boolean roundSkipped=false;
 
         infoBar = new JLabel("Select 2 cards to know who will begin");
         infoBar.setBounds(550, 380, 1000, 30);
@@ -90,7 +91,7 @@ public class GameLoop {
                 //wait until an input of the player
                 while(firstSelection == null){
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         // Handle the exception if necessary
                     }
@@ -116,12 +117,12 @@ public class GameLoop {
                             discard_pile = new Deck(false);
                         }
                         
-                        firstSelection.setVisible(true);
+                        firstSelection.setVisibility(true);
                         infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
                         //wait until the player clicks on something
                         while(secondSelection == null){
                             try {
-                                Thread.sleep(10);
+                                Thread.sleep(1);
                             } catch (InterruptedException e) {
                                 // Handle the exception if necessary
                             }
@@ -139,17 +140,18 @@ public class GameLoop {
                             System.out.println("There is no discard pile, choose another");
                             infoBar.setText("There is no discard pile");
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 // Handle the exception if necessary
                             }
+                            roundSkipped =true;
                             break;
                         }
                         infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
                         //wait until the player clicks on something
                         while(secondSelection == null){
                             try {
-                                Thread.sleep(10);
+                                Thread.sleep(1);
                             } catch (InterruptedException e) {
                                 // Handle the exception if necessary
                             }
@@ -165,11 +167,16 @@ public class GameLoop {
                         playerTurn+=1;
                         break;
                 }
-                player.verifyRowsAndColumns(window);
+  
                 firstSelection=null;
-                secondSelection=null;            
-                
-                play = !its.next().verifyWin(nbRound, (short) players.size());
+                secondSelection=null;  
+
+                player.verifyRowsAndColumns(window);
+                if(!roundSkipped){
+                    play = !its.next().verifyWin(nbRound, (short) players.size());
+                    roundSkipped = true;
+                }
+
                 if (!play)
                 {
                     atLeastOnePlayerFinished = true;

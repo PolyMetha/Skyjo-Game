@@ -111,7 +111,7 @@ public class Card extends JLabel{
 
     // Method to get the string representation of the card
     public String getCardName() {
-        if (this.visible) {
+        if (this.getVisibility()) {
             // If the card is visible, return the name and value of the card
             return this.getName() + " (" + this.getValue() +")";
         } else {
@@ -130,7 +130,7 @@ public class Card extends JLabel{
     }
 
     // Setter method to change the visibility status of the card
-    public void changeVisibility(boolean visible) {
+    public void setVisibility(boolean visible) {
         this.visible = visible;
     }
 

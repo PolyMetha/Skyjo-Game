@@ -100,7 +100,7 @@ public class Player {
             else
             {
                 // If not, reveal the card
-                this.hand.get(indiceHand).changeVisibility(true);
+                this.hand.get(indiceHand).setVisibility(true);
             }
         }
         else
@@ -118,7 +118,7 @@ public class Player {
         secondSelection.setPlayerID(GameLoop.playerTurn);
         this.ChangeCardSide(secondSelection);
 
-        tmp.changeVisibility(true);
+        tmp.setVisibility(true);
         tmp.setPlayerID(-1);
         System.out.println("tmp : " + tmp.getCardName());
 
@@ -128,7 +128,7 @@ public class Player {
         discardUI.changeCard(discard_pile.getFirstCard());
         discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
         discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
-        discardUI.changeVisibility(true);
+        discardUI.setVisibility(true);
 
         deck.draw();
         deckUI.removeMouseListener(deckUI.getMouseListeners()[0]);
@@ -159,27 +159,36 @@ public class Player {
         if (this.nbColumnRemoved == 0)
         {
             // Iterate through each row
-            for (int i = 0; i <= 9 - (this.nbLineRemoved * 3) ; i = i + 3)
+            for (int i = 0; i <= 6 - (this.nbLineRemoved * 3) ; i = i + 4)
             {
                 try
                 {
-                    // Check if all three cards in the row have the same color and are visible
+                    // Check if all 4 cards in the row have the same color and are visible
                     if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
-                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
-                            && this.hand.get(i).getVisibility()
-                            && this.hand.get(i + 1).getVisibility()
-                            && this.hand.get(i + 2).getVisibility())
+                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
+                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3).getUv().getColor())
+                        && this.hand.get(i).getVisibility()
+                        && this.hand.get(i + 1).getVisibility()
+                        && this.hand.get(i + 2).getVisibility()
+                        && this.hand.get(i + 3).getVisibility())
                     {
                         // If so, remove the cards from the hand and increment the number of lines removed
-                        this.hand.remove(i);
                         window.remove(hand.get(i));
-                        window.remove(uiHandCards.get(i));
                         this.hand.remove(i);
+
+                        // window.remove(uiHandCards.get(i));                        
                         window.remove(hand.get(i));
-                        window.remove(uiHandCards.get(i));
                         this.hand.remove(i);
+
+                        // window.remove(uiHandCards.get(i));                        
                         window.remove(hand.get(i));
-                        window.remove(uiHandCards.get(i));
+                        this.hand.remove(i);
+
+                        // window.remove(uiHandCards.get(i));
+                        window.remove(hand.get(i));
+                        this.hand.remove(i);
+                        
+                        // window.remove(uiHandCards.get(i));
                         window.repaint();
                         this.nbLineRemoved += 1;
                         System.out.println("Line removed !");
@@ -192,25 +201,30 @@ public class Player {
         if (this.nbLineRemoved < 2)
         {
             // Iterate through each column
-            for (int i = 0 ; i <= 2 - this.nbColumnRemoved; i ++)
+            for (int i = 0 ; i <= 3 - this.nbColumnRemoved; i ++)
             {
                 switch (nbLineRemoved) {
                     case 0 -> {
                         try {
                             // Check if all four cards in the column have the same color and are visible
-                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
-                                    && this.hand.get(i).getVisibility()
-                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
-                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
-                                    && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
+                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 4 - this.nbColumnRemoved).getUv().getColor())
+                                && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 8 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                && this.hand.get(i).getVisibility()
+                                && this.hand.get(i + 4 - this.nbColumnRemoved).getVisibility()
+                                && this.hand.get(i + 8 - (this.nbColumnRemoved * 2)).getVisibility()) {
                                 // If so, remove the cards from the hand and increment the number of columns removed
+                                window.remove(hand.get(i));
                                 this.hand.remove(i);
-                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
-                                this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
 
+                                System.out.println(hand.get(i + 4 - this.nbColumnRemoved-1).getCardName());
+                                window.remove(hand.get(i + 4 - this.nbColumnRemoved-1));
+                                this.hand.remove(i + 4 - this.nbColumnRemoved-1);
+                                
+                                System.out.println(hand.get(i + 8 - this.nbColumnRemoved*2-2).getCardName());
+                                window.remove(hand.get(i + 8 - this.nbColumnRemoved*2-2));
+                                this.hand.remove(i + 8 - this.nbColumnRemoved*2-2);
+
+                                window.repaint();
                                 this.nbColumnRemoved += 1;
                                 System.out.println("Column removed !");
                             }
@@ -219,14 +233,14 @@ public class Player {
 
                     case 1 -> {
                         try {
-                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 4 - this.nbColumnRemoved).getUv().getColor())
+                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 8 - (this.nbColumnRemoved * 2)).getUv().getColor())
                                     && this.hand.get(i).getVisibility()
-                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
-                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+                                    && this.hand.get(i + 4 - this.nbColumnRemoved).getVisibility()) {
+                                window.remove(hand.get(i));
                                 this.hand.remove(i);
-                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+                                window.remove(hand.get(i + 4 - this.nbColumnRemoved));
+                                this.hand.remove(i + 4 - this.nbColumnRemoved);
 
                                 this.nbColumnRemoved += 1;
                                 System.out.println("Column removed !");
@@ -280,7 +294,7 @@ public class Player {
                 {
                     // In case of an error, show all cards in the player's hand and mark the round as played
                     for (Card card : this.hand) {
-                        card.changeVisibility(true);
+                        card.setVisibility(true);
                     }
                     this.printHand();
                     round_played = true;
