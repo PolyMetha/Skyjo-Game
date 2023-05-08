@@ -45,11 +45,13 @@ public class GameLoop {
         {
             listFirstCardPlayer.add(player.getFirstCardReturned());
         }
-        short min = Short.MAX_VALUE; // Initialize the variable min with the maximum possible value of short
+
+        short max = Short.MIN_VALUE; // Initialize the variable min with the maximum possible value of short
         int minIndex = -1; // Initialize the index with an invalid value
+
         for (int i = 0; i < listFirstCardPlayer.size(); i++) {
-            if (listFirstCardPlayer.get(i) < min) {
-                min = listFirstCardPlayer.get(i);
+            if (listFirstCardPlayer.get(i) > max) {
+                max = listFirstCardPlayer.get(i);
                 minIndex = i;
             }
         }

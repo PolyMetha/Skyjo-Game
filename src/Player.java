@@ -99,7 +99,7 @@ public class Player {
         return true;
     }
 
-    public void verifyRowsAndColumns()
+    public void verifyRowsAndColumns(Deck discard_pile)
     {
         // Check if any rows can be removed
         if (this.nbColumnRemoved == 0)
@@ -117,9 +117,15 @@ public class Player {
                             && this.hand.get(i + 2).getVisibility())
                     {
                         // If so, remove the cards from the hand and increment the number of lines removed
+                        discard_pile.addCard(hand.get(i));
                         this.hand.remove(i);
+
                         this.hand.remove(i);
+                        discard_pile.addCard(hand.get(i));
+
                         this.hand.remove(i);
+                        discard_pile.addCard(hand.get(i));
+
                         this.nbLineRemoved += 1;
                         System.out.println("Line removed !");
                     }
@@ -145,9 +151,16 @@ public class Player {
                                     && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
                                     && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
                                 // If so, remove the cards from the hand and increment the number of columns removed
+                                discard_pile.addCard(hand.get(i));
                                 this.hand.remove(i);
+
+                                discard_pile.addCard(hand.get(i + 3 - this.nbColumnRemoved - 1));
                                 this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                discard_pile.addCard(hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
                                 this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+                                discard_pile.addCard(hand.get(i + 9 - (this.nbColumnRemoved * 3) - 3));
                                 this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
 
                                 this.nbColumnRemoved += 1;
@@ -163,8 +176,14 @@ public class Player {
                                     && this.hand.get(i).getVisibility()
                                     && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                     && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+
+                                discard_pile.addCard(hand.get(i));
                                 this.hand.remove(i);
+
+                                discard_pile.addCard(hand.get(i + 3 - this.nbColumnRemoved - 1));
                                 this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                discard_pile.addCard(hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
                                 this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
                                 this.nbColumnRemoved += 1;
@@ -229,7 +248,7 @@ public class Player {
         } while (!round_played);
 
         // Verify rows and columns for the player's hand
-        this.verifyRowsAndColumns();
+        this.verifyRowsAndColumns(discard_pile);
     }
 
     public boolean verifyWin(short round, short nbPlayers) {
