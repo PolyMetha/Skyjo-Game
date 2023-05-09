@@ -1,9 +1,12 @@
 // import the required ArrayList class
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.Window;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Player {
     // player ID which is either 0 or 1
@@ -16,8 +19,6 @@ public class Player {
     private short nbLineRemoved;
     // the player's score
     private short score;
-
-    private ArrayList<Component> uiHandCards;
 
     private int[] uiHandSize;
 
@@ -168,15 +169,17 @@ public class Player {
                                 && this.hand.get(i + 1).getVisibility()
                                 && this.hand.get(i + 2).getVisibility())
                         {
-                            window.remove(hand.get(i));
+                            hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
-                            window.remove(hand.get(i));
+                            hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
-                            window.remove(hand.get(i));
+                            hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
                             this.nbLineRemoved += 1;
                             System.out.println("Line removed !");
-                            window.repaint();
+                            if(hand.get(0)!=null){
+                                hand.get(0).getPanel().repaint();
+                            }
                         }
                     }
                     catch (Exception exception) {}
@@ -197,18 +200,21 @@ public class Player {
                                         && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                         && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
                                         && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
-                                    window.remove(hand.get(i));
+                                    hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
-                                    window.remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
                                     this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                    window.remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
                                     this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
-                                    window.remove(hand.get(i+9-this.nbColumnRemoved*3-3));
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).getPanel().remove(hand.get(i+9-this.nbColumnRemoved*3-3));
                                     this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
+
 
                                     this.nbColumnRemoved += 1;
                                     System.out.println("Column removed !");
-                                    window.repaint();
+                                    if(hand.get(0)!=null){
+                                        hand.get(0).getPanel().repaint();
+                                    }
                                 }
                             } catch (Exception exception) {}
                         }
@@ -219,16 +225,18 @@ public class Player {
                                         && this.hand.get(i).getVisibility()
                                         && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                         && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
-                                    window.remove(hand.get(i));
+                                    hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
-                                    window.remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
                                     this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                    window.remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
                                     this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
                                     this.nbColumnRemoved += 1;
                                     System.out.println("Column removed !");
-                                    window.repaint();
+                                    if(hand.get(0)!=null){
+                                        hand.get(0).getPanel().repaint();
+                                    }
                                 }
                             } catch (Exception exception) {}
                         }
@@ -330,19 +338,25 @@ public class Player {
         }
     }
 
-    public void printHand(JFrame window, int x, int y){
-        int j=0, tmpX = x, tmpY = y;
-        this.uiHandCards = new ArrayList<>();
+    public JPanel printHand(JFrame window, int xPanel, int yPanel){
+        int j=0, tmpXCard = 10, xCard=10, yCard=10;
+        JPanel panel = new JPanel(null);
+        panel.setBackground(Color.blue);
+        panel.setBounds(xPanel, yPanel, 3*ImageResized.IMG_WIDTH+50, 4*ImageResized.IMG_HEIGHT+50);
         for(Card card : hand){
-            card.setBounds(x, y, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
-            uiHandCards.add(window.add(card));
-            x+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
+            card.setBounds(xCard, yCard, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
+            panel.add(card);
+            xCard+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
             if(j==2 || j==5 || j ==8){
-                y+=hand.get(0).getHeight() + 10;
-                x=tmpX;
+                yCard+=hand.get(0).getHeight() + 10;
+                xCard=tmpXCard;
             }
             j+=1;
+            card.setPanel(panel);
         }
+        window.add(panel);
+        window.repaint();
+        return panel;
     }
 
     public void printHand()

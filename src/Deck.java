@@ -117,17 +117,15 @@ public class Deck {
     }
 
     public Card printDeck(JFrame window, int x, int y, String path, Card card){
-        Card deck = new Card(new ImageResized(path));
-        deck.setBounds(x, y, deck.getImage().getImage().getWidth(null), deck.getImage().getImage().getWidth(null));
-        deck.addMouseListener(new MouseHandler(card));
-        window.add(deck);
-
-        return deck;
+        card.setBounds(x, y, card.getImage().getImage().getWidth(null), card.getImage().getImage().getHeight(null));
+        card.addMouseListener(new MouseHandler(card));
+        window.add(card);
+        return card;
     }
 
     public Card PrintDiscardPile(JFrame window, int x, int y, String path, Card card){
         Card discardPile = new Card(new ImageResized(path));
-        discardPile.setBounds(x, y, discardPile.getImage().getImage().getWidth(null), discardPile.getImage().getImage().getWidth(null));
+        discardPile.setBounds(x, y, discardPile.getImage().getImage().getWidth(null), discardPile.getImage().getImage().getHeight(null));
         discardPile.addMouseListener(new MouseHandler(card));
         window.add(discardPile);
         return discardPile;

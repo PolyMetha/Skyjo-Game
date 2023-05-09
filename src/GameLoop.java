@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class GameLoop {
     private static Card deckUI=null;
     private static JLabel infoBar;
     
+    private static ArrayList<JPanel> panels = new ArrayList<>();
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -35,12 +37,11 @@ public class GameLoop {
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
         final int INTERFACE_SIZE = 3*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET); 
 
-        final int WIN_WIDTH_OFFSET = 0;
-        final int WIN_HEIGHT_OFFSET = 5;
+        final int WIN_OFFSET = 20;
         //initialize player hands
         int i =0, j=0;
         for (Player player : players) {
-            player.printHand(window, i*(player.getUiHandSize()[0]),WIN_HEIGHT_OFFSET+ j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
+            panels.add(player.printHand(window, WIN_OFFSET+i*(player.getUiHandSize()[0]),WIN_OFFSET+ j*(player.getUiHandSize()[1])));
             System.out.println(player.getUiHandSize()[0]);
             i++;
             if(i==4){
@@ -50,12 +51,10 @@ public class GameLoop {
         }
 
 
-        
-
         //initialize deck
-        deckUI = deck.printDeck(window,WIN_WIDTH_OFFSET+ i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), WIN_HEIGHT_OFFSET+j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/back.png", deck.getFirstCard());
+        deckUI = deck.printDeck(window,WIN_OFFSET+ i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), WIN_OFFSET+j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/12.png", deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, WIN_WIDTH_OFFSET+i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET),WIN_HEIGHT_OFFSET+ j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/Discard_empty.png", new Card(new ImageResized("img/Discard_Empty.png")));
+        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET),WIN_OFFSET+ j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/12.png", new Card(new ImageResized("img/Discard_Empty.png")));
     }
 
     // Execute a round of the game
@@ -88,6 +87,8 @@ public class GameLoop {
 
                 
                 Player player = players.get(playerTurn);
+                //size up the player panel, size down the others
+                panels.get(playerTurn).setBackground(Color.CYAN);
 
                 infoBar.setText("Select a card, the deck or the discard pile");
                 //wait until an input of the player
@@ -171,7 +172,8 @@ public class GameLoop {
                 }
   
                 firstSelection=null;
-                secondSelection=null;  
+                secondSelection=null;
+                panels.get(playerTurn-1).setBackground(Color.blue);
 
                 player.verifyRowsAndColumns(window);
                 if(!roundSkipped){

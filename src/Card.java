@@ -2,6 +2,7 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Card extends JLabel{
     // Private member variables to store the card's value, UV, and visibility status
@@ -11,10 +12,11 @@ public class Card extends JLabel{
     private int playerID=-2; //set all the cards to-1, the cards -2 corresponds to the deck, -1 to the discard pile and others positive are for the players
     private int playerTurn;
 
-    private Runnable onClick;
     private ImageIcon image;
     private ImageIcon back;
     private ImageIcon front;
+
+    private JPanel panel;
 
 
     public void changeCardImage(ImageIcon newCard){
@@ -22,12 +24,16 @@ public class Card extends JLabel{
         this.setIcon(newCard);
     }
 
-    public void setOnClick(Runnable onClick) {
-        this.onClick = onClick;
-    }
-
     public ImageIcon getImage(){
         return this.image;
+    }
+
+    public JPanel getPanel(){
+        return this.panel;
+    }
+
+    public void setPanel(JPanel panel){
+        this.panel=panel;
     }
 
     //to intervert 2 cards when we need to
