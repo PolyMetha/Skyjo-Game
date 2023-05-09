@@ -28,7 +28,7 @@ public class App {
         //number of players inf=put field
         JTextField textField = new JTextField(20);
         //play button
-        JButton playButton = new JButton("Play");        
+        JButton playButton = new JButton("Play");
         
         //add an informative text
         JLabel infoNbPlayers = new JLabel("Select the number of players");

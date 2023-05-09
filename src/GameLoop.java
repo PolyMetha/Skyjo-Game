@@ -5,16 +5,18 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class GameLoop {
 
-    final private static int UI_HAND_OFFSET = 20;
+    final private static int UI_HAND_OFFSET = 0;
     public static short playerTurn=0;
     public static Card firstSelection = null;
     public static Card secondSelection = null;
     private static Card discardPileUI=null;
     private static Card deckUI=null;
     private static JLabel infoBar;
+    
 
     // Reset the game with a new deck and empty discard pile for each player
     public static void resetGame(ArrayList<Player> players, Deck deck, Deck discard_pile)
@@ -33,15 +35,15 @@ public class GameLoop {
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
         final int INTERFACE_SIZE = 3*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET); 
 
-        final int WIN_WIDTH_OFFSET = (window.getWidth()-INTERFACE_SIZE)/2;
-        final int WIN_HEIGHT_OFFSET = 20;
+        final int WIN_WIDTH_OFFSET = 0;
+        final int WIN_HEIGHT_OFFSET = 5;
         //initialize player hands
         int i =0, j=0;
         for (Player player : players) {
-            player.printHand(window, WIN_WIDTH_OFFSET + i*(player.getUiHandSize()[0]+UI_HAND_OFFSET),WIN_HEIGHT_OFFSET+ j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
+            player.printHand(window, i*(player.getUiHandSize()[0]),WIN_HEIGHT_OFFSET+ j*(player.getUiHandSize()[1]+UI_HAND_OFFSET));
             System.out.println(player.getUiHandSize()[0]);
             i++;
-            if(i==3){
+            if(i==4){
                 j+=1;
                 i=0;
             }

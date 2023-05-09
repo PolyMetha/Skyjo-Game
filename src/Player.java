@@ -155,78 +155,86 @@ public class Player {
 
     public void verifyRowsAndColumns(JFrame window)
     {
-        //lines verif
-        for(int i=0; i<12;i+=4-nbColumnRemoved){
-            //si les 3 premieres cartes sont egales
-            if(this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
-            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
-            && this.hand.get(i).getVisibility()
-            && this.hand.get(i + 1).getVisibility()
-            && this.hand.get(i + 2).getVisibility()){
-                //si aucune colonne n'est remove
-                if(nbColumnRemoved==0){
-                    //si la 4e carte est égale et visible
-                    if(this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3).getUv().getColor()) && this.hand.get(i + 3).getVisibility()){
-                        //remove 4 cards
-                        window.remove(hand.get(i));
-                        this.hand.remove(i);
-                      
-                        window.remove(hand.get(i));
-                        this.hand.remove(i);
-                       
-                        window.remove(hand.get(i));
-                        this.hand.remove(i);
+                // verify rows
+            if (this.nbColumnRemoved == 0)
+            {
+                for (int i = 0; i <= 9 - (this.nbLineRemoved * 3) ; i = i + 3)
+                {
+                    try
+                    {
+                        if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
+                                && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
+                                && this.hand.get(i).getVisibility()
+                                && this.hand.get(i + 1).getVisibility()
+                                && this.hand.get(i + 2).getVisibility())
+                        {
+                            window.remove(hand.get(i));
+                            this.hand.remove(i);
+                            window.remove(hand.get(i));
+                            this.hand.remove(i);
+                            window.remove(hand.get(i));
+                            this.hand.remove(i);
+                            this.nbLineRemoved += 1;
+                            System.out.println("Line removed !");
+                            window.repaint();
+                        }
+                    }
+                    catch (Exception exception) {}
+                }
+            }
+            // verify columns
+            if (this.nbLineRemoved < 2)
+            {
+                for (int i = 0 ; i <= 2 - this.nbColumnRemoved; i ++)
+                {
+                    switch (nbLineRemoved) {
+                        case 0 -> {
+                            try {
+                                if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
+                                        && this.hand.get(i).getVisibility()
+                                        && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                        && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
+                                        && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
+                                    window.remove(hand.get(i));
+                                    this.hand.remove(i);
+                                    window.remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+                                    window.remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+                                    window.remove(hand.get(i+9-this.nbColumnRemoved*3-3));
+                                    this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
 
-                        window.remove(hand.get(i));
-                        this.hand.remove(i);
-                        
-                        window.repaint();
-                        this.nbLineRemoved += 1;
-                        System.out.println("Line removed !");
+                                    this.nbColumnRemoved += 1;
+                                    System.out.println("Column removed !");
+                                    window.repaint();
+                                }
+                            } catch (Exception exception) {}
+                        }
+                        case 1 -> {
+                            try {
+                                if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                        && this.hand.get(i).getVisibility()
+                                        && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                        && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+                                    window.remove(hand.get(i));
+                                    this.hand.remove(i);
+                                    window.remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+                                    window.remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+                                    this.nbColumnRemoved += 1;
+                                    System.out.println("Column removed !");
+                                    window.repaint();
+                                }
+                            } catch (Exception exception) {}
+                        }
                     }
                 }
-                if(nbColumnRemoved<2){
-                    //remove 3 cards
-                    window.remove(hand.get(i));
-                    this.hand.remove(i);
-                   
-                    window.remove(hand.get(i));
-                    this.hand.remove(i);
-                      
-                    window.remove(hand.get(i));
-                    this.hand.remove(i);
-                    
-                    window.repaint();
-                    this.nbLineRemoved += 1;
-                    System.out.println("Line removed !");
-                }
-
             }
-        }
-        //col verif
-        for(int i=0; i<4; i+=1){
-            //check number of removed lines and if the 3 cards are equal and visible
-            if(nbLineRemoved==0
-            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 4-nbColumnRemoved).getUv().getColor())
-            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 8-nbColumnRemoved).getUv().getColor())
-            && this.hand.get(i).getVisibility()
-            && this.hand.get(i + 4-nbColumnRemoved).getVisibility()
-            && this.hand.get(i + 8-nbColumnRemoved*2).getVisibility()
-            ){
-                //remove the 3 cards
-                window.remove(hand.get(i+8-nbColumnRemoved*2));
-                this.hand.remove(i+8-nbColumnRemoved*2);
-
-                window.remove(hand.get(i+4-nbColumnRemoved));
-                this.hand.remove(i+4-nbColumnRemoved);
-
-                window.remove(hand.get(i));
-                this.hand.remove(i);
-
-                this.nbColumnRemoved+=1;
-                window.repaint();
-            }
-        }
     }
 
     public void round(Deck deck, Deck discard_pile, JFrame window) {
@@ -320,7 +328,6 @@ public class Player {
             card.addMouseListener(new MouseHandler(card, this));
             hand.add(card);
         }
-        
     }
 
     public void printHand(JFrame window, int x, int y){
@@ -330,8 +337,8 @@ public class Player {
             card.setBounds(x, y, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
             uiHandCards.add(window.add(card));
             x+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
-            if(j==3 || j==7){
-                y+=hand.get(0).getHeight() + hand.get(0).getHeight()/5;
+            if(j==2 || j==5 || j ==8){
+                y+=hand.get(0).getHeight() + 10;
                 x=tmpX;
             }
             j+=1;
