@@ -105,19 +105,8 @@ public class Deck {
         return null; // return null if there are no cards in the deck
     }
 
-    public void printDeck(String name) {
-        if (this.cards.size() > 0) // check if there is at least one card in the deck
-        {
-            // change the visibility of the last card in the deck and print it
-            this.cards.get(this.cards.size() - 1).setVisibility(!name.equals("Deck"));
-            System.out.print(name + " : |" + this.cards.get(this.cards.size() - 1).getCardName() + "| \n");
-        } else {
-            System.out.println(name + " : empty"); // if there are no cards in the deck, print "empty"
-        }
-    }
-
     public Card printDeck(JFrame window, int x, int y, String path, Card card){
-        card.setBounds(x, y, card.getImage().getImage().getWidth(null), card.getImage().getImage().getHeight(null));
+        card.setBounds(x, y, card.getFront().getImage().getWidth(null), card.getFront().getImage().getHeight(null));
         card.addMouseListener(new MouseHandler(card));
         window.add(card);
         return card;
@@ -125,7 +114,7 @@ public class Deck {
 
     public Card PrintDiscardPile(JFrame window, int x, int y, String path, Card card){
         Card discardPile = new Card(new ImageResized(path));
-        discardPile.setBounds(x, y, discardPile.getImage().getImage().getWidth(null), discardPile.getImage().getImage().getHeight(null));
+        discardPile.setBounds(x, y, discardPile.getFront().getImage().getWidth(null), discardPile.getFront().getImage().getHeight(null));
         discardPile.addMouseListener(new MouseHandler(card));
         window.add(discardPile);
         return discardPile;

@@ -42,7 +42,6 @@ public class GameLoop {
         int i =0, j=0;
         for (Player player : players) {
             panels.add(player.printHand(window, WIN_OFFSET+i*(player.getUiHandSize()[0]),WIN_OFFSET+ j*(player.getUiHandSize()[1])));
-            System.out.println(player.getUiHandSize()[0]);
             i++;
             if(i==4){
                 j+=1;
@@ -67,7 +66,7 @@ public class GameLoop {
         boolean roundSkipped=false;
 
         infoBar = new JLabel("Select 2 cards to know who will begin");
-        infoBar.setBounds(550, 380, 1000, 30);
+        infoBar.setBounds(550,4*ImageResized.IMG_WIDTH+200, 1000, 30);
         infoBar.setFont(new Font("Verdana", Font.PLAIN, 18));
         window.add(infoBar);
         //Decide who will begin
@@ -130,6 +129,7 @@ public class GameLoop {
                                 // Handle the exception if necessary
                             }
                         }
+
                         players.get(playerTurn).takeACardFromDeck(deck, discard_pile, discardPileUI, deckUI, firstSelection, secondSelection);
                         playerTurn+=1;
                         break;
@@ -166,7 +166,6 @@ public class GameLoop {
                     default:
                         //player card selected
                         player.ChangeCardSide(firstSelection);
-                        System.out.println("Changed the card side");
                         playerTurn+=1;
                         break;
                 }
@@ -177,8 +176,8 @@ public class GameLoop {
 
                 player.verifyRowsAndColumns(window);
                 if(!roundSkipped){
-                    play = !its.next().verifyWin(nbRound, (short) players.size());
-                    roundSkipped = true;
+                    play = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
+                    roundSkipped = false;
                 }
 
                 if (!play)
@@ -195,94 +194,6 @@ public class GameLoop {
         }
         //display the score at the end of the round
         Utility.displayScore(players, window, deckUI);
-
-        /*
-        // Print each player's hand
-        for (Player player : players) {
-            player.printHand();
-        }
-
-        // Each player takes a card from the deck to know who is the first player to start
-        for (short j = 0 ; j < players.size() ; j++) {
-            if (j != 0)
-            {
-                players.get(j).printHand();
-            }
-            players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
-        }
-
-        // Get the first card returned by each player and find the player with the lowest card
-        ArrayList<Short> listFirstCardPlayer = new ArrayList<>();
-        for (Player player : players)
-        {
-            listFirstCardPlayer.add(player.getFirstCardReturned());
-        }
-        short min = Short.MAX_VALUE; // Initialize the variable min with the maximum possible value of short
-        int minIndex = -1; // Initialize the index with an invalid value
-        for (int i = 0; i < listFirstCardPlayer.size(); i++) {
-            if (listFirstCardPlayer.get(i) < min) {
-                min = listFirstCardPlayer.get(i);
-                minIndex = i;
-            }
-        }
-
-        // Play the round until all players have finished
-        while(play) {
-            if (nbRound == 0)
-            {
-                playerTurn = (short) minIndex;
-                if (playerTurn != 0)
-                {
-                    its.next();
-                }
-                System.out.println("\nThe first player to start is player " + (playerTurn + 1));
-            }
-            else
-            {
-                playerTurn = 0;
-            }
-
-            // Play one round for each player
-            do
-            {
-                if (playerTurn != minIndex) {
-                    System.out.println("It's player " + (playerTurn + 1) + " round's");
-                }
-
-                // Print each player's hand and execute their turn
-                for (Player player : players) {
-                    player.printHand();
-                }
-                players.get(playerTurn).round(deck, discard_pile);
-
-                // Check if the player has won and update the play variable accordingly
-                play = !its.next().verifyWin(nbRound, (short) players.size());
-                if (!play)
-                {
-                    atLeastOnePlayerFinished = true;
-                }
-                nbRound++;
-
-                // Move to the next player
-                if (playerTurn == players.size() - 1)
-                {
-                    playerTurn = 0;
-                }
-                else
-                {
-                    playerTurn ++;
-                }
-            } while(its.hasNext());
-
-            // Check if at least one player has finished and update the play variable accordingly
-            if (atLeastOnePlayerFinished)
-            {
-                play = false;
-            }
-
-            // Reset the iterator to the beginning
-            its = players.iterator();
-        }*/
     }
 
     private static short whoBegins(ArrayList<Player> players){
