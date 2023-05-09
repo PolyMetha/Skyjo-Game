@@ -105,7 +105,7 @@ public class Deck {
         return null; // return null if there are no cards in the deck
     }
 
-    public Card printDeck(JFrame window, int x, int y, String path, Card card){
+    public Card printDeck(JFrame window, int x, int y, Card card){
         card.setBounds(x, y, card.getFront().getImage().getWidth(null), card.getFront().getImage().getHeight(null));
         card.addMouseListener(new MouseHandler(card));
         window.add(card);

@@ -1,5 +1,7 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,11 +39,23 @@ public class GameLoop {
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
         final int INTERFACE_SIZE = 3*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET); 
 
-        final int WIN_OFFSET = 20;
+        final int WIN_OFFSET = 10;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) screenSize.getWidth();
+        int screenHeight = (int) screenSize.getHeight();
+        int panelWidth;
+        int panelHeight = screenHeight/2-40;
+
+        if(players.size()<4){
+            panelWidth = (screenWidth-160)/(players.size()+1);
+        }
+        else{
+            panelWidth = (screenWidth-160)/4;
+        }
         //initialize player hands
         int i =0, j=0;
         for (Player player : players) {
-            panels.add(player.printHand(window, WIN_OFFSET+i*(player.getUiHandSize()[0]),WIN_OFFSET+ j*(player.getUiHandSize()[1])));
+            panels.add(player.printHand(window, WIN_OFFSET+i*(panelWidth+120/(players.size()-1)),WIN_OFFSET+ j*(panelHeight+30),panelWidth, panelHeight));
             i++;
             if(i==4){
                 j+=1;
@@ -51,9 +65,14 @@ public class GameLoop {
 
 
         //initialize deck
-        deckUI = deck.printDeck(window,WIN_OFFSET+ i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET), WIN_OFFSET+j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET), "img/12.png", deck.getFirstCard());
+        deckUI = deck.printDeck(window,WIN_OFFSET+ i*(panelWidth)+160, WIN_OFFSET+j*(panelHeight+40), deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET),WIN_OFFSET+ j*(players.get(0).getUiHandSize()[1]+UI_HAND_OFFSET)+ImageResized.IMG_HEIGHT+20, "img/12.png", new Card(new ImageResized("img/Discard_Empty.png")));
+        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+ImageResized.IMG_HEIGHT+20, "img/12.png", new Card(new ImageResized("img/Discard_Empty.png")));
+
+        infoBar = new JLabel("Select 2 cards to know who will begin");
+        infoBar.setBounds(screenWidth/2-250,WIN_OFFSET+panelHeight, 500, 30);
+        infoBar.setFont(new Font("Verdana", Font.PLAIN, 18));
+        window.add(infoBar);
     }
 
     // Execute a round of the game
@@ -65,10 +84,6 @@ public class GameLoop {
         boolean atLeastOnePlayerFinished = false;
         boolean roundSkipped=false;
 
-        infoBar = new JLabel("Select 2 cards to know who will begin");
-        infoBar.setBounds(550,4*ImageResized.IMG_WIDTH+200, 1000, 30);
-        infoBar.setFont(new Font("Verdana", Font.PLAIN, 18));
-        window.add(infoBar);
         //Decide who will begin
         playerTurn = whoBegins(players);
 

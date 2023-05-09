@@ -1,5 +1,7 @@
 // import the required ArrayList class
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -30,7 +32,7 @@ public class Player {
         // initialize the player's hand
         initializeHand(deck);
 
-        uiHandSize[0]=5*hand.get(0).getFront().getIconWidth();
+        uiHandSize[0]=3*hand.get(0).getFront().getIconWidth();
         uiHandSize[1]=4*hand.get(0).getFront().getIconHeight();
     }
 
@@ -234,11 +236,12 @@ public class Player {
         }
     }
 
-    public JPanel printHand(JFrame window, int xPanel, int yPanel){
+    public JPanel printHand(JFrame window, int xPanel, int yPanel, int panelWidth, int panelHeight){
         int j=0, tmpXCard = 10, xCard=10, yCard=10;
         JPanel panel = new JPanel(null);
         panel.setBackground(Color.blue);
-        panel.setBounds(xPanel, yPanel, 3*ImageResized.IMG_WIDTH+50, 4*ImageResized.IMG_HEIGHT+50);
+        panel.setBounds(xPanel, yPanel, panelWidth, panelHeight);
+
         for(Card card : hand){
             card.setBounds(xCard, yCard, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
             panel.add(card);

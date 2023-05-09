@@ -64,7 +64,7 @@ public class App {
         });
 
         //take user input under conditions
-        while(nbPlayers <2 || nbPlayers >5){
+        while(nbPlayers <2 || nbPlayers >7){
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
