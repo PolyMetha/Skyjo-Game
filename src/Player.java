@@ -1,7 +1,5 @@
 // import the required ArrayList class
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -201,7 +199,6 @@ public class Player {
         }
 
         for (Card card : this.hand) {
-            System.out.println(card.getVisibility());
             if (!card.getVisibility()) {
                 count++;
             }
@@ -215,9 +212,9 @@ public class Player {
                 // If the round is over, notify the player that the round has finished
                 System.out.println("Round finished !");
             }
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -237,20 +234,23 @@ public class Player {
     }
 
     public JPanel printHand(JFrame window, int xPanel, int yPanel, int panelWidth, int panelHeight){
-        int j=0, tmpXCard = 10, xCard=10, yCard=10;
+        int i=0,j=0, tmpXCard = 10, xCard=0, yCard=0;
         JPanel panel = new JPanel(null);
-        panel.setBackground(Color.blue);
+        panel.setBackground(new Color(255, 221, 131));
         panel.setBounds(xPanel, yPanel, panelWidth, panelHeight);
+        int CARDS_OFFSET = 10;
+        int CARDS_WIDTH_PADDING = (panelWidth-(3*CardImgResized.IMG_WIDTH+20))/2;
+        int CARDS_HEIGHT_PADDING = (panelHeight-(4*CardImgResized.IMG_HEIGHT+20))/3;
 
         for(Card card : hand){
-            card.setBounds(xCard, yCard, ImageResized.IMG_WIDTH, ImageResized.IMG_HEIGHT);
+            card.setBounds(CARDS_OFFSET+i*(CARDS_WIDTH_PADDING+CardImgResized.IMG_WIDTH), CARDS_OFFSET+j*(CARDS_HEIGHT_PADDING+CardImgResized.IMG_HEIGHT), CardImgResized.IMG_WIDTH, CardImgResized.IMG_HEIGHT);
             panel.add(card);
-            xCard+=hand.get(0).getWidth() + hand.get(0).getWidth()/5;
-            if(j==2 || j==5 || j ==8){
-                yCard+=hand.get(0).getHeight() + 10;
-                xCard=tmpXCard;
+            i++;
+            if(i==3){
+                i=0;
+                j++;
             }
-            j+=1;
+
             card.setPanel(panel);
         }
         window.add(panel);

@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -12,7 +13,6 @@ import javax.swing.JPanel;
 
 public class GameLoop {
 
-    final private static int UI_HAND_OFFSET = 0;
     public static short playerTurn=0;
     public static Card firstSelection = null;
     public static Card secondSelection = null;
@@ -36,15 +36,24 @@ public class GameLoop {
         }
     }
 
+    public static void resetRoundUI(JFrame window){
+        Container contentPane = window.getContentPane();
+        discardPileUI = null;
+        deckUI = null;
+        contentPane.removeAll();
+        contentPane.revalidate();
+        contentPane.repaint();
+        panels = new ArrayList<>();
+    }
+
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
-        final int INTERFACE_SIZE = 3*(players.get(0).getUiHandSize()[0]+UI_HAND_OFFSET); 
 
         final int WIN_OFFSET = 10;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
         int panelWidth;
-        int panelHeight = screenHeight/2-40;
+        int panelHeight = screenHeight/2-60;
 
         if(players.size()<4){
             panelWidth = (screenWidth-160)/(players.size()+1);
@@ -67,11 +76,12 @@ public class GameLoop {
         //initialize deck
         deckUI = deck.printDeck(window,WIN_OFFSET+ i*(panelWidth)+160, WIN_OFFSET+j*(panelHeight+40), deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+ImageResized.IMG_HEIGHT+20, "img/12.png", new Card(new ImageResized("img/Discard_Empty.png")));
+        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_Empty.png")));
 
         infoBar = new JLabel("Select 2 cards to know who will begin");
-        infoBar.setBounds(screenWidth/2-250,WIN_OFFSET+panelHeight, 500, 30);
-        infoBar.setFont(new Font("Verdana", Font.PLAIN, 18));
+        infoBar.setBounds(screenWidth/2-250,WIN_OFFSET+panelHeight+5, 500, 30);
+        infoBar.setFont(new Font("Verdana", Font.BOLD, 18));
+        infoBar.setForeground(new Color(255, 221, 131));
         window.add(infoBar);
     }
 
@@ -79,8 +89,8 @@ public class GameLoop {
     public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile, JFrame window) {
         // Initialize some variables for the round
         short nbRound = 0;
+        short idPlayerFinished=-1;
         boolean play = true;
-        Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
         boolean roundSkipped=false;
 
@@ -102,7 +112,7 @@ public class GameLoop {
                 
                 Player player = players.get(playerTurn);
                 //size up the player panel, size down the others
-                panels.get(playerTurn).setBackground(Color.CYAN);
+                panels.get(playerTurn).setBackground(new Color(152, 223, 214));
 
                 infoBar.setText("Select a card, the deck or the discard pile");
                 //wait until an input of the player
@@ -133,8 +143,9 @@ public class GameLoop {
                             //create discard pile
                             discard_pile = new Deck(false);
                         }
-                        
+
                         firstSelection.setVisibility(true);
+                        deckUI.changeCardImage(firstSelection.getFront());
                         infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
                         //wait until the player clicks on something
                         while(secondSelection == null){
@@ -147,6 +158,8 @@ public class GameLoop {
 
                         players.get(playerTurn).takeACardFromDeck(deck, discard_pile, discardPileUI, deckUI, firstSelection, secondSelection);
                         playerTurn+=1;
+
+                        deckUI.changeCardImage(firstSelection.getBack());
                         break;
 
                     case -1:
@@ -156,7 +169,7 @@ public class GameLoop {
                         if (!discard_pile.verifyExistence()) {
                             //if there is no discard pile, you can't draw in it, say it to the player and replay
                             System.out.println("There is no discard pile, choose another");
-                            infoBar.setText("There is no discard pile");
+                            // infoBar.setText("There is no discard pile");
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
@@ -187,27 +200,30 @@ public class GameLoop {
   
                 firstSelection=null;
                 secondSelection=null;
-                panels.get(playerTurn-1).setBackground(Color.blue);
+                panels.get(playerTurn-1).setBackground(new Color(255, 221, 131));
 
                 player.verifyRowsAndColumns(window);
-                if(!roundSkipped){
-                    play = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
+                if(!roundSkipped && !atLeastOnePlayerFinished){
+                    atLeastOnePlayerFinished = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
                     roundSkipped = false;
                 }
 
-                if (!play)
+                if (atLeastOnePlayerFinished)
                 {
-                    atLeastOnePlayerFinished = true;
-                    infoBar.setText("Game finished");
+                    play = false;
+                    infoBar.setText("Round finished");
                 }
             }
-
-            its = players.iterator();
 
             playerTurn=0;
             
         }
-        //display the score at the end of the round
+        //display the score and the deck of all players at the end of the round
+        for(Player player : players){
+            for(Card card : player.getHand()){
+                card.returnCard();
+            }
+        }
         Utility.displayScore(players, window, deckUI);
     }
 

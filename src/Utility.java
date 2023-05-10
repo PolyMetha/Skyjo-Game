@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -53,7 +54,8 @@ public class Utility {
             JLabel scoreUI = new JLabel("Player "+ player.getID()+" score : "+player.getScore());
             // scoreUI.setBounds((players.size()%3)*(players.get(0).getUiHandSize()[0]+), players.size()/3*(players.get(0).getUiHandSize()[1]+100), 500, 30);
             scoreUI.setBounds(deckUI.getBounds().x+deckUI.getWidth()+20, deckUI.getBounds().y+deckUI.getHeight()+i, 500, 30);
-            scoreUI.setFont(new Font("Verdana", Font.PLAIN, 18));
+            scoreUI.setFont(new Font("Verdana", Font.BOLD, 18));
+            scoreUI.setForeground(new Color(255, 221, 131));
             window.add(scoreUI);
             window.repaint();
             i+=30;

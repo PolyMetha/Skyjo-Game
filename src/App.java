@@ -2,11 +2,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,7 +21,7 @@ import javax.swing.JTextField;
 public class App {
     private static short nbPlayers;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //get screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
@@ -82,18 +87,20 @@ public class App {
         window.setTitle("Skyjo game");
         window.setLayout(null);
         window.setSize(screenWidth, screenHeight);
-        window.getContentPane().setBackground(Color.GRAY);
+
+        window.getContentPane().setBackground(new Color(0, 35, 91));
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
         //Adding a please wait label
         JLabel waitJLabel = new JLabel("Game is loading, please wait...");
         waitJLabel.setBounds(550, 380, 1000, 30);
-        waitJLabel.setFont(new Font("Verdana", Font.PLAIN, 18));
+        waitJLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        waitJLabel.setForeground(Color.BLACK);
         window.add(waitJLabel);
 
         // Initialize the variables for the game
-        int maxScore = 50;
+        int maxScore = 100;
         boolean gameOver = false;
 
         // Create and shuffle a deck of cards
@@ -110,8 +117,6 @@ public class App {
             players.add(new Player(i, deck));
         }
 
-        //initialize the base view
-        GameLoop.initializeRoundUI(window, players, deck, discard_pile);
 
         //remove the wait label and print the game view
         window.remove(waitJLabel);
@@ -119,7 +124,8 @@ public class App {
 
         // Play the game until a player reaches the maximum score
         while(!gameOver) {
-
+            //initialize the base view
+            GameLoop.initializeRoundUI(window, players, deck, discard_pile);
             // Execute a round of the game
             GameLoop.executeRound(players, deck, discard_pile, window);
 
@@ -135,6 +141,8 @@ public class App {
 
             // Reset the game state for the next round
             GameLoop.resetGame(players, deck, discard_pile);
+  
+            GameLoop.resetRoundUI(window);
         }
     }
 }

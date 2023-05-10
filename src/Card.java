@@ -45,14 +45,14 @@ public class Card extends JLabel{
     }
 
     //used only to instantiate the UI of the discard pile
-    public Card(ImageResized img){
+    public Card(CardImgResized img){
         super();
         this.value = 0;
         this.uv = new UV("Discard empty",Color.black);
         this.visible = false;
 
-        front = new ImageResized("img/Discard_empty.png");
-        back = new ImageResized("img/Discard_empty.png");
+        front = new CardImgResized("img/Discard_empty.png");
+        back = new CardImgResized("img/Discard_empty.png");
         playerID=-1;
         this.setIcon(back);
     }
@@ -65,7 +65,7 @@ public class Card extends JLabel{
         this.visible = false;
 
         front = icon;
-        back = new ImageResized("img/Back.png");
+        back = new CardImgResized("img/Back.png");
         this.setIcon(back);
     }
 
@@ -77,7 +77,7 @@ public class Card extends JLabel{
             this.visible = card.getVisibility();
     
             front = card.getFront();
-            back = new ImageResized("img/Back.png");
+            back = new CardImgResized("img/Back.png");
             this.setIcon(back);
         }
 
