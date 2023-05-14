@@ -10,7 +10,6 @@ public class Card extends JLabel{
     private UV uv;
     private boolean visible;
     private int playerID=-2; //set all the cards to-1, the cards -2 corresponds to the deck, -1 to the discard pile and others positive are for the players
-    private int playerTurn;
 
     private ImageIcon back;
     private ImageIcon front;
@@ -89,10 +88,6 @@ public class Card extends JLabel{
         return back;
     }
 
-    public int getPlayerTurn(){
-        return playerTurn;
-    }
-
     public int getPlayerId(){
         return playerID;
     }
@@ -111,10 +106,6 @@ public class Card extends JLabel{
     // Getter method to retrieve the card's visibility status
     public boolean getVisibility() {
         return this.visible;
-    }
-
-    public Card getCard(){
-        return this;
     }
 
     // Method to get the string representation of the card
@@ -140,12 +131,5 @@ public class Card extends JLabel{
     // Setter method to change the visibility status of the card
     public void setVisibility(boolean vis) {
         this.visible = vis;
-    }
-
-    // Setter method to change the value, UV, and visibility status of the card
-    public void changeCard(int value, UV uv, boolean vis) {
-        this.visible = vis;
-        this.value = value;
-        this.uv = uv;
     }
 }

@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Deck {
@@ -61,34 +59,14 @@ public class Deck {
         }
     }
 
-    // Get the value of the top card in the deck
-    public int getValueCard() {
-        return cards.get(this.cards.size() - 1).getValue();
-    }
-
     // Get the list of cards in the deck
     public ArrayList<Card> getCards() {
         return this.cards;
     }
 
-    // Get the name of the top card in the deck
-    public String getCard() {
-        return cards.get(this.cards.size() - 1).getName();
-    }
-
-    // Get the UV values of the top card in the deck
-    public UV getUvCard() {
-        return cards.get(this.cards.size() - 1).getUv();
-    }
-
     // Shuffle the deck
     public void shuffle() {
         Collections.shuffle(cards); // shuffle the cards using the Collections.shuffle method
-    }
-
-    public void changeFirstCard(int value, UV uv, boolean visible) {
-        // change the value, uv, and visibility of the first card in the deck
-        this.cards.get(this.cards.size() - 1).changeCard(value, uv, visible);
     }
 
     public Card getFirstCard(){

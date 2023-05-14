@@ -1,7 +1,5 @@
 // import the required ArrayList class
-import java.awt.Color;
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -85,7 +83,7 @@ public class Player {
     }
 
 
-    public void verifyRowsAndColumns(JFrame window, JLabel infoBar)
+    public void verifyRowsAndColumns(JLabel infoBar)
     {
                 // verify rows
             if (this.nbColumnRemoved == 0)
@@ -244,7 +242,7 @@ public class Player {
     }
 
     public JPanel printHand(JFrame window, int xPanel, int yPanel, int panelWidth, int panelHeight){
-        int i=0,j=0, tmpXCard = 10, xCard=0, yCard=0;
+        int i=0,j=0;
         JPanel panel = new JPanel(null);
         panel.setBounds(xPanel, yPanel, panelWidth, panelHeight);
         int CARDS_OFFSET = 10;
@@ -281,10 +279,6 @@ public class Player {
     {
         // Return the player's hand
         return this.hand;
-    }
-
-    public int[] getUiHandSize(){
-        return uiHandSize;
     }
 
     public int getID(){

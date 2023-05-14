@@ -4,9 +4,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -133,9 +130,6 @@ public class GameLoop {
                 switch(firstSelection.getPlayerId()){
                     case -2:// Take a card from the deck
                         //verify if there is a deck
-
-                        
-
                         if (!deck.verifyExistence()) {
                             // Shuffle discard pile back into deck and draw a new card if the deck is empty
                             deck = new Deck(false);
@@ -174,7 +168,6 @@ public class GameLoop {
                         if (!discard_pile.verifyExistence()) {
                             //if there is no discard pile, you can't draw in it, say it to the player and replay
                             System.out.println("There is no discard pile, choose another");
-                            // infoBar.setText("There is no discard pile");
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
@@ -208,7 +201,7 @@ public class GameLoop {
                 if(!roundSkipped)
                     panels.get(playerTurn-1).setBackground(panelColor);
 
-                player.verifyRowsAndColumns(window, infoBar);
+                player.verifyRowsAndColumns(infoBar);
                 if(!roundSkipped && !atLeastOnePlayerFinished){
                     atLeastOnePlayerFinished = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
                     roundSkipped = false;
