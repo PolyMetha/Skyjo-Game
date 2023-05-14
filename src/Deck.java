@@ -69,6 +69,7 @@ public class Deck {
         Collections.shuffle(cards); // shuffle the cards using the Collections.shuffle method
     }
 
+    //return the card on the top of the deck
     public Card getFirstCard(){
         return cards.get(cards.size()-1);
     }
@@ -83,17 +84,20 @@ public class Deck {
         return null; // return null if there are no cards in the deck
     }
 
+    //return and print the deck on the screen by printing his top card, facing down
     public Card printDeck(JFrame window, int x, int y, Card card){
         card.setBounds(x, y, card.getFront().getImage().getWidth(null), card.getFront().getImage().getHeight(null));
-        card.addMouseListener(new MouseHandler(card));
+        card.addMouseListener(new MouseHandler(card));  //adding a mouse listner of type mouse handler
         window.add(card);
         return card;
     }
 
+    //return and print the discard pile by printing an empty card, in fact, at this moment, the discard pile is empty
     public Card PrintDiscardPile(JFrame window, int x, int y, String path, Card card){
+        //generate an empty card
         Card discardPile = new Card(new CardImgResized(path));
         discardPile.setBounds(x, y, discardPile.getFront().getImage().getWidth(null), discardPile.getFront().getImage().getHeight(null));
-        discardPile.addMouseListener(new MouseHandler(card));
+        discardPile.addMouseListener(new MouseHandler(card));   //adding a mouse listner of type mouse handler
         window.add(discardPile);
         return discardPile;
     }

@@ -9,7 +9,7 @@ public class BackgroundResized extends ImageIcon{
     int screenHeight = (int) screenSize.getHeight();
     int screenWidth = (int) screenSize.getWidth();
 
-    //resize the background image
+    //resize the background image (that we are proud of :) )
     public BackgroundResized(String fileName){
         super(fileName);
         Image imageResized = this.getImage().getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH);

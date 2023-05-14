@@ -11,38 +11,24 @@ public class Card extends JLabel{
     private boolean visible;
     private int playerID=-2; //set all the cards to-1, the cards -2 corresponds to the deck, -1 to the discard pile and others positive are for the players
 
-    private ImageIcon back;
-    private ImageIcon front;
+    private ImageIcon back; //the back image of the card
+    private ImageIcon front;//the front image of the card
 
-    private JPanel panel;
+    private JPanel panel;   //the panel that contains the card
 
 
-    public void changeCardImage(ImageIcon newCard){
-        this.visible = true;
-        this.setIcon(newCard);
-    }
 
-    public void returnCard(){
-        this.visible = true;
-        this.setIcon(front);
-    }
-
-    public JPanel getPanel(){
-        return this.panel;
-    }
-
-    public void setPanel(JPanel panel){
-        this.panel=panel;
-    }
-
-    //to intervert 2 cards when we need to
-    public void changeCard(Card other){
-        this.value = other.getValue();
-        this.uv = other.uv;
-        this.front = other.getFront();
+    // Constructor to initialize the card's value, UV, and visibility status
+    public Card(int value, UV uv, ImageIcon icon){
+        super(icon);
+        this.value = value;
+        this.uv = uv;
         this.visible = false;
-    }
 
+        front = icon;
+        back = new CardImgResized("img/Back.png");
+        this.setIcon(back);
+    }
     //used only to instantiate the UI of the discard pile
     public Card(CardImgResized img){
         super();
@@ -57,29 +43,39 @@ public class Card extends JLabel{
     }
 
     // Constructor to initialize the card's value, UV, and visibility status
-    public Card(int value, UV uv, ImageIcon icon){
-        super(icon);
-        this.value = value;
-        this.uv = uv;
-        this.visible = false;
+    public Card(Card card){
+        super(card.getFront());
+        this.value = card.getValue();
+        this.uv = card.getUv();
+        this.visible = card.getVisibility();
 
-        front = icon;
+        front = card.getFront();
         back = new CardImgResized("img/Back.png");
         this.setIcon(back);
     }
 
-        // Constructor to initialize the card's value, UV, and visibility status
-        public Card(Card card){
-            super(card.getFront());
-            this.value = card.getValue();
-            this.uv = card.getUv();
-            this.visible = card.getVisibility();
-    
-            front = card.getFront();
-            back = new CardImgResized("img/Back.png");
-            this.setIcon(back);
-        }
+    //Change the card visibility and his image with a new image
+    public void changeCardImage(ImageIcon newCard){
+        this.visible = true;
+        this.setIcon(newCard);
+    }
 
+    //return the card in the screen and change his visibility
+    public void returnCard(){
+        this.visible = true;
+        this.setIcon(front);
+    }
+
+
+    //copy the card other into this card, needed for card exchange 
+    //in the dack and discard pile interactions
+    public void changeCard(Card other){
+        this.value = other.getValue();
+        this.uv = other.uv;
+        this.front = other.getFront();
+        this.visible = false;
+    }
+    //getters and setters :
     public ImageIcon getFront(){
         return front;
     }
@@ -106,6 +102,14 @@ public class Card extends JLabel{
     // Getter method to retrieve the card's visibility status
     public boolean getVisibility() {
         return this.visible;
+    }
+
+    public JPanel getPanel(){
+        return this.panel;
+    }
+
+    public void setPanel(JPanel panel){
+        this.panel=panel;
     }
 
     // Method to get the string representation of the card

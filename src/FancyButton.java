@@ -8,10 +8,11 @@ import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
 public class FancyButton extends JButton {
-
+    //define the colors of the button and the text
     private static final Color BACKGROUND_COLOR = new Color(57, 62, 70);
     private static final Color FOREGROUND_COLOR = Color.WHITE;
 
+    //generate a super nice looking button (that we are proud of too :) )
     public FancyButton(String label) {
         super(label);
         setPreferredSize(new Dimension(100, 50)); // set preferred size for the button
@@ -20,6 +21,7 @@ public class FancyButton extends JButton {
         setBorder(new EmptyBorder(10, 20, 10, 20)); // add padding to the button text
     }
 
+    //Rendering nice and smooth our beautiful button
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
