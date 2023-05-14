@@ -8,21 +8,21 @@ public class Utility {
     public static short controlInt(short borne1, short borne2, String message1, String message2)
     {
         short indice = 0;
-        while (indice < borne1 || indice > borne2) {
-            Scanner scanner = new Scanner(System.in);
+        boolean validInput = false;
+        Scanner scanner = new Scanner(System.in);
+
+        while (!validInput) {
             System.out.println(message1);
-            try
-            {
-                indice = scanner.nextShort(); // reads the input as a short
-            }
-            catch (Exception exception)
-            {
-                System.out.println("This must be an integer, retry.");
-                indice = 0;
-            }
-            // If the input is not within the range, the function displays a message
-            // and prompts the user to enter a new input.
-            if(indice < borne1 || indice > borne2) {
+            String input = scanner.nextLine();
+
+            try {
+                indice = Short.parseShort(input);
+                if (indice >= borne1 && indice <= borne2) {
+                    validInput = true;
+                } else {
+                    System.out.println(message2);
+                }
+            } catch (NumberFormatException exception) {
                 System.out.println(message2);
             }
         }
