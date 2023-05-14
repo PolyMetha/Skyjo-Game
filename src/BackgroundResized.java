@@ -5,9 +5,9 @@ import javax.swing.ImageIcon;
 
 public class BackgroundResized extends ImageIcon{
     //screen dimensions
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenHeight = (int) screenSize.getHeight();
-    int screenWidth = (int) screenSize.getWidth();
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final int screenHeight = (int) screenSize.getHeight();
+    private final int screenWidth = (int) screenSize.getWidth();
 
     //resize the background image (that we are proud of :) )
     public BackgroundResized(String fileName){
