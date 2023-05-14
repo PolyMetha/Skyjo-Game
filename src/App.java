@@ -57,8 +57,6 @@ public class App {
             background.add(quitButton);
             BackgroundPanel.add(background, BorderLayout.CENTER);
 
-            
-
             //adding panel to frame
             playersSelect.getContentPane().add(BackgroundPanel);
 
@@ -104,7 +102,6 @@ public class App {
             //close the window
             playersSelect.dispose();
 
-
             //start game window
             JFrame window = new JFrame();        
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,8 +113,6 @@ public class App {
             window.getContentPane().setBackground(backgoundColor);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
-
-
 
             //Adding a please wait label
             JLabel waitJLabel = new JLabel("Game is loading, please wait...");
