@@ -230,7 +230,14 @@ public class GameLoop {
                 card.returnCard();
             }
         }
+        //display score and wait 5 sec before running a new round
         Utility.displayScore(players, window, deckUI);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // Handle the exception if necessary
+        }
+
     }
 
     private static short whoBegins(ArrayList<Player> players){
