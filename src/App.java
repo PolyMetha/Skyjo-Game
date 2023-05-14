@@ -133,7 +133,6 @@ public class App {
             players.add(new Player(i, deck));
         }
 
-
         //remove the wait label and print the game view
         window.remove(waitJLabel);
         window.repaint();
