@@ -23,6 +23,7 @@ public class App {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int screenWidth = (int) screenSize.getWidth();
             int screenHeight = (int) screenSize.getHeight();
+
             Color backgoundColor = new Color(35, 41, 49);
 
             //create player selection window
@@ -31,12 +32,13 @@ public class App {
             //number of players inf=put field
             JTextField textField = new JTextField(20);
             textField.setBounds(screenWidth/2-50, screenHeight/2-textField.getHeight()/2+100, 100, 50);
+
             //play button
             FancyButton playButton = new FancyButton("Play");
             playButton.setBounds(screenWidth/2-110, screenHeight/2+170, 100, 50);
             playButton.setForeground(Color.WHITE);
 
-            //quit
+            //quit button
             FancyButton quitButton = new FancyButton("Quit game");
             quitButton.setBounds(screenWidth/2+10, screenHeight/2+170, 100, 50);
             quitButton.setForeground(Color.WHITE);
@@ -47,7 +49,7 @@ public class App {
             infoNbPlayers.setFont(new Font("Verdana", Font.BOLD, 25));
             infoNbPlayers.setForeground(Color.white);
 
-            //adding it to a panel
+            //adding everything to a panel
             JPanel BackgroundPanel = new JPanel();
             BackgroundPanel.setLayout(new BorderLayout());
             JLabel background = new JLabel(new BackgroundResized("img/Background_Selection.png")); 
@@ -56,8 +58,6 @@ public class App {
             background.add(infoNbPlayers);
             background.add(quitButton);
             BackgroundPanel.add(background, BorderLayout.CENTER);
-
-            
 
             //adding panel to frame
             playersSelect.getContentPane().add(BackgroundPanel);
@@ -83,7 +83,7 @@ public class App {
                 }
             });
 
-            //adding logic behind play button
+            //adding logic behind quit button
             quitButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -93,7 +93,7 @@ public class App {
                 }
             });
 
-            //take user input under conditions
+            //let the game run under number players conditions
             while(nbPlayers <2 || nbPlayers >7){
                 try {
                     Thread.sleep(10);
@@ -101,11 +101,11 @@ public class App {
                     // Handle the exception if necessary
                 }
             }
+
             //close the window
             playersSelect.dispose();
 
-
-            //start game window
+            //start game window and set its parameters
             JFrame window = new JFrame();        
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setResizable(false);
@@ -113,11 +113,10 @@ public class App {
             window.setLayout(null);
             window.setSize(screenWidth, screenHeight);
 
+            //set the background and the layout
             window.getContentPane().setBackground(backgoundColor);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
-
-
 
             //Adding a please wait label
             JLabel waitJLabel = new JLabel("Game is loading, please wait...");
@@ -168,9 +167,13 @@ public class App {
                 // Reset the game state for the next round
                 GameLoop.resetGame(players, deck, discard_pile);
     
+                //reset the interface
                 GameLoop.resetRoundUI(window);
             }
+            //reset the number of players for a new game
             nbPlayers = 0;
+
+            //the game can now restart with new players
         }        
     }
 }
