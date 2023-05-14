@@ -11,15 +11,23 @@ import javax.swing.JPanel;
 public class GameLoop {
 
     public static short playerTurn=0;
+
+    //the intermediates between the interface and the gameloop
     public static Card firstSelection = null;
     public static Card secondSelection = null;
+
+    //references to the discard pile and the deck on the screen (instantiated later)
     private static Card discardPileUI=null;
     private static Card deckUI=null;
+
+    //reference to an information bar to indicate things to the player
     private static JLabel infoBar;
+
+    //interface colors
     private static Color panelColor = new Color(57, 62, 70);
     private static Color panelColorPlaying = new Color(78, 204, 163);
 
-    
+    //panels representing the hand space of a player
     private static ArrayList<JPanel> panels = new ArrayList<>();
 
     // Reset the game with a new deck and empty discard pile for each player
@@ -36,6 +44,7 @@ public class GameLoop {
         }
     }
 
+    //reset the UI for another game
     public static void resetRoundUI(JFrame window){
         Container contentPane = window.getContentPane();
         discardPileUI = null;
@@ -46,22 +55,29 @@ public class GameLoop {
         panels = new ArrayList<>();
     }
 
+    //creates a new interface
     public static void initializeRoundUI(JFrame window, ArrayList<Player> players, Deck deck, Deck discardPile){
 
+        //margin with the window border
         final int WIN_OFFSET = 10;
+        //screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
+
+        //dimensions of a future player panel
         int panelWidth;
         int panelHeight = screenHeight/2-60;
 
+        //calculate the width of a panel depending on the number of players
         if(players.size()<4){
             panelWidth = (screenWidth-160)/(players.size()+1);
         }
         else{
             panelWidth = (screenWidth-160)/4;
         }
-        //initialize player hands
+
+        //initialize player hands in the panels created
         int i =0, j=0, h=0;
         for (Player player : players) {
             panels.add(player.printHand(window, WIN_OFFSET+i*(panelWidth+120/(players.size()-1)),WIN_OFFSET+ j*(panelHeight+30),panelWidth, panelHeight));
@@ -80,6 +96,7 @@ public class GameLoop {
         //initialize discard pile
         discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_empty.png")));
 
+        //setting up the infobar
         infoBar = new JLabel("Select 2 cards to know who will begin");
         infoBar.setBounds(screenWidth/2-250,WIN_OFFSET+panelHeight+5, 500, 30);
         infoBar.setFont(new Font("Verdana", Font.BOLD, 18));
@@ -87,20 +104,20 @@ public class GameLoop {
         window.add(infoBar);
     }
 
-    // Execute a round of the game
+    // Execute a round of the game, here is the core of the programm
     public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile, JFrame window) {
         // Initialize some variables for the round
-        short nbRound = 0;
-        short idPlayerFinished=-1;
+        short nbRound = 0;      //number of the actual round
         boolean play = true;
         boolean atLeastOnePlayerFinished = false;
-        boolean roundSkipped=false;
+        boolean turnSkipped=false;     //used if a player turn is skipped
 
         //Decide who will begin
         playerTurn = whoBegins(players);
 
         infoBar.setText("Player "+(playerTurn+1)+" begins");
 
+        //wait for the player to read
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -109,15 +126,17 @@ public class GameLoop {
 
         while(play){    //while nobody outpassed the max score
 
+            //for all the players
             while(playerTurn < players.size()){
 
-                
+                //get the player presently playing
                 Player player = players.get(playerTurn);
-                //size up the player panel, size down the others
+
+                //change color of the playing player panel
                 panels.get(playerTurn).setBackground(panelColorPlaying);
 
                 infoBar.setText("Select a card, the deck or the discard pile");
-                //wait until an input of the player
+                //wait until an click of the player
                 while(firstSelection == null){
                     try {
                         Thread.sleep(1);
@@ -143,10 +162,12 @@ public class GameLoop {
                             discard_pile = new Deck(false);
                         }
 
+                        //show the card picked
                         firstSelection.setVisibility(true);
                         deckUI.changeCardImage(firstSelection.getFront());
                         infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
-                        //wait until the player clicks on something
+
+                        //wait until the player clicks on a card of his deck
                         while(secondSelection == null){
                             try {
                                 Thread.sleep(1);
@@ -155,9 +176,11 @@ public class GameLoop {
                             }
                         }
 
+                        //put the card of the deck in the hand and the hand card in the discard pile
                         players.get(playerTurn).takeACardFromDeck(deck, discard_pile, discardPileUI, deckUI, firstSelection, secondSelection);
                         playerTurn+=1;
 
+                        //update the UI of the deck with a card back
                         deckUI.changeCardImage(firstSelection.getBack());
                         break;
 
@@ -173,7 +196,7 @@ public class GameLoop {
                             } catch (InterruptedException e) {
                                 // Handle the exception if necessary
                             }
-                            roundSkipped =true;
+                            turnSkipped =true;
                             break;
                         }
                         infoBar.setText("Picked : "+firstSelection.getCardName()+" put it in your hand");
@@ -185,6 +208,8 @@ public class GameLoop {
                                 // Handle the exception if necessary
                             }
                         }
+
+                        //exchange discard card and hand card
                         players.get(playerTurn).takeACardFromDiscardPile(discard_pile, discardPileUI, firstSelection, secondSelection);
                         playerTurn+=1;
                         break;
@@ -196,17 +221,24 @@ public class GameLoop {
                         break;
                 }
   
+                //reset the variables for a new turn
                 firstSelection=null;
                 secondSelection=null;
-                if(!roundSkipped)
+
+                //reset the player background color
+                if(!turnSkipped)
                     panels.get(playerTurn-1).setBackground(panelColor);
 
+                //verify if a column or a row can be deleted
                 player.verifyRowsAndColumns(infoBar, discard_pile, discardPileUI);
-                if(!roundSkipped && !atLeastOnePlayerFinished){
+
+                //check if a player finished his hand, if so, the game will run until the last player plays, calculate the score and end the round
+                if(!turnSkipped && !atLeastOnePlayerFinished){
                     atLeastOnePlayerFinished = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
-                    roundSkipped = false;
+                    turnSkipped = false;
                 }
 
+                //end the round
                 if (atLeastOnePlayerFinished)
                 {
                     play = false;
@@ -214,6 +246,7 @@ public class GameLoop {
                 }
             }
 
+            //Reset player turn
             playerTurn=0;
             
         }
