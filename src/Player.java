@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Player {
@@ -74,6 +75,7 @@ public class Player {
         this.ChangeCardSide(secondSelection);
 
         tmp.setPlayerID(-1);
+        tmp.setVisibility(true);
         discard_pile.addCard(tmp);
         discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
         discardUI.changeCard(discard_pile.getFirstCard());
@@ -83,7 +85,7 @@ public class Player {
     }
 
 
-    public void verifyRowsAndColumns(JFrame window)
+    public void verifyRowsAndColumns(JFrame window, JLabel infoBar)
     {
                 // verify rows
             if (this.nbColumnRemoved == 0)
@@ -97,12 +99,14 @@ public class Player {
                                 && this.hand.get(i).getVisibility()
                                 && this.hand.get(i + 1).getVisibility()
                                 && this.hand.get(i + 2).getVisibility())
-                        {
+                        {                            
+                            infoBar.setText("Row removed !");
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(700);
                             } catch (InterruptedException e) {
                                 // Handle the exception if necessary
                             }
+
                             hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
                             hand.get(i).getPanel().remove(hand.get(i));
@@ -110,7 +114,6 @@ public class Player {
                             hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
                             this.nbLineRemoved += 1;
-                            System.out.println("Line removed !");
                             if(hand.get(0)!=null){
                                 hand.get(0).getPanel().repaint();
                             }
@@ -133,12 +136,14 @@ public class Player {
                                         && this.hand.get(i).getVisibility()
                                         && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                         && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
-                                        && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
+                                        && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {                                    
+                                    infoBar.setText("Column removed !");
                                     try {
-                                        Thread.sleep(1000);
+                                        Thread.sleep(700);
                                     } catch (InterruptedException e) {
                                         // Handle the exception if necessary
                                     }
+
                                     hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
                                     hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
@@ -150,7 +155,6 @@ public class Player {
 
 
                                     this.nbColumnRemoved += 1;
-                                    System.out.println("Column removed !");
                                     if(hand.get(0)!=null){
                                         hand.get(0).getPanel().repaint();
                                     }
@@ -164,11 +168,13 @@ public class Player {
                                         && this.hand.get(i).getVisibility()
                                         && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                         && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+                                    infoBar.setText("Column removed !");
                                     try {
-                                        Thread.sleep(1000);
+                                        Thread.sleep(700);
                                     } catch (InterruptedException e) {
                                         // Handle the exception if necessary
                                     }
+
                                     hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
                                     hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
@@ -177,7 +183,6 @@ public class Player {
                                     this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
                                     this.nbColumnRemoved += 1;
-                                    System.out.println("Column removed !");
                                     if(hand.get(0)!=null){
                                         hand.get(0).getPanel().repaint();
                                     }
@@ -193,10 +198,15 @@ public class Player {
         // Count number of visible cards in the player's hand
         short count = 0;
         //if there is no more cards in the player hand
-        if(this.hand.get(0)==null){
-            System.out.println("Plus de cartes dans la main");
-            return true;
+        try {
+            if(this.hand.get(0)==null){
+                System.out.println("Plus de cartes dans la main");
+                return true;
+            }}
+        catch (Exception exception){
+            count = 0;
         }
+        
 
         for (Card card : this.hand) {
             if (!card.getVisibility()) {
@@ -236,7 +246,6 @@ public class Player {
     public JPanel printHand(JFrame window, int xPanel, int yPanel, int panelWidth, int panelHeight){
         int i=0,j=0, tmpXCard = 10, xCard=0, yCard=0;
         JPanel panel = new JPanel(null);
-        panel.setBackground(new Color(255, 221, 131));
         panel.setBounds(xPanel, yPanel, panelWidth, panelHeight);
         int CARDS_OFFSET = 10;
         int CARDS_WIDTH_PADDING = (panelWidth-(3*CardImgResized.IMG_WIDTH+20))/2;

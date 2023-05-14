@@ -22,12 +22,22 @@ public class MouseHandler implements MouseListener{
 
         //detects if we clicked on the deck, the discard pile or a card of the hand of a player
         switch(card.getPlayerId()){
+            //case discard pile empty
+            case -3:
+                break;
+            //case deck
             case -2:
-                GameLoop.firstSelection = card;
-                break;
+                if(GameLoop.firstSelection==null){
+                    GameLoop.firstSelection = card;
+                    break;
+                }
+            //case discard pile
             case -1:
-                GameLoop.firstSelection = card;
-                break;
+                if(GameLoop.firstSelection==null){
+                    GameLoop.firstSelection = card;
+                    break;
+                }
+            //case player hand
             default:
                 if(GameLoop.playerTurn == player.getID() && !card.getVisibility()&&GameLoop.firstSelection == null){
                     GameLoop.firstSelection = this.card;
@@ -50,11 +60,12 @@ public class MouseHandler implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        card.setBounds(card.getBounds().x, card.getBounds().y-2, card.getWidth(), card.getHeight());
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        card.setBounds(card.getBounds().x, card.getBounds().y+2, card.getWidth(), card.getHeight());
     }
     
 }

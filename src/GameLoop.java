@@ -19,6 +19,9 @@ public class GameLoop {
     private static Card discardPileUI=null;
     private static Card deckUI=null;
     private static JLabel infoBar;
+    private static Color panelColor = new Color(57, 62, 70);
+    private static Color panelColorPlaying = new Color(78, 204, 163);
+
     
     private static ArrayList<JPanel> panels = new ArrayList<>();
 
@@ -62,14 +65,16 @@ public class GameLoop {
             panelWidth = (screenWidth-160)/4;
         }
         //initialize player hands
-        int i =0, j=0;
+        int i =0, j=0, h=0;
         for (Player player : players) {
             panels.add(player.printHand(window, WIN_OFFSET+i*(panelWidth+120/(players.size()-1)),WIN_OFFSET+ j*(panelHeight+30),panelWidth, panelHeight));
+            panels.get(h).setBackground(panelColor);
             i++;
             if(i==4){
                 j+=1;
                 i=0;
             }
+            h++;
         }
 
 
@@ -112,7 +117,7 @@ public class GameLoop {
                 
                 Player player = players.get(playerTurn);
                 //size up the player panel, size down the others
-                panels.get(playerTurn).setBackground(new Color(152, 223, 214));
+                panels.get(playerTurn).setBackground(panelColorPlaying);
 
                 infoBar.setText("Select a card, the deck or the discard pile");
                 //wait until an input of the player
@@ -200,9 +205,10 @@ public class GameLoop {
   
                 firstSelection=null;
                 secondSelection=null;
-                panels.get(playerTurn-1).setBackground(new Color(255, 221, 131));
+                if(!roundSkipped)
+                    panels.get(playerTurn-1).setBackground(panelColor);
 
-                player.verifyRowsAndColumns(window);
+                player.verifyRowsAndColumns(window, infoBar);
                 if(!roundSkipped && !atLeastOnePlayerFinished){
                     atLeastOnePlayerFinished = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
                     roundSkipped = false;
@@ -232,6 +238,7 @@ public class GameLoop {
         short bestSumID=0;
 
         for(playerTurn =0; playerTurn<players.size(); playerTurn++){
+            panels.get(playerTurn).setBackground(panelColorPlaying);
             //do 1 round of 2 cards return to know which player is going to begin
             //retry while there is no selection or if the player select the deck or the discard pile
             while(firstSelection == null || firstSelection.getPlayerId()<0){
@@ -264,6 +271,7 @@ public class GameLoop {
             }
             firstSelection =null;
             secondSelection=null;
+            panels.get(playerTurn).setBackground(panelColor);
         }
 
         //return the ID of the player that had the biggest sum

@@ -53,7 +53,7 @@ public class Card extends JLabel{
 
         front = new CardImgResized("img/Discard_empty.png");
         back = new CardImgResized("img/Discard_empty.png");
-        playerID=-1;
+        playerID=-3;
         this.setIcon(back);
     }
 
