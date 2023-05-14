@@ -78,7 +78,7 @@ public class GameLoop {
         //initialize deck
         deckUI = deck.printDeck(window,WIN_OFFSET+ i*(panelWidth)+160, WIN_OFFSET+j*(panelHeight+40), deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_Empty.png")));
+        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_empty.png")));
 
         infoBar = new JLabel("Select 2 cards to know who will begin");
         infoBar.setBounds(screenWidth/2-250,WIN_OFFSET+panelHeight+5, 500, 30);
@@ -201,7 +201,7 @@ public class GameLoop {
                 if(!roundSkipped)
                     panels.get(playerTurn-1).setBackground(panelColor);
 
-                player.verifyRowsAndColumns(infoBar);
+                player.verifyRowsAndColumns(infoBar, discard_pile, discardPileUI);
                 if(!roundSkipped && !atLeastOnePlayerFinished){
                     atLeastOnePlayerFinished = players.get(playerTurn-1).verifyWin(nbRound, (short) players.size());
                     roundSkipped = false;
@@ -210,7 +210,7 @@ public class GameLoop {
                 if (atLeastOnePlayerFinished)
                 {
                     play = false;
-                    infoBar.setText("Round finished");
+                    infoBar.setText("Round finished, please wait for the next one");
                 }
             }
 

@@ -83,7 +83,7 @@ public class Player {
     }
 
 
-    public void verifyRowsAndColumns(JLabel infoBar)
+    public void verifyRowsAndColumns(JLabel infoBar, Deck discard_pile, Card discardUI)
     {
                 // verify rows
             if (this.nbColumnRemoved == 0)
@@ -105,10 +105,25 @@ public class Player {
                                 // Handle the exception if necessary
                             }
 
+                            hand.get(i).setPlayerID(-1);
+                            hand.get(i).setVisibility(true);
+                            discard_pile.addCard(hand.get(i));
                             hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
+
+                            hand.get(i).setPlayerID(-1);
+                            hand.get(i).setVisibility(true);
+                            discard_pile.addCard(hand.get(i));
                             hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
+
+                            hand.get(i).setPlayerID(-1);
+                            hand.get(i).setVisibility(true);
+                            discard_pile.addCard(hand.get(i));
+                            discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                            discardUI.changeCard(discard_pile.getFirstCard());
+                            discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+                            discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
                             hand.get(i).getPanel().remove(hand.get(i));
                             this.hand.remove(i);
                             this.nbLineRemoved += 1;
@@ -142,12 +157,33 @@ public class Player {
                                         // Handle the exception if necessary
                                     }
 
+                                    hand.get(i).setPlayerID(-1);
+                                    hand.get(i).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i));
                                     hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
+
+                                    hand.get(i+3-this.nbColumnRemoved-1).setPlayerID(-1);
+                                    hand.get(i+3-this.nbColumnRemoved-1).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+3-this.nbColumnRemoved-1));
                                     hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
                                     this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setPlayerID(-1);
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+6-this.nbColumnRemoved*2-2));
                                     hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
                                     this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).setPlayerID(-1);
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+9-this.nbColumnRemoved*3-3));
+                                    discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                                    discardUI.changeCard(discard_pile.getFirstCard());
+                                    discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+                                    discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        
                                     hand.get(i+9-this.nbColumnRemoved*3-3).getPanel().remove(hand.get(i+9-this.nbColumnRemoved*3-3));
                                     this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
 
@@ -173,10 +209,25 @@ public class Player {
                                         // Handle the exception if necessary
                                     }
 
+                                    hand.get(i).setPlayerID(-1);
+                                    hand.get(i).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i));
                                     hand.get(i).getPanel().remove(hand.get(i));
                                     this.hand.remove(i);
+
+                                    hand.get(i+3-this.nbColumnRemoved-1).setPlayerID(-1);
+                                    hand.get(i+3-this.nbColumnRemoved-1).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+3-this.nbColumnRemoved-1));
                                     hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
                                     this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setPlayerID(-1);
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                                    discardUI.changeCard(discard_pile.getFirstCard());
+                                    discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+                                    discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
                                     hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
                                     this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
