@@ -77,7 +77,7 @@ public class App {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Get the text from the text field
-                    if(textField.getText().length()!=0){
+                    if(Utility.isInt(textField.getText())){
                         nbPlayers =(short)Integer.parseInt(textField.getText());
                     }
                 }
