@@ -93,7 +93,7 @@ public class Deck {
     }
 
     //return and print the discard pile by printing an empty card, in fact, at this moment, the discard pile is empty
-    public Card PrintDiscardPile(JFrame window, int x, int y, String path, Card card){
+    public Card printDiscardPile(JFrame window, int x, int y, String path, Card card){
         //generate an empty card
         Card discardPile = new Card(new CardImgResized(path));
         discardPile.setBounds(x, y, discardPile.getFront().getImage().getWidth(null), discardPile.getFront().getImage().getHeight(null));

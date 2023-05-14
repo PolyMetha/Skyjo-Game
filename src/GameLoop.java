@@ -94,7 +94,7 @@ public class GameLoop {
         //initialize deck
         deckUI = deck.printDeck(window,WIN_OFFSET+ i*(panelWidth)+160, WIN_OFFSET+j*(panelHeight+40), deck.getFirstCard());
         //initialize discard pile
-        discardPileUI = discardPile.PrintDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_empty.png")));
+        discardPileUI = discardPile.printDiscardPile(window, WIN_OFFSET+i*panelWidth+160,WIN_OFFSET+ j*(panelHeight+50)+CardImgResized.IMG_HEIGHT+20, "img/12.png", new Card(new CardImgResized("img/Discard_empty.png")));
 
         //setting up the infobar
         infoBar = new JLabel("Select 2 cards to know who will begin");
@@ -216,7 +216,7 @@ public class GameLoop {
 
                     default:
                         //player card selected
-                        player.ChangeCardSide(firstSelection);
+                        player.changeCardSide(firstSelection);
                         playerTurn+=1;
                         break;
                 }
@@ -284,7 +284,7 @@ public class GameLoop {
             }
 
             //change card side
-            players.get(playerTurn).ChangeCardSide(firstSelection);
+            players.get(playerTurn).changeCardSide(firstSelection);
 
             //moreover, verify if the 2nd selection is different from the first
             while(secondSelection == null || secondSelection.getPlayerId()<0 || secondSelection.equals(firstSelection)){
@@ -296,7 +296,7 @@ public class GameLoop {
                 }
             }
             
-            players.get(playerTurn).ChangeCardSide(secondSelection);
+            players.get(playerTurn).changeCardSide(secondSelection);
 
             if(firstSelection.getValue() + secondSelection.getValue()>bestSum){
                 bestSum = (short)(firstSelection.getValue() + secondSelection.getValue());

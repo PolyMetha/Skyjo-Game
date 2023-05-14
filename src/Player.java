@@ -44,7 +44,7 @@ public class Player {
         //change and return the hand card
         secondSelection.changeCard(firstSelection);
         secondSelection.setPlayerID(GameLoop.playerTurn);
-        this.ChangeCardSide(secondSelection);
+        this.changeCardSide(secondSelection);
 
         //put the old hand card in the discard pile
         tmp.setVisibility(true);
@@ -72,7 +72,7 @@ public class Player {
         //change the hand card
         secondSelection.changeCard(firstSelection);
         secondSelection.setPlayerID(GameLoop.playerTurn);
-        this.ChangeCardSide(secondSelection);
+        this.changeCardSide(secondSelection);
 
         //put the old hand card into the discard
         tmp.setPlayerID(-1);
@@ -83,7 +83,7 @@ public class Player {
         discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
         discardUI.changeCard(discard_pile.getFirstCard());
         discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
-        this.ChangeCardSide(discardUI);
+        this.changeCardSide(discardUI);
 
     }
 
@@ -278,7 +278,7 @@ public class Player {
         }
     }
 
-    public void ChangeCardSide(Card card){
+    public void changeCardSide(Card card){
         card.changeCardImage(card.getFront());
         card.setVisibility(true);
     }
