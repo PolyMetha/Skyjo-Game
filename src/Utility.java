@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 public class Utility {
 
     // This function calculates the score of a player based on the values of their cards.
-    static void calculScore(Player player)
+    public static void calculScore(Player player)
     {
         short score = 0;
         for (Card card : player.getHand()) {
@@ -17,7 +17,7 @@ public class Utility {
     }
 
     // This function displays the scores of all the players in the game.
-    static void displayScore(ArrayList<Player> players, JFrame window, Card deckUI)
+    public static void displayScore(ArrayList<Player> players, JFrame window, Card deckUI)
     {
         int i=0;
         for (Player player : players) {

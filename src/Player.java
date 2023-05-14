@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 public class Player {
     // player ID which is either 0 or 1
-    private final int id;
+    private final short id;
     // array list of cards representing the player's hand
     private ArrayList<Card> hand;
     // the number of columns the player has removed
@@ -17,7 +17,7 @@ public class Player {
     private short score;
 
     // constructor for creating a player with a given ID and deck
-    public Player(int ID, Deck deck){
+    public Player(short ID, Deck deck){
         this.id = ID;
         this.hand = new ArrayList<>();
         this.nbColumnRemoved = 0;
@@ -251,7 +251,7 @@ public class Player {
                 }
             }
     }
-//check if a player finished the round
+    //check if a player finished the round
     public boolean verifyWin(short round, short nbPlayers) {
         // Count number of visible cards in the player's hand
         short count = 0;
@@ -339,7 +339,7 @@ public class Player {
         return this.hand;
     }
 
-    public int getID(){
-        return id;
+    public short getID(){
+        return (short) id;
     }
 }
