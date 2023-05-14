@@ -1,21 +1,33 @@
+// import the required ArrayList class
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Player {
-    private final int id;                 // 0 or 1
-    private ArrayList<Card> hand;   // hand constitued by 12 cards
+    // player ID which is either 0 or 1
+    private final short id;
+    // array list of cards representing the player's hand
+    private ArrayList<Card> hand;
+    // the number of columns the player has removed
     private short nbColumnRemoved;
+    // the number of lines the player has removed
     private short nbLineRemoved;
+    // the player's score
     private short score;
 
-    public Player(int ID, Deck deck){
+    // constructor for creating a player with a given ID and deck
+    public Player(short ID, Deck deck){
         this.id = ID;
         this.hand = new ArrayList<>();
         this.nbColumnRemoved = 0;
         this.nbLineRemoved = 0;
         this.score = 0;
+        // initialize the player's hand
         initializeHand(deck);
     }
 
+    // reset the player's state by removing their hand, column and line counts and initializing their hand
     public void resetPlayer(Deck deck)
     {
         this.hand = new ArrayList<>();
@@ -24,289 +36,310 @@ public class Player {
         initializeHand(deck);
     }
 
-    public ArrayList<Short> askPosition()
+    public void takeACardFromDeck(Deck deck, Deck discard_pile, Card discardUI, Card deckUI, Card firstSelection, Card secondSelection)
     {
-        ArrayList<Short> position = new ArrayList<>();
-        short row = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a row :", "The integer must between 1 and 4, retry.");
-        short column = Utility.controlInt((short) 1, (short) 3, "Enter an integer to select a column :", "The integer must between 1 and 3, retry.");
-        position.add(row);
-        position.add(column);
-        return position;
+        //save the hand card
+        Card tmp = new Card(secondSelection);
+
+        //change and return the hand card
+        secondSelection.changeCard(firstSelection);
+        secondSelection.setPlayerID(GameLoop.playerTurn);
+        this.changeCardSide(secondSelection);
+
+        //put the old hand card in the discard pile
+        tmp.setVisibility(true);
+        tmp.setPlayerID(-1);
+        discard_pile.addCard(tmp);
+        //update discard pile UI
+        discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+        discardUI.changeCard(discard_pile.getFirstCard());
+        discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+        discardUI.setVisibility(true);
+
+        //draw the deck card and change the UI of the top card
+        deck.draw();
+        deckUI.removeMouseListener(deckUI.getMouseListeners()[0]);
+        deckUI.changeCard(deck.getFirstCard());
+        deckUI.addMouseListener(new MouseHandler(deck.getFirstCard(), null));
     }
 
-    public boolean takeACardFromADeck(Deck deck, Deck discard_pile, short state)
-    {
-        ArrayList<Short> position;
+    public void takeACardFromDiscardPile(Deck discard_pile,Card discardUI, Card firstSelection, Card secondSelection){
+        
+        //save the hand card
+        Card tmp = new Card(secondSelection);
 
-        if (state == 2)
-        {
-            deck.changeFirstCard(deck.getValueCard(), deck.getUvCard(), true);
-            System.out.println("Card picked : " + deck.getCard());
-        }
+        //change the hand card
+        secondSelection.changeCard(firstSelection);
+        secondSelection.setPlayerID(GameLoop.playerTurn);
+        this.changeCardSide(secondSelection);
 
-        position = this.askPosition();
-        int indiceHand = (position.get(0)-1) * (3 - this.nbColumnRemoved) + position.get(1) - 1;
-        Card temp = new Card(this.hand.get(indiceHand).getValue(), this.hand.get(indiceHand).getUv()); // récuperation de la carte qui va être remplacé
+        //put the old hand card into the discard
+        tmp.setPlayerID(-1);
+        tmp.setVisibility(true);
+        discard_pile.addCard(tmp);
 
-        if (state == 1)
-        {
-            this.hand.get(indiceHand).changeCard(discard_pile.getValueCard(), discard_pile.getUvCard(), true);
-            discard_pile.removeCard();
-            discard_pile.addCard(temp);
-        }
-        else if (state == 2)
-        {
-            this.hand.get(indiceHand).changeCard(deck.getValueCard(), deck.getUvCard(), true); // changement de la carte dans le jeu du joueur
-            deck.removeCard();
-            discard_pile.addCard(temp);
-        }
-        else if (state == 3)
-        {
-            if (this.hand.get(indiceHand).getVisibility())
-            {
-                System.out.println("This card is already returned, please select another card.");
-                return false;
-            }
-            else
-            {
-                this.hand.get(indiceHand).changeVisibility(true);
-            }
-        }
-        else
-        {
-            System.out.println("Error");
-        }
-        return true;
+        //change discard UI
+        discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+        discardUI.changeCard(discard_pile.getFirstCard());
+        discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        this.changeCardSide(discardUI);
+
     }
 
-    public void verifyRowsAndColumns()
+//checks id a column or a row of a deck can be removed
+    public void verifyRowsAndColumns(JLabel infoBar, Deck discard_pile, Card discardUI)
     {
-        // verify rows
-        if (this.nbColumnRemoved == 0)
-        {
-            for (int i = 0; i <= 9 - (this.nbLineRemoved * 3) ; i = i + 3)
-            {
-                try
+            // verify rows in case of 0 columns already removed
+            if (this.nbColumnRemoved == 0)
+            {   //for all the rows
+                for (int i = 0; i <= 9 - (this.nbLineRemoved * 3) ; i = i + 3)
                 {
-                    if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
-                            && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
-                            && this.hand.get(i).getVisibility()
-                            && this.hand.get(i + 1).getVisibility()
-                            && this.hand.get(i + 2).getVisibility())
-                    {
-                        this.hand.remove(i);
-                        this.hand.remove(i);
-                        this.hand.remove(i);
-                        this.nbLineRemoved += 1;
-                        System.out.println("Line removed !");
-                    }
-                }
-                catch (Exception exception) {}
-            }
-        }
-        // verify columns
-        if (this.nbLineRemoved < 2)
-        {
-            for (int i = 0 ; i <= 2 - this.nbColumnRemoved; i ++)
-            {
-                switch (nbLineRemoved) {
-                    case 0 -> {
-                        try {
-                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
-                                    && this.hand.get(i).getVisibility()
-                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
-                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
-                                    && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
-                                this.hand.remove(i);
-                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
-                                this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
-
-                                this.nbColumnRemoved += 1;
-                                System.out.println("Column removed !");
+                    try
+                    {   //check if the 3 cards have the same color
+                        if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 1).getUv().getColor())
+                                && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 2).getUv().getColor())
+                                && this.hand.get(i).getVisibility()
+                                && this.hand.get(i + 1).getVisibility()
+                                && this.hand.get(i + 2).getVisibility())
+                        {      
+                                                  
+                            infoBar.setText("Row removed !");
+                            try {
+                                Thread.sleep(700);
+                            } catch (InterruptedException e) {
+                                // Handle the exception if necessary
                             }
-                        } catch (Exception exception) {}
-                    }
-                    case 1 -> {
-                        try {
-                            if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
-                                    && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
-                                    && this.hand.get(i).getVisibility()
-                                    && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
-                                    && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+
+                            //removing it 1 by 1 and adding it to the discard pile
+                            for(int j=0; j<3; j++){
+                                hand.get(i).setPlayerID(-1);
+                                hand.get(i).setVisibility(true);
+                                discard_pile.addCard(hand.get(i));
+                                hand.get(i).getPanel().remove(hand.get(i));
                                 this.hand.remove(i);
-                                this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
-                                this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
-
-                                this.nbColumnRemoved += 1;
-                                System.out.println("Column removed !");
                             }
-                        } catch (Exception exception) {}
+
+                            //refresh the ui discard UI
+                            discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                            discardUI.changeCard(discard_pile.getFirstCard());
+                            discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+                            discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+
+                            this.nbLineRemoved += 1;
+                            //repaint the panel if there still a card
+                            if(hand.get(0)!=null){
+                                hand.get(0).getPanel().repaint();
+                            }
+                        }
                     }
+                    catch (Exception exception) {}
                 }
             }
-        }
-    }
-
-    public void round(Deck deck, Deck discard_pile)
-    {
-        boolean round_played;
-        do
-        {
-            round_played = false;
-            deck.printDeck("Deck");
-            discard_pile.printDeck("Discard pile");
-            System.out.println("--------------------------------------");
-            System.out.println("1. Choose a card from the discard pile");
-            System.out.println("2. Choose a card from the deck");
-            System.out.println("3. Discover a card within your game");
-            System.out.println("--------------------------------------");
-            short indice = Utility.controlInt((short) 1, (short) 4, "Enter an integer to select a line :", "The integer must between 1 and 3, retry.");
-
-            switch (indice)
+            // verify columns
+            if (this.nbLineRemoved < 2)
             {
-                case 1 ->
+                for (int i = 0 ; i <= 2 - this.nbColumnRemoved; i ++)
                 {
-                    if (!discard_pile.verifyExistence())
-                    {
-                        System.out.println("The discard pile is empty, choose another action.");
-                        break;
+                    switch (nbLineRemoved) {
+                        //if 0 lines removed, we must remove 4 cards
+                        case 0 -> {
+                            try {
+                                //check the colors of the 4 cards
+                                if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getUv().getColor())
+                                        && this.hand.get(i).getVisibility()
+                                        && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                        && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
+                                        && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {                                    
+                                    infoBar.setText("Column removed !");
+                                    try {
+                                        Thread.sleep(700);
+                                    } catch (InterruptedException e) {
+                                        // Handle the exception if necessary
+                                    }
+                                    
+                                    //we must remove it 1 by 1 because of the choice ofArrayList we made
+                                    //for our hand, here, to get the next line, the algorithm changes
+                                    //for every card we remove 
+                                    hand.get(i).setPlayerID(-1);
+                                    hand.get(i).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i));
+                                    hand.get(i).getPanel().remove(hand.get(i));
+                                    this.hand.remove(i);
+
+                                    hand.get(i+3-this.nbColumnRemoved-1).setPlayerID(-1);
+                                    hand.get(i+3-this.nbColumnRemoved-1).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+3-this.nbColumnRemoved-1));
+                                    hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setPlayerID(-1);
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).setPlayerID(-1);
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+9-this.nbColumnRemoved*3-3));  
+                                    hand.get(i+9-this.nbColumnRemoved*3-3).getPanel().remove(hand.get(i+9-this.nbColumnRemoved*3-3));
+                                    this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
+
+                                    //update the hand UI
+                                    discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                                    discardUI.changeCard(discard_pile.getFirstCard());
+                                    discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+                                    discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+        
+                                    this.nbColumnRemoved += 1;
+                                    if(hand.get(0)!=null){
+                                        hand.get(0).getPanel().repaint();
+                                    }
+                                }
+                            } catch (Exception exception) {}
+                        }
+                        case 1 -> {//id 1 line was removed
+                            try {
+                                if (this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 3 - this.nbColumnRemoved).getUv().getColor())
+                                        && this.hand.get(i).getUv().getColor().equals(this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getUv().getColor())
+                                        && this.hand.get(i).getVisibility()
+                                        && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
+                                        && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
+                                    infoBar.setText("Column removed !");
+                                    try {
+                                        Thread.sleep(700);
+                                    } catch (InterruptedException e) {
+                                        // Handle the exception if necessary
+                                    }
+
+                                    //same process as the case 0 but with  cards instead of 4
+                                    hand.get(i).setPlayerID(-1);
+                                    hand.get(i).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i));
+                                    hand.get(i).getPanel().remove(hand.get(i));
+                                    this.hand.remove(i);
+
+                                    hand.get(i+3-this.nbColumnRemoved-1).setPlayerID(-1);
+                                    hand.get(i+3-this.nbColumnRemoved-1).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+3-this.nbColumnRemoved-1));
+                                    hand.get(i+3-this.nbColumnRemoved-1).getPanel().remove(hand.get(i+3-this.nbColumnRemoved-1));
+                                    this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
+
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setPlayerID(-1);
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).setVisibility(true);
+                                    discard_pile.addCard(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    hand.get(i+6-this.nbColumnRemoved*2-2).getPanel().remove(hand.get(i+6-this.nbColumnRemoved*2-2));
+                                    this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
+
+                                    //update the hand UI
+                                    discardUI.removeMouseListener(discardUI.getMouseListeners()[0]);
+                                    discardUI.changeCard(discard_pile.getFirstCard());
+                                    discardUI.changeCardImage(discard_pile.getFirstCard().getFront());
+                                    discardUI.addMouseListener(new MouseHandler(discard_pile.getFirstCard(), null));
+
+                                    this.nbColumnRemoved += 1;
+                                    if(hand.get(0)!=null){
+                                        hand.get(0).getPanel().repaint();
+                                    }
+                                }
+                            } catch (Exception exception) {}
+                        }
                     }
-                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 1);
-                }
-                case 2 ->
-                {
-                    if (!deck.verifyExistence())
-                    {
-                        deck = new Deck(false);
-                        deck.addAllCards(discard_pile);
-                        discard_pile = new Deck(false);
-                        discard_pile.addCard(deck.draw());
-                        break;
-                    }
-                    round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
-                }
-                case 3 -> round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
-                default ->
-                {
-                    for (Card card : this.hand)
-                    {
-                        card.changeVisibility(true);
-                    }
-                    this.printHand();
-                    round_played = true;
-                    System.out.println("Error");
                 }
             }
-        }
-        while (!round_played);
-
-        this.verifyRowsAndColumns();
-        // verify color rows and columns !
     }
-
-    public boolean verifyWin(short round, short nbPlayers)
-    {
+    //check if a player finished the round
+    public boolean verifyWin(short round, short nbPlayers) {
+        // Count number of visible cards in the player's hand
         short count = 0;
+        //if there is no more cards in the player hand the player finished
+        try {
+            if(this.hand.get(0)==null){
+                return true;
+            }}
+        catch (Exception exception){
+            count = 0;
+        }
+        
+        //count the non visible cards
         for (Card card : this.hand) {
             if (!card.getVisibility()) {
                 count++;
             }
         }
-        if (count == 0)
-        {
-            if (round != nbPlayers - 1)
-            {
-                System.out.println("All of your cards are returned, you finished ! Please wait the end of the round");
-            }
-            else
-            {
-                System.out.println("Round finished !");
-            }
+        // If all cards are visible, the player finished
+        if (count == 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    //initialize the base cards of the player
-    public void initializeHand(Deck deck)
-    {
-        for(int i=0; i < 12; i++)
-        {
-            hand.add(deck.draw());
+    public void changeCardSide(Card card){
+        card.changeCardImage(card.getFront());
+        card.setVisibility(true);
+    }
+
+    // Initialize the player's hand with 12 cards drawn from the deck
+    public void initializeHand(Deck deck) {
+        for(int i = 0; i < 12; i++) {
+            Card card = deck.draw();
+            card.setPlayerID(id);       //set the cardId to the player ID
+            card.addMouseListener(new MouseHandler(card, this));
+            hand.add(card);
         }
     }
 
-    //print hand of the player
-    public void printHand()
-    {
-        System.out.print("\nHand of player : " + (this.id + 1) + "\n");
-        System.out.println("--------------------------------");
-        for (int i = 1; i <= this.hand.size(); i++)
-        {
-            switch (this.nbColumnRemoved)
-            {
-                case 0 ->
-                {
-                    if (i % 3 == 0)
-                    {
-                        System.out.print(this.hand.get(i - 1).getCard());
-                        System.out.println("\n--------------------------------");
-                    }
-                    else
-                    {
-                        System.out.print(this.hand.get(i - 1).getCard() + " | ");
-                    }
-                }
-                case 1 ->
-                {
-                    if (i % 2 == 0)
-                    {
-                        System.out.print(this.hand.get(i - 1).getCard());
-                        System.out.println("\n--------------------------------");
-                    }
-                    else
-                    {
-                        System.out.print(this.hand.get(i - 1).getCard() + " | ");
-                    }
-                }
-                case 2 ->
-                {
-                    System.out.print(this.hand.get(i - 1).getCard());
-                    System.out.println("\n--------------------------------");
-                }
-                case 3 -> System.out.println("empty");
+    //print the hand on the screen
+    public JPanel printHand(JFrame window, int xPanel, int yPanel, int panelWidth, int panelHeight){
+        int i=0,j=0;
+
+        JPanel panel = new JPanel(null);
+        panel.setBounds(xPanel, yPanel, panelWidth, panelHeight);
+
+        //space between cards
+        int CARDS_OFFSET = 10;
+        int CARDS_WIDTH_PADDING = (panelWidth-(3*CardImgResized.IMG_WIDTH+20))/2;
+        int CARDS_HEIGHT_PADDING = (panelHeight-(4*CardImgResized.IMG_HEIGHT+20))/3;
+
+        for(Card card : hand){
+            //instantiate the card grid
+            card.setBounds(CARDS_OFFSET+i*(CARDS_WIDTH_PADDING+CardImgResized.IMG_WIDTH), CARDS_OFFSET+j*(CARDS_HEIGHT_PADDING+CardImgResized.IMG_HEIGHT), CardImgResized.IMG_WIDTH, CardImgResized.IMG_HEIGHT);
+            panel.add(card);
+            i++;
+            if(i==3){
+                i=0;
+                j++;
             }
+
+            card.setPanel(panel);
         }
+        window.add(panel);
+        window.repaint();
+        return panel;
     }
 
+    //getters and setters
     public void setScore(short score) {
+        // Add the given score to the player's total score
         this.score += score;
     }
 
     public short getScore() {
+        // Return the player's current score
         return this.score;
     }
 
     public ArrayList<Card> getHand()
     {
+        // Return the player's hand
         return this.hand;
     }
 
-    public short getFirstCardReturned()
-    {
-        for (Card card : hand)
-        {
-            if (card.getVisibility())
-            {
-                return (short) card.getValue();
-            }
-        }
-        return 20;
+    public short getID(){
+        return (short) id;
     }
 }

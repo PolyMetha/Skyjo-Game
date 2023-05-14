@@ -1,45 +1,179 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class App {
-    public static void main(String[] args) {
+    private static short nbPlayers;
 
-        short nbPlayers = Utility.controlInt((short)2, (short)8, "Enter an integer representing the number of players :", "The number of players must be between 2 and 8, retry.");
+    public static void main(String[] args) throws IOException {
+        boolean play=true;
+        while(play){
+            //get screen dimensions
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = (int) screenSize.getWidth();
+            int screenHeight = (int) screenSize.getHeight();
 
-        // Initialisation des variables
-        GameLoop gameLoop = new GameLoop();
-        int maxScore = 50;
-        boolean gameOver = false;
+            Color backgoundColor = new Color(35, 41, 49);
 
-        Deck deck = new Deck(true);
-        Deck discard_pile = new Deck(false);
-        ArrayList<Player> players = new ArrayList<>();
+            //create player selection window
+            JFrame playersSelect = new JFrame();
 
-        for (short i = 0 ; i < nbPlayers ; i++) {
-            players.add(new Player(i, deck));
-        }
+            //number of players inf=put field
+            JTextField textField = new JTextField(20);
+            textField.setBounds(screenWidth/2-50, screenHeight/2-textField.getHeight()/2+100, 100, 50);
 
+            //play button
+            FancyButton playButton = new FancyButton("Play");
+            playButton.setBounds(screenWidth/2-110, screenHeight/2+170, 100, 50);
+            playButton.setForeground(Color.WHITE);
 
-        System.out.println("Welcome to the a UTBM version fo the Skyjo game !" +
-                "\nLet's choose a card within your cards and see who will begin !");
+            //quit button
+            FancyButton quitButton = new FancyButton("Quit game");
+            quitButton.setBounds(screenWidth/2+10, screenHeight/2+170, 100, 50);
+            quitButton.setForeground(Color.WHITE);
+            
+            //add an informative text
+            JLabel infoNbPlayers = new JLabel("Select the number of players");
+            infoNbPlayers.setBounds(screenWidth/2-205, screenHeight/2+50, 410, 30);
+            infoNbPlayers.setFont(new Font("Verdana", Font.BOLD, 25));
+            infoNbPlayers.setForeground(Color.white);
 
-        while(!gameOver) {
-            // Exécution d'une manche de jeu
-            gameLoop.executeRound(players, deck, discard_pile);
+            //adding everything to a panel
+            JPanel BackgroundPanel = new JPanel();
+            BackgroundPanel.setLayout(new BorderLayout());
+            JLabel background = new JLabel(new BackgroundResized("img/Background_Selection.png")); 
+            background.add(textField);
+            background.add(playButton);
+            background.add(infoNbPlayers);
+            background.add(quitButton);
+            BackgroundPanel.add(background, BorderLayout.CENTER);
 
-            Utility.displayScore(players);
+            //adding panel to frame
+            playersSelect.getContentPane().add(BackgroundPanel);
 
-            // Vérification du score de chaque joueur
-            for(Player player : players)
-            {
-                if(player.getScore() >= maxScore)
-                {
-                    gameOver = true;
-                    break;
+            //set window parameters
+            playersSelect.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            playersSelect.setResizable(false);
+            playersSelect.setTitle("Skyjo game players selection");
+            playersSelect.setLayout(new FlowLayout());
+            playersSelect.setSize(screenWidth, screenHeight);
+            playersSelect.getContentPane().setBackground(backgoundColor);
+            playersSelect.setLocationRelativeTo(null);
+            playersSelect.setVisible(true);
+
+            //adding logic behind play button
+            playButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Get the text from the text field
+                    if(Utility.isInt(textField.getText())){
+                        nbPlayers =(short)Integer.parseInt(textField.getText());
+                    }
+                }
+            });
+
+            //adding logic behind quit button
+            quitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //quit game
+                    playersSelect.dispose();
+                    System.exit(0);
+                }
+            });
+
+            //let the game run under number players conditions
+            while(nbPlayers <2 || nbPlayers >7){
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // Handle the exception if necessary
                 }
             }
-            gameLoop.resetGame(players, deck, discard_pile);
-        }
 
-        System.out.println("Le jeu est terminé !");
+            //close the window
+            playersSelect.dispose();
+
+            //start game window and set its parameters
+            JFrame window = new JFrame();        
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setResizable(false);
+            window.setTitle("Skyjo game");
+            window.setLayout(null);
+            window.setSize(screenWidth, screenHeight);
+
+            //set the background and the layout
+            window.getContentPane().setBackground(backgoundColor);
+            window.setLocationRelativeTo(null);
+            window.setVisible(true);
+
+            //Adding a please wait label
+            JLabel waitJLabel = new JLabel("Game is loading, please wait...");
+            waitJLabel.setBounds(screenWidth/2-175, screenHeight/2-30, 350, 30);
+            waitJLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+            waitJLabel.setForeground(Color.WHITE);
+            window.add(waitJLabel);
+
+            // Initialize the variables for the game
+            int maxScore = 100;
+            boolean gameOver = false;
+
+            // Create and shuffle a deck of cards
+            Deck deck = new Deck(true);
+
+            // Create an empty deck for the discard pile
+            Deck discard_pile = new Deck(false);
+
+            // Create an array list to store the players
+            ArrayList<Player> players = new ArrayList<>();
+
+            // Create the players and add them to the array list
+            for (short i = 0 ; i < nbPlayers ; i++) {
+                players.add(new Player(i, deck));
+            }
+
+            //remove the wait label and print the game view
+            window.remove(waitJLabel);
+            window.repaint();
+
+            // Play the game until a player reaches the maximum score
+            while(!gameOver) {
+                //initialize the base view
+                GameLoop.initializeRoundUI(window, players, deck, discard_pile);
+                // Execute a round of the game
+                GameLoop.executeRound(players, deck, discard_pile, window);
+
+                // Check if any player has reached the maximum score
+                for(Player player : players)
+                {
+                    if(player.getScore() >= maxScore)
+                    {
+                        gameOver = true;
+                        break;
+                    }
+                }
+
+                // Reset the game state for the next round
+                GameLoop.resetGame(players, deck, discard_pile);
+    
+                //reset the interface
+                GameLoop.resetRoundUI(window);
+            }
+            //reset the number of players for a new game
+            nbPlayers = 0;
+
+            //the game can now restart with new players
+        }        
     }
 }
