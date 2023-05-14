@@ -10,13 +10,9 @@ public class Card extends JLabel{
     private UV uv;
     private boolean visible;
     private int playerID=-2; //set all the cards to-1, the cards -2 corresponds to the deck, -1 to the discard pile and others positive are for the players
-
     private ImageIcon back; //the back image of the card
     private ImageIcon front;//the front image of the card
-
     private JPanel panel;   //the panel that contains the card
-
-
 
     // Constructor to initialize the card's value, UV, and visibility status
     public Card(int value, UV uv, ImageIcon icon){
@@ -29,6 +25,7 @@ public class Card extends JLabel{
         back = new CardImgResized("img/Back.png");
         this.setIcon(back);
     }
+
     //used only to instantiate the UI of the discard pile
     public Card(CardImgResized img){
         super();
@@ -66,7 +63,6 @@ public class Card extends JLabel{
         this.setIcon(front);
     }
 
-
     //copy the card other into this card, needed for card exchange 
     //in the dack and discard pile interactions
     public void changeCard(Card other){
@@ -75,6 +71,7 @@ public class Card extends JLabel{
         this.front = other.getFront();
         this.visible = false;
     }
+
     //getters and setters :
     public ImageIcon getFront(){
         return front;
