@@ -37,8 +37,8 @@ public class Player {
     public ArrayList<Short> askPosition()
     {
         ArrayList<Short> position = new ArrayList<>();
-        short row = Utility.controlInt((short) 1, (short) (4 - this.nbLineRemoved), "Enter an integer to select a row :", "The integer must be between 1 and 4, retry.");
-        short column = Utility.controlInt((short) 1, (short) (3 - this.nbColumnRemoved), "Enter an integer to select a column :", "The integer must be between 1 and 3, retry.");
+        short row = Utility.controlInt((short) 1, (short) (4 - this.nbLineRemoved), "Enter an integer to select a row :", "The integer must be between 1 and " + (4 - this.nbLineRemoved) + ", retry.");
+        short column = Utility.controlInt((short) 1, (short) (3 - this.nbColumnRemoved), "Enter an integer to select a column :", "The integer must be between 1 and " + (3 - this.nbColumnRemoved) + ", retry.");
         position.add(row);
         position.add(column);
         return position;
@@ -117,14 +117,14 @@ public class Player {
                             && this.hand.get(i + 2).getVisibility())
                     {
                         // If so, remove the cards from the hand and increment the number of lines removed
-                        discard_pile.addCard(hand.get(i));
+                        discard_pile.addCard(this.hand.get(i));
                         this.hand.remove(i);
 
+                        discard_pile.addCard(this.hand.get(i));
                         this.hand.remove(i);
-                        discard_pile.addCard(hand.get(i));
 
+                        discard_pile.addCard(this.hand.get(i));
                         this.hand.remove(i);
-                        discard_pile.addCard(hand.get(i));
 
                         this.nbLineRemoved += 1;
                         System.out.println("Line removed !");
@@ -151,16 +151,16 @@ public class Player {
                                     && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()
                                     && this.hand.get(i + 9 - (this.nbColumnRemoved * 3)).getVisibility()) {
                                 // If so, remove the cards from the hand and increment the number of columns removed
-                                discard_pile.addCard(hand.get(i));
+                                discard_pile.addCard(this.hand.get(i));
                                 this.hand.remove(i);
 
-                                discard_pile.addCard(hand.get(i + 3 - this.nbColumnRemoved - 1));
+                                discard_pile.addCard(this.hand.get(i + 3 - this.nbColumnRemoved - 1));
                                 this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
 
-                                discard_pile.addCard(hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
+                                discard_pile.addCard(this.hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
                                 this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
-                                discard_pile.addCard(hand.get(i + 9 - (this.nbColumnRemoved * 3) - 3));
+                                discard_pile.addCard(this.hand.get(i + 9 - (this.nbColumnRemoved * 3) - 3));
                                 this.hand.remove(i + 9 - (this.nbColumnRemoved * 3) - 3);
 
                                 this.nbColumnRemoved += 1;
@@ -177,13 +177,13 @@ public class Player {
                                     && this.hand.get(i + 3 - this.nbColumnRemoved).getVisibility()
                                     && this.hand.get(i + 6 - (this.nbColumnRemoved * 2)).getVisibility()) {
 
-                                discard_pile.addCard(hand.get(i));
+                                discard_pile.addCard(this.hand.get(i));
                                 this.hand.remove(i);
 
-                                discard_pile.addCard(hand.get(i + 3 - this.nbColumnRemoved - 1));
+                                discard_pile.addCard(this.hand.get(i + 3 - this.nbColumnRemoved - 1));
                                 this.hand.remove(i + 3 - this.nbColumnRemoved - 1);
 
-                                discard_pile.addCard(hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
+                                discard_pile.addCard(this.hand.get(i + 6 - (this.nbColumnRemoved * 2) - 2));
                                 this.hand.remove(i + 6 - (this.nbColumnRemoved * 2) - 2);
 
                                 this.nbColumnRemoved += 1;
@@ -194,6 +194,7 @@ public class Player {
                 }
             }
         }
+        // no more colum possible removed
     }
 
     public void round(Deck deck, Deck discard_pile) {
@@ -234,19 +235,8 @@ public class Player {
                     round_played = this.takeACardFromADeck(deck, discard_pile, (short) 2);
                 }
                 case 3 -> round_played = this.takeACardFromADeck(deck, discard_pile, (short) 3);
-                default ->
-                {
-                    // In case of an error, show all cards in the player's hand and mark the round as played
-                    for (Card card : this.hand) {
-                        card.changeVisibility(true);
-                    }
-                    this.printHand();
-                    round_played = true;
-                    System.out.println("Error");
-                }
             }
         } while (!round_played);
-
         // Verify rows and columns for the player's hand
         this.verifyRowsAndColumns(discard_pile);
     }

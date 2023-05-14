@@ -27,12 +27,14 @@ public class App {
         // Print the welcome message and prompt the players to choose a card to determine the starting player
         System.out.println("Welcome to the UTBM version of the Skyjo game!" +
                 "\nLet's choose a card within your cards and see who will begin!");
-
+        short state = 0;
         // Play the game until a player reaches the maximum score
         while(!gameOver) {
 
             // Execute a round of the game
-            GameLoop.executeRound(players, deck, discard_pile);
+            GameLoop.executeRound(players, deck, discard_pile, state);
+
+            state = 1;
 
             // Display the scores of all the players
             Utility.displayScore(players);

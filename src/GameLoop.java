@@ -18,41 +18,41 @@ public class GameLoop {
     }
 
     // Execute a round of the game
-    public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile) {
+    public static void executeRound(ArrayList<Player> players, Deck deck, Deck discard_pile, short state) {
         // Initialize some variables for the round
         short nbRound = 0;
         boolean play = true;
         Iterator<Player> its = players.iterator();
         boolean atLeastOnePlayerFinished = false;
 
+        short max = Short.MIN_VALUE; // Initialize the variable min with the maximum possible value of short
+        int minIndex = 0; // Initialize the index with an invalid value
+
         // Print each player's hand
         for (Player player : players) {
             player.printHand();
         }
 
-        // Each player takes a card from the deck to know who is the first player to start
-        for (short j = 0 ; j < players.size() ; j++) {
-            if (j != 0)
-            {
-                players.get(j).printHand();
+        if (state == 0) {
+            // Each player takes a card from the deck to know who is the first player to start
+            for (short j = 0; j < players.size(); j++) {
+                if (j != 0) {
+                    players.get(j).printHand();
+                }
+                players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
             }
-            players.get(j).takeACardFromADeck(deck, discard_pile, (short) 3);
-        }
 
-        // Get the first card returned by each player and find the player with the lowest card
-        ArrayList<Short> listFirstCardPlayer = new ArrayList<>();
-        for (Player player : players)
-        {
-            listFirstCardPlayer.add(player.getFirstCardReturned());
-        }
+            // Get the first card returned by each player and find the player with the lowest card
+            ArrayList<Short> listFirstCardPlayer = new ArrayList<>();
+            for (Player player : players) {
+                listFirstCardPlayer.add(player.getFirstCardReturned());
+            }
 
-        short max = Short.MIN_VALUE; // Initialize the variable min with the maximum possible value of short
-        int minIndex = -1; // Initialize the index with an invalid value
-
-        for (int i = 0; i < listFirstCardPlayer.size(); i++) {
-            if (listFirstCardPlayer.get(i) > max) {
-                max = listFirstCardPlayer.get(i);
-                minIndex = i;
+            for (int i = 0; i < listFirstCardPlayer.size(); i++) {
+                if (listFirstCardPlayer.get(i) > max) {
+                    max = listFirstCardPlayer.get(i);
+                    minIndex = i;
+                }
             }
         }
 
@@ -76,9 +76,7 @@ public class GameLoop {
             // Play one round for each player
             do
             {
-                if (j != minIndex) {
-                    System.out.println("It's player " + (j + 1) + " round's");
-                }
+                System.out.println("It's player " + (j + 1) + " round's");
 
                 // Print each player's hand and execute their turn
                 for (Player player : players) {
